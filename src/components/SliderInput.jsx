@@ -1,7 +1,7 @@
-import React, { Component, Fragment, useState, useEffect } from "react";
+import React, { Component, Fragment, useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import RangeSlider from "react-bootstrap-range-slider";
+import Form from "react-bootstrap/Form";
 
 export default function SliderInput(props) {
 
@@ -27,13 +27,13 @@ export default function SliderInput(props) {
           <Col>
             <Form.Control value={value}  onChange={(e) => updateValue(e)}/>
           </Col>
-          <Col >
+          {/* <Col >
             <RangeSlider
               max={props.max}
               defaultValue={value}
               onChange={(e) => updateValue(e)}
             />
-          </Col>
+          </Col> */}
         </Row>
       </Form.Group>
     );

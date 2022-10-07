@@ -1,22 +1,10 @@
 import React, { Component } from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import {
-  ResponsiveContainer,
-  CartesianGrid,
-  Line,
-  LineChart,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-
 import DropDownSelector from "../components/DropDownSelector";
 import RegularInput from "../components/RegularInput";
 import SliderInput from "../components/SliderInput";
 import data from "../data/response.json";
-import Chart from "../components/Chart";
-import moment from "moment/moment";
 import PlotlyChart from "../components/PlotlyChart";
 
 export default class SimulationDashboard extends Component {
@@ -51,6 +39,7 @@ export default class SimulationDashboard extends Component {
   }
 
   setValue = (id, val) => {
+    console.log(id);
     this.setState({
       [id]: val,
     });
@@ -60,7 +49,7 @@ export default class SimulationDashboard extends Component {
     let dataPoints = [];
     let optimised = [];
     let x = [];
-    for (let i = 0; i < data.time.length; i++) {
+    for (let i = 0; i < 500; i++) {
       optimised.push(100);
       x.push(i + 1);
     }
@@ -69,7 +58,7 @@ export default class SimulationDashboard extends Component {
       {
         // prices
         x: x,
-        y: data.prices,
+        y: data.prices.slice(0,500),
         type: "scatter",
         mode: "lines+markers",
         marker: { color: "red" },
@@ -77,7 +66,7 @@ export default class SimulationDashboard extends Component {
       {
         // ppa 1
         x: x,
-        y: data.ppa1.data,
+        y: data.ppa1.data.slice(0,500),
         type: "scatter",
         mode: "lines+markers",
         marker: { color: "blue" },
@@ -85,7 +74,7 @@ export default class SimulationDashboard extends Component {
       {
         // ppa 2
         x: x,
-        y: data.ppa2.data,
+        y: data.ppa2.data.slice(0,500),
         type: "scatter",
         mode: "lines+markers",
         marker: { color: "green" },
@@ -93,7 +82,7 @@ export default class SimulationDashboard extends Component {
       {
         // combined vre
         x: x,
-        y: data.combined_vre.data,
+        y: data.combined_vre.data.slice(0,500),
         type: "scatter",
         mode: "lines+markers",
         marker: { color: "yellow" },
@@ -142,7 +131,7 @@ export default class SimulationDashboard extends Component {
     } = this.state;
     return (
       <div>
-        <Container style={{ paddingBottom: 30 }} fluid>
+        <Container style={{ paddingBottom: 30}} fluid>
           <Container style={{ height: 15 }} />
           <Row>
             <Col className="electrolyser-load">
@@ -354,10 +343,23 @@ export default class SimulationDashboard extends Component {
               </Row>
             </Col>
           </Row>
-
+          <Button variant="primary" onClick={() => console.log(this.state)}>Run Simulation</Button>{" "}
           <Row>
-            <PlotlyChart data={this.getSeriesData()}></PlotlyChart>
-            {/* <Chart data={data}></Chart> */}
+            <Card
+              style={{
+                paddingTop: 20,
+                paddingLeft: 5,
+                paddingRight: 5,
+              }}
+            >
+              <Card.Title style={{ paddingLeft: 15 }}>
+                Simulation Results
+              </Card.Title>
+              <Card.Body>
+                <PlotlyChart data={this.getSeriesData()}></PlotlyChart>
+              </Card.Body>
+             
+            </Card>
           </Row>
         </Container>
       </div>

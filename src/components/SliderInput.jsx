@@ -25,7 +25,7 @@ export default function SliderInput(props) {
         </Form.Label>
         <Row>
           <Col>
-            <Form.Control value={value}  onChange={(e) => updateValue(e)}/>
+            <Form.Control value={value} type="number" onChange={(e) => updateValue(e)}/>
           </Col>
           <Col >
             <RangeSlider

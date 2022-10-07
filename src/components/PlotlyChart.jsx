@@ -69,12 +69,12 @@ class PlotlyChart extends Component {
     const data = this.getSeriesData();
     return (
       <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "60vh",
-        }}
+        // style={{
+        //   display: "flex",
+        //   justifyContent: "center",
+        //   alignItems: "center",
+        //   height: "60vh",
+        // }}
       >
         <Plot
           data={data}

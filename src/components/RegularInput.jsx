@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 export default function RegularInput(props) {
   const updateValue = (e) => {
     let value = parseInt(e.target.value)
-    props.setValue(props.id, value);
+    props.setConfigValue(props.id, value);
   };
 
   return (
@@ -16,9 +16,10 @@ export default function RegularInput(props) {
       <Row>
         <Col>
           <Form.Control
-            type="number"
+            type={props.type}
             onChange={(e) => updateValue(e)}
             placeholder={props.placeholder}
+            value={props.value}
           />
         </Col>
       </Row>

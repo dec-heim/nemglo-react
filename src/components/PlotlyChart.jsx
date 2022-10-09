@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import Plot from "react-plotly.js";
+
 import data from "../data/response.json";
 
 class PlotlyChart extends Component {
   constructor() {
     super();
     this.state = {};
-
     this.getSeriesData = this.getSeriesData.bind(this);
   }
 
@@ -66,7 +66,8 @@ class PlotlyChart extends Component {
   };
 
   render() {
-    const data = this.getSeriesData();
+    // const data = this.getSeriesData();
+    const data = this.props.data;
     return (
       <div
         // style={{

@@ -3,9 +3,11 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Button, Card, Col, Container, Row, Navbar, Nav} from "react-bootstrap";
 import SimulationDashboard from "./views/SimulationDashboard";
 
+
 import './App.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import AmChart from "./components/AmChart";
 
 
 function App() {
@@ -25,6 +27,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<SimulationDashboard />} />
+          <Route path="/test" element={<AmChart />} />
         </Routes>
       </Router>
     </div>

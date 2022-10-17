@@ -12,6 +12,7 @@ export default function DateTimeSelector(props) {
       {props.label}
       </Form.Label>
       <Form.Control
+        required
         type={props.type}
         format="dd/MM/yyyy"
         onChange={(e) => updateValue(e)}

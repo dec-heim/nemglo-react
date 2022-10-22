@@ -205,19 +205,20 @@ export default class SimulationDashboard extends Component {
                   Run Simulation
                 </Button>
               )}
-
-{runningSimulation ? (
-                 <Button variant="secondary" onClick={() => console.log("Running Simulation, cannot reset") }>
-                 Reset Config
-               </Button>
+              ss{runningSimulation ? (
+                <Button
+                  variant="secondary"
+                  onClick={() =>
+                    console.log("Running Simulation, cannot reset")
+                  }
+                >
+                  Reset Config
+                </Button>
               ) : (
                 <Button variant="danger" onClick={this.resetConfig}>
-                Reset Config
-              </Button>
+                  Reset Config
+                </Button>
               )}
-
-
-          
               {resultsLoaded && (
                 <Button variant="primary" onClick={this.viewConfig}>
                   View Config

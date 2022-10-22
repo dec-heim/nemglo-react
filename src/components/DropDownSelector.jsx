@@ -11,7 +11,7 @@ export default function DropDownSelector(props) {
       <Form.Label style={{ textAlign: "text-center text-md-right" }}>
         {props.label}
       </Form.Label>
-      <Form.Select value={props.value} onChange={(e) => updateValue(e)} required>
+      <Form.Select value={props.value} onChange={(e) => updateValue(e)} required >
         {props.options.length > 0 &&
           props.options.map((option) => (
             <option value={option}>{option}</option>

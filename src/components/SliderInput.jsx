@@ -23,8 +23,8 @@ export default function SliderInput(props) {
       <Form.Label style={{ textAlign: "text-center text-md-right" }}>
         {props.label}
       </Form.Label>
-      <Stack direction="horizontal" gap={3}>
-        <Form.Control
+      <Stack direction="horizontal" gap={5}>
+        <Form.Control 
           required
           value={value}
           type="number"

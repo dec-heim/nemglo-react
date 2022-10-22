@@ -1,13 +1,12 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { Button, Card, Col, Container, Row, Navbar, Nav} from "react-bootstrap";
+  import { Button, Card, Col, Container, Row, Navbar, Nav} from "react-bootstrap";
 import SimulationDashboard from "./views/SimulationDashboard";
 
-import './App.css';
+import './App.scss';
 
-import 'bootstrap/dist/css/bootstrap.min.css'
+// import 'bootstrap/dist/css/bootstrap.min.css'
 
-import { Sidebar, Menu, MenuItem, SubMenu, Icon } from 'react-pro-sidebar';
 
 function App() {
   return (
@@ -23,6 +22,9 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
+      
+
+
       <Router>
         <Routes>
           <Route path="/" element={<SimulationDashboard />} />

@@ -23,8 +23,6 @@ function App() {
         </Container>
       </Navbar>
       
-
-
       <Router>
         <Routes>
           <Route path="/" element={<SimulationDashboard />} />

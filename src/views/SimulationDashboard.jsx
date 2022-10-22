@@ -11,6 +11,25 @@ import dataResponse from "../data/nemgloApiResponse.json";
 import { CirclesWithBar } from "react-loader-spinner";
 import SidebarMenu, { SidebarMenuBody } from "react-bootstrap-sidebar-menu";
 
+
+
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+
+
+
 const secProfiles = ["fixed", "variable"];
 const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
@@ -59,6 +78,7 @@ export default class SimulationDashboard extends Component {
     this.getReChartsData = this.getReChartsData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.isDateInvalid = this.isDateInvalid.bind(this);
+    this.onSelect = this.onSelect.bind(this);
   }
 
   setConfigValue = (id, val) => {
@@ -170,6 +190,11 @@ export default class SimulationDashboard extends Component {
     });
   };
 
+  onSelect = (eventKey) => {
+    if (eventKey)
+      document.getElementById(`${eventKey}`)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   render() {
     const {
       config,
@@ -186,44 +211,46 @@ export default class SimulationDashboard extends Component {
         <Container>
           <Row>
             <Col style={{ maxWidth: 300, maxHeight: 5 }}>
-              <SidebarMenu
-                exclusiveExpand={false}
-                collapseOnSelect={false}
-                variant={"dark"}
-                bg={"dark"}
-                rtl={false}
-                expand="lg"
-                hide="md"
-              >
-                <SidebarMenu.Collapse>
-                  <SidebarMenu.Header>
-                    <SidebarMenu.Brand>
-                      {/* Your brand icon */}
-                    </SidebarMenu.Brand>
-                    {/* <SidebarMenu.Toggle /> */}
-                  </SidebarMenu.Header>
-                  <SidebarMenu.Body>
-                    <SidebarMenu.Nav>
-                      <SidebarMenu.Nav.Link eventKey="setup">
-                        <SidebarMenu.Nav.Icon>1</SidebarMenu.Nav.Icon>
-                        <SidebarMenu.Nav.Title>
-                          How to install
-                        </SidebarMenu.Nav.Title>
-                      </SidebarMenu.Nav.Link>
-                      <SidebarMenu.Nav.Link eventKey="usage">
-                        <SidebarMenu.Nav.Icon>2</SidebarMenu.Nav.Icon>
-                        <SidebarMenu.Nav.Title>Usage</SidebarMenu.Nav.Title>
-                      </SidebarMenu.Nav.Link>
-                    </SidebarMenu.Nav>
-                    <SidebarMenu.Sub eventKey={0}>
-                      <SidebarMenu.Sub.Toggle>
-                        <SidebarMenu.Nav.Icon />
-                        <SidebarMenu.Nav.Title>Api</SidebarMenu.Nav.Title>
-                      </SidebarMenu.Sub.Toggle>
-                    </SidebarMenu.Sub>
-                  </SidebarMenu.Body>
-                </SidebarMenu.Collapse>
-              </SidebarMenu>
+            <Drawer
+        sx={{
+          width: 240,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: 240,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        <Toolbar />
+        <Divider />
+        <List>
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
             </Col>
             <Col>
               <Form

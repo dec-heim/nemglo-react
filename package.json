@@ -23,6 +23,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "react-loader-spinner": "^5.3.4",
+    "react-modern-drawer": "^1.1.2",
     "react-plotly.js": "^2.6.0",
     "react-pro-sidebar": "^1.0.0-alpha.6",
     "react-router-dom": "^6.4.0",

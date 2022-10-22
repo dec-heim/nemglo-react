@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
+
+
 import Chart from "../components/Chart";
 import DateTimeSelector from "../components/DateTimeSelector";
 import DropDownSelector from "../components/DropDownSelector";
@@ -12,10 +14,10 @@ import AmChart from "../components/AmChart";
 import dataResponse from "../data/nemgloApiResponse.json";
 import { CirclesWithBar } from "react-loader-spinner";
 
-const secProfiles = ["Fixed", "Variable"];
+const secProfiles = ["fixed", "variable"];
 const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
-const technologyTypes = ["PEM", "MEM"];
+const technologyTypes = ["PEM", "AE"];
 
 export default class SimulationDashboard extends Component {
   constructor() {

@@ -6,3 +6,41 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0; 
 }
 
+:root {
+    --color_sidebar: #2e3440;
+/* NORD color scheme */
+    --polar-1: #4c566a;
+    --polar-2: #434c5e;
+    --polar-3: #3b4252;
+    --polar-4: #2e3440;
+    --snow-1: #eceff4;
+    --snow-2: #e5e9f0;
+    --snow-3: #d8dee9;
+    --frost-1: #5e81ac;
+    --frost-2: #81a1c1;
+    --frost-3: #88c0d0;
+    --frost-4: #8fbcbb;
+    --aurora-p: #b48ead;
+    --aurora-g: #a3be8c;
+    --aurora-y: #ebcb8b;
+    --aurora-o: #d08770;
+    --aurora-r: #bf616a;
+}
+
+.col_sidebar {
+    background: var(--polar-4);
+}
+
+.navbar {
+    background-color: var(--snow-3);
+}
+
+.main_sidebar {
+    color: var(--snow-1);
+    background: var(--frost-3);
+    border-right: None;
+}
+
+.pro-sidebar {
+    color: var(--frost-4);
+}

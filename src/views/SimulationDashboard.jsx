@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
 
-
+import NemGloApi from "../api/NemgloApi";
 import Chart from "../components/Chart";
 import DateTimeSelector from "../components/DateTimeSelector";
 import DropDownSelector from "../components/DropDownSelector";
 import RegularInput from "../components/RegularInput";
 import SliderInput from "../components/SliderInput";
-import NemGloApi from "../api/NemgloApi";
+import data from "../data/data.json"
 
 const secProfiles = ["Fixed", "Variable"];
 const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
@@ -88,9 +88,10 @@ export default class SimulationDashboard extends Component {
 
   runSimulation = async () => {
     this.setState({ runningSimulation: true, resultsLoaded: false });
-    const data = await NemGloApi.runSimulation(this.state.config);
-    console.log(data);
+    // const data = await NemGloApi.runSimulation(this.state.config);
+    // console.log(data);
     this.getReChartsData(data);
+    console.log("here")
     this.setState({ runningSimulation: false, resultsLoaded: true });
   };
 

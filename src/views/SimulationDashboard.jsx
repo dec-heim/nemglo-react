@@ -9,26 +9,14 @@ import NemGloApi from "../api/NemgloApi";
 import AmChart from "../components/AmChart";
 import dataResponse from "../data/nemgloApiResponse.json";
 import { CirclesWithBar } from "react-loader-spinner";
-import SidebarMenu, { SidebarMenuBody } from "react-bootstrap-sidebar-menu";
 
-
-
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-
-
+import { Sidebar, Menu, MenuItem, SubMenu, Icon } from "react-pro-sidebar";
+import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
+import PPA1Config from "./PPA1Config";
+import PPA2Config from "./PPA2Config";
+import PlannerConfig from "./PlannerConfig";
+import SimulationView from "./SimulationView";
+import ResultsView from "./ResultsView";
 
 const secProfiles = ["fixed", "variable"];
 const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
@@ -71,6 +59,7 @@ export default class SimulationDashboard extends Component {
       runningSimulation: false,
       formValidated: false,
       isLoading: false,
+      currentConfig: "plannerConfig",
     };
 
     // Bindings go here
@@ -78,10 +67,10 @@ export default class SimulationDashboard extends Component {
     this.getReChartsData = this.getReChartsData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.isDateInvalid = this.isDateInvalid.bind(this);
-    this.onSelect = this.onSelect.bind(this);
   }
 
   setConfigValue = (id, val) => {
+    console.log(id, val);
     const { config } = this.state;
     config[id] = val;
     this.setState({
@@ -102,6 +91,7 @@ export default class SimulationDashboard extends Component {
       dataPoints.push(dataPoint);
     }
     this.setState({ dataPoints });
+    console.log(dataPoints)
   };
 
   viewResults = () => {
@@ -132,6 +122,7 @@ export default class SimulationDashboard extends Component {
 
   handleSubmit = (event) => {
     const form = event.currentTarget;
+    console.log(form);
     event.preventDefault();
     if (form.checkValidity() === false) {
       event.stopPropagation();
@@ -153,8 +144,15 @@ export default class SimulationDashboard extends Component {
     }
   };
 
+  onSelectModelConfig = (id) => {
+    let { currentConfig } = this.state;
+    currentConfig = id;
+    this.setState({
+      currentConfig,
+    });
+  };
+
   resetConfig = () => {
-    console.log("here");
     this.setState({
       config: {
         dispatchIntervalLength: 30,
@@ -187,13 +185,65 @@ export default class SimulationDashboard extends Component {
       resultsLoaded: false,
       runningSimulation: false,
       formValidated: false,
+      currentConfig: "plannerConfig",
     });
   };
 
-  onSelect = (eventKey) => {
-    if (eventKey)
-      document.getElementById(`${eventKey}`)?.scrollIntoView({ behavior: 'smooth' })
-  }
+  getCurrentConfig = () => {
+    const { currentConfig, config } = this.state;
+    switch (currentConfig) {
+      case "plannerConfig":
+        return (
+          <PlannerConfig
+            setConfigValue={this.setConfigValue}
+            dispatchIntervalLength={config.dispatchIntervalLength}
+            startDate={config.startDate}
+            isDateInvalid={this.isDateInvalid()}
+            endDate={config.endDate}
+            region={config.region}
+          />
+        );
+      case "electrolyserConfig":
+        return (
+          <ElectrolyserLoadConfig
+            setConfigValue={this.setConfigValue}
+            technologyType={config.technologyType}
+            h2Price={config.h2Price}
+            electrolyserCapacity={config.electrolyserCapacity}
+            minStableLoad={config.minStableLoad}
+            ratedLoad={config.ratedLoad}
+            overload={config.overload}
+            nominalSec={config.nominalSec}
+            conversionFactor={config.conversionFactor}
+            secProfile={config.secProfile}
+          />
+        );
+      case "ppa1Config":
+        return (
+          <PPA1Config
+            setConfigValue={this.setConfigValue}
+            duid1={config.duid1}
+            ppa1Capacity={config.ppa1Capacity}
+            ppa1StrikePrice={config.ppa1StrikePrice}
+          />
+        );
+      case "ppa2Config":
+        return (
+          <PPA2Config
+            setConfigValue={this.setConfigValue}
+            duid2={config.duid2}
+            ppa2Capacity={config.ppa2Capacity}
+            ppa2StrikePrice={config.ppa2StrikePrice}
+          />
+        );
+      case "simulationView":
+        return <SimulationView />;
+      // case "emissionsConfig":
+      //   return "bar";
+      default:
+        return "foo";
+    }
+  };
 
   render() {
     const {
@@ -205,402 +255,120 @@ export default class SimulationDashboard extends Component {
       dataPoints,
       formValidated,
       isLoading,
+      currentConfig,
     } = this.state;
     return (
-      <div>
-        <Container>
-          <Row>
-            <Col style={{ maxWidth: 300, maxHeight: 5 }}>
-            <Drawer
-        sx={{
-          width: 240,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: 240,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="permanent"
-        anchor="left"
-      >
-        <Toolbar />
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-            </Col>
-            <Col>
-              <Form
-                noValidate
-                validated={formValidated}
-                onSubmit={this.handleSubmit}
+      <div style={{ display: "flex", height: "100%" }}>
+        <Sidebar style={{ borderRight: "None" }}>
+          <Menu>
+            <SubMenu label="Configure Model">
+              <MenuItem
+                id="plannerConfig"
+                onClick={() => this.onSelectModelConfig("plannerConfig")}
               >
-                <Container style={{ paddingBottom: 5, paddingTop: 15 }}>
-                  <Stack direction="horizontal" gap={3}>
-                    {runningSimulation ? (
-                      <h2>Running Simulation</h2>
-                    ) : (
-                      <h2>Simulation Config</h2>
-                    )}
-                    {runningSimulation ? (
-                      <Button
-                        onClick={() => console.log("Running Simulation")}
-                        variant={!runningSimulation ? "warning" : "secondary"}
-                      >
-                        Run Simulation
-                      </Button>
-                    ) : (
-                      <Button
-                        type="submit"
-                        variant={!runningSimulation ? "warning" : "secondary"}
-                      >
-                        Run Simulation
-                      </Button>
-                    )}
-                    {runningSimulation ? (
-                      <Button
-                        variant="secondary"
-                        onClick={() =>
-                          console.log("Running Simulation, cannot reset")
-                        }
-                      >
-                        Reset Config
-                      </Button>
-                    ) : (
-                      <Button variant="danger" onClick={this.resetConfig}>
-                        Reset Config
-                      </Button>
-                    )}
-                    {resultsLoaded && (
-                      <Button variant="primary" onClick={this.viewConfig}>
-                        View Config
-                      </Button>
-                    )}{" "}
-                    <Button
-                      variant={resultsLoaded ? "success" : "secondary"}
-                      onClick={
-                        resultsLoaded ? this.viewResults : console.log("")
-                      }
-                    >
-                      View Results
-                    </Button>{" "}
-                  </Stack>
+                {" "}
+                Planner{" "}
+              </MenuItem>
+              <MenuItem
+                id="electrolyserConfig"
+                onClick={() => this.onSelectModelConfig("electrolyserConfig")}
+              >
+                {" "}
+                Electrolyser{" "}
+              </MenuItem>
+              <MenuItem
+                id="ppa1Config"
+                onClick={() => this.onSelectModelConfig("ppa1Config")}
+              >
+                {" "}
+                Renewable PPA 1{" "}
+              </MenuItem>
+              <MenuItem
+                id="ppa2Config"
+                onClick={() => this.onSelectModelConfig("ppa2Config")}
+              >
+                {" "}
+                Renewable PPA 2{" "}
+              </MenuItem>
+            </SubMenu>
+            <MenuItem
+              onClick={() => this.onSelectModelConfig("simulationView")}
+            >
+              {" "}
+              Simulate{" "}
+            </MenuItem>
+            {resultsLoaded && (
+              <MenuItem onClick={() => this.onSelectModelConfig("resultsView")}>
+                {" "}
+                Results{" "}
+              </MenuItem>
+            )}
 
-                  <Container style={{ height: 15 }} />
+            <MenuItem> About </MenuItem>
+          </Menu>
+        </Sidebar>
+        <Container
+          fluid
+          style={{
+            background: "#eceff4",
+            paddingBottom: 20,
+            paddingTop: 20,
+            paddingLeft: 20,
+            paddingRight: 20,
+          }}
+        >
+          <Form
+            noValidate
+            validated={formValidated}
+            onSubmit={this.handleSubmit}
+          >
+            <Container style={{ paddingLeft: 5, paddingRight: 5 }}>
+              {/* {this.getCurrentConfig()} */}
 
-                  {viewConfig && !runningSimulation && (
-                    <Row>
-                      <Col className="electrolyser-load">
-                        <Card
-                          style={{
-                            paddingTop: 20,
-                            paddingBottom: 10,
-                            paddingLeft: 5,
-                            paddingRight: 5,
-                          }}
-                        >
-                          <Card.Title style={{ paddingLeft: 15 }}>
-                            Electrolyser Load
-                          </Card.Title>
-                          <Card.Body>
-                            <DropDownSelector
-                              id="technologyType"
-                              label="Technology Type"
-                              options={technologyTypes}
-                              setConfigValue={this.setConfigValue}
-                              value={config.technologyType}
-                            ></DropDownSelector>
-                            <SliderInput
-                              id="h2Price"
-                              label="H2 Price ($/kh)"
-                              setConfigValue={this.setConfigValue}
-                              value={config.h2Price}
-                              max={100}
-                            ></SliderInput>
-                            <SliderInput
-                              id="electrolyserCapacity"
-                              label="Capacity (MW)"
-                              setConfigValue={this.setConfigValue}
-                              value={config.electrolyserCapacity}
-                              max={100}
-                            ></SliderInput>
-                            <Container style={{ height: 50 }}></Container>
-                            <SliderInput
-                              id="minStableLoad"
-                              label="Minimum Stable Load"
-                              setConfigValue={this.setConfigValue}
-                              value={config.minStableLoad}
-                              max={100}
-                            ></SliderInput>
-                            <SliderInput
-                              id="ratedLoad"
-                              label="Rated Load (MW)"
-                              setConfigValue={this.setConfigValue}
-                              value={config.ratedLoad}
-                              max={100}
-                            ></SliderInput>
-                            <SliderInput
-                              id="overload"
-                              label="Overload (MW)"
-                              setConfigValue={this.setConfigValue}
-                              value={config.overload}
-                              max={100}
-                            ></SliderInput>
-                            <Container style={{ height: 50 }}></Container>
-                            <RegularInput
-                              id="nominalSec"
-                              label="Nominal SEC (KWH/kg)"
-                              placeholder={50}
-                              setConfigValue={this.setConfigValue}
-                              value={config.nominalSec}
-                              type="number"
-                            ></RegularInput>
-                            <RegularInput
-                              id="conversionFactor"
-                              label="Conversion Factor (%)"
-                              placeholder={50}
-                              setConfigValue={this.setConfigValue}
-                              value={config.conversionFactor}
-                              type="number"
-                            ></RegularInput>
-                            <DropDownSelector
-                              id="secProfile"
-                              label="SEC Profile"
-                              options={secProfiles}
-                              setConfigValue={this.setConfigValue}
-                              value={config.secProfile}
-                            ></DropDownSelector>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                      <Col>
-                        <Row>
-                          <Col className="renewables-ppa-1">
-                            <Card
-                              style={{
-                                paddingTop: 20,
-                                paddingBottom: 10,
-                                paddingLeft: 5,
-                                paddingRight: 5,
-                              }}
-                            >
-                              <Card.Title style={{ paddingLeft: 15 }}>
-                                PPA 1
-                              </Card.Title>
-                              <Card.Body>
-                                <DropDownSelector
-                                  id="duid1"
-                                  label="DUID (Unit)"
-                                  options={duids}
-                                  setConfigValue={this.setConfigValue}
-                                  value={config.duid1}
-                                ></DropDownSelector>
-                                <SliderInput
-                                  id="ppa1Capacity"
-                                  label="Capacity (MW)"
-                                  setConfigValue={this.setConfigValue}
-                                  value={config.ppa1Capacity}
-                                  max={100}
-                                ></SliderInput>
-                                <SliderInput
-                                  id="ppa1StrikePrice"
-                                  label="PPA Strike ($/MWh)"
-                                  setConfigValue={this.setConfigValue}
-                                  value={config.ppa1StrikePrice}
-                                  max={100}
-                                ></SliderInput>
-                              </Card.Body>
-                            </Card>
-                          </Col>
-                          <Col className="renewables-ppa-2">
-                            <Card
-                              style={{
-                                paddingTop: 20,
-                                paddingBottom: 10,
-                                paddingLeft: 5,
-                                paddingRight: 5,
-                              }}
-                            >
-                              <Card.Title style={{ paddingLeft: 15 }}>
-                                PPA 1
-                              </Card.Title>
-                              <Card.Body>
-                                <DropDownSelector
-                                  id="duid2"
-                                  label="DUID (Unit)"
-                                  options={duids}
-                                  setConfigValue={this.setConfigValue}
-                                  value={config.duid2}
-                                ></DropDownSelector>
-                                <SliderInput
-                                  id="ppa2Capacity"
-                                  label="Capacity (MW)"
-                                  setConfigValue={this.setConfigValue}
-                                  value={config.ppa2Capacity}
-                                  max={100}
-                                ></SliderInput>
-                                <SliderInput
-                                  id="ppa2StrikePrice"
-                                  label="PPA Strike ($/MWh)"
-                                  setConfigValue={this.setConfigValue}
-                                  value={config.ppa2StrikePrice}
-                                  max={100}
-                                ></SliderInput>
-                              </Card.Body>
-                            </Card>
-                          </Col>
-                        </Row>
-                        <Container style={{ height: 15 }} />
-                        <Row>
-                          <Col className="market-data">
-                            <Card
-                              style={{
-                                paddingTop: 20,
-                                paddingLeft: 5,
-                                paddingRight: 5,
-                              }}
-                            >
-                              <Card.Title style={{ paddingLeft: 15 }}>
-                                Market Data
-                              </Card.Title>
-                              <Card.Body>
-                                <DropDownSelector
-                                  id="dispatchIntervalLength"
-                                  label="Dispatch Interval Length"
-                                  value={config.dispatchIntervalLength}
-                                  options={[30, 60, 90]}
-                                  setConfigValue={this.setConfigValue}
-                                ></DropDownSelector>
-
-                                <Form.Group style={{ paddingBottom: 10 }}>
-                                  <Form.Label
-                                    style={{
-                                      textAlign: "text-center text-md-right",
-                                    }}
-                                  >
-                                    Start Date
-                                  </Form.Label>
-                                  <Form.Control
-                                    required
-                                    id="startDate"
-                                    type="date"
-                                    format="dd/MM/yyyy"
-                                    onChange={(e) =>
-                                      this.setConfigValue(
-                                        "startDate",
-                                        e.target.value
-                                      )
-                                    }
-                                    value={config.startDate}
-                                    isInvalid={this.isDateInvalid()}
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    Please select a valid date. Maximum date
-                                    range is 7 days.
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group style={{ paddingBottom: 10 }}>
-                                  <Form.Label
-                                    style={{
-                                      textAlign: "text-center text-md-right",
-                                    }}
-                                  >
-                                    End Date
-                                  </Form.Label>
-                                  <Form.Control
-                                    required
-                                    id="endDate"
-                                    type="date"
-                                    format="dd/MM/yyyy"
-                                    onChange={(e) =>
-                                      this.setConfigValue(
-                                        "endDate",
-                                        e.target.value
-                                      )
-                                    }
-                                    value={config.endDate}
-                                    isInvalid={this.isDateInvalid()}
-                                  />
-                                  <Form.Control.Feedback type="invalid">
-                                    Please select a valid date. Maximum date
-                                    range is 7 days.
-                                  </Form.Control.Feedback>
-                                </Form.Group>
-                                <DropDownSelector
-                                  id="region"
-                                  label="Region"
-                                  value={config.region}
-                                  options={regions}
-                                  setConfigValue={this.setConfigValue}
-                                ></DropDownSelector>
-                              </Card.Body>
-                            </Card>
-                          </Col>
-                        </Row>
-                      </Col>
-                    </Row>
-                  )}
-                  {viewResults && (
-                    <Container>
-                      {" "}
-                      {/* <Chart data={dataPoints}></Chart>{" "} */}
-                      <AmChart data={dataPoints}></AmChart>
-                    </Container>
-                  )}
-                  {runningSimulation && (
-                    <Container
-                      style={{
-                        top: "50%",
-                        left: "50%",
-                        bottom: "50%",
-                        right: "50%",
-                        margin: "0",
-                        position: "absolute",
-                      }}
-                    >
-                      <Col>
-                        <CirclesWithBar
-                          height="100"
-                          width="100"
-                          color="#4fa94d"
-                          wrapperStyle={{}}
-                          wrapperClass=""
-                          visible={true}
-                          outerCircleColor=""
-                          innerCircleColor=""
-                          barColor=""
-                          ariaLabel="circles-with-bar-loading"
-                        />
-                      </Col>
-                    </Container>
-                  )}
-                </Container>
-              </Form>
-            </Col>
-          </Row>
+              {currentConfig === "plannerConfig" && (
+                <PlannerConfig
+                  setConfigValue={this.setConfigValue}
+                  dispatchIntervalLength={config.dispatchIntervalLength}
+                  startDate={config.startDate}
+                  isDateInvalid={() => this.isDateInvalid()}
+                  endDate={config.endDate}
+                  region={config.region}
+                />
+              )}
+              {currentConfig === "electrolyserConfig" && (
+                <ElectrolyserLoadConfig
+                  setConfigValue={this.setConfigValue}
+                  technologyType={config.technologyType}
+                  h2Price={config.h2Price}
+                  electrolyserCapacity={config.electrolyserCapacity}
+                  minStableLoad={config.minStableLoad}
+                  ratedLoad={config.ratedLoad}
+                  overload={config.overload}
+                  nominalSec={config.nominalSec}
+                  conversionFactor={config.conversionFactor}
+                  secProfile={config.secProfile}
+                />
+              )}
+              {currentConfig === "ppa1Config" && (
+                <PPA1Config
+                  setConfigValue={this.setConfigValue}
+                  duid1={config.duid1}
+                  ppa1Capacity={config.ppa1Capacity}
+                  ppa1StrikePrice={config.ppa1StrikePrice}
+                />
+              )}
+              {currentConfig === "ppa2Config" && (
+                <PPA2Config
+                  setConfigValue={this.setConfigValue}
+                  duid2={config.duid2}
+                  ppa2Capacity={config.ppa2Capacity}
+                  ppa2StrikePrice={config.ppa2StrikePrice}
+                />
+              )}
+              {currentConfig === "simulationView" && <SimulationView />}
+              {currentConfig === "resultsView" && <ResultsView chart1={dataPoints}/>}
+            </Container>
+          </Form>
         </Container>
       </div>
     );

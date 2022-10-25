@@ -19,8 +19,12 @@ export default function SimulationView(props) {
     >
       <Card.Title style={{ paddingLeft: 15 }}>Perform Simulation</Card.Title>
       <Card.Body>
-        <Button type="submit" variant={"secondary"}>
+        <Button type="submit" variant={"primary"}>
           Run Simulation
+        </Button>
+        {" "}
+        <Button type="submit" variant={"danger"}>
+          Reset Model Config
         </Button>
       </Card.Body>
     </Card>

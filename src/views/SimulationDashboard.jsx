@@ -111,20 +111,17 @@ export default class SimulationDashboard extends Component {
       let diffDays = diff / (1000 * 3600 * 24);
       return diffDays > 7 || diffDays <= 0;
     }
-    if (config.startDate !== "" && config.endDate === "") {
-      return true;
-    }
-    if (config.startDate === "" && config.endDate !== "") {
-      return true;
-    }
-    return false;
+    return config.startDate === "" || config.endDate === "";
   };
+
+
 
   handleSubmit = (event) => {
     const form = event.currentTarget;
-    console.log(form);
+    console.log(form.checkValidity());
     event.preventDefault();
-    if (form.checkValidity() === false) {
+    console.log(this.isDateInvalid());
+    if (form.checkValidity() === false || this.isDateInvalid()) {
       event.stopPropagation();
     } else {
       this.runSimulation();
@@ -198,7 +195,6 @@ export default class SimulationDashboard extends Component {
             setConfigValue={this.setConfigValue}
             dispatchIntervalLength={config.dispatchIntervalLength}
             startDate={config.startDate}
-            isDateInvalid={this.isDateInvalid()}
             endDate={config.endDate}
             region={config.region}
           />
@@ -328,7 +324,6 @@ export default class SimulationDashboard extends Component {
                   setConfigValue={this.setConfigValue}
                   dispatchIntervalLength={config.dispatchIntervalLength}
                   startDate={config.startDate}
-                  isDateInvalid={() => this.isDateInvalid()}
                   endDate={config.endDate}
                   region={config.region}
                 />

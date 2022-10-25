@@ -4,19 +4,25 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
 class AmChart extends Component {
-    constructor() {
-        super();
-        this.state = {
-        }
-        this.createAxisAndSeries = this.createAxisAndSeries.bind(this);
-        this.updateChart = this.updateChart.bind(this);
-    }
+  constructor() {
+    super();
+    this.state = {};
+    this.createAxisAndSeries = this.createAxisAndSeries.bind(this);
+    this.updateChart = this.updateChart.bind(this);
+  }
 
-  createAxisAndSeries = (chart, xAxis, data, valueYField, root, opposite, tooltip) => {
+  createAxisAndSeries = (
+    chart,
+    xAxis,
+    data,
+    valueYField,
+    root,
+    opposite,
+    tooltip
+  ) => {
     let yRenderer = am5xy.AxisRendererY.new(root, {
       opposite: opposite,
     });
-    console.log(data);
     let yAxis = chart.yAxes.push(
       am5xy.ValueAxis.new(root, {
         maxDeviation: 1,
@@ -67,10 +73,10 @@ class AmChart extends Component {
 
   updateChart = () => {
     am5.array.each(am5.registry.rootElements, function (root) {
-        if (root.dom.id == "chartdiv") {
-          root.dispose();
-        }
-      });
+      if (root.dom.id == "chartdiv") {
+        root.dispose();
+      }
+    });
 
     let root = am5.Root.new("chartdiv");
 
@@ -78,12 +84,13 @@ class AmChart extends Component {
 
     let chart = root.container.children.push(
       am5xy.XYChart.new(root, {
-        focusable: true,
+        focusable: false,
         panX: true,
         panY: true,
         wheelX: "panX",
         wheelY: "zoomX",
         pinchZoomX: true,
+        layout: root.verticalLayout,
       })
     );
 
@@ -124,12 +131,61 @@ class AmChart extends Component {
       })
     );
     let data = this.props.data;
-    this.createAxisAndSeries(chart, xAxis, data, "price", root, true,   "Price: ${valueY}");
-    this.createAxisAndSeries(chart, xAxis, data, "ppa1", root, false, "PPA1:  ${valueY}");
-    this.createAxisAndSeries(chart, xAxis, data, "ppa2", root, true, "PPA2:  ${valueY}");
-    this.createAxisAndSeries(chart, xAxis, data, "combined", root, false, "Combined:  ${valueY}");
-    this.createAxisAndSeries(chart, xAxis, data, "optimised", root, true, "Optimised:  ${valueY}");
-  }
+    this.createAxisAndSeries(
+      chart,
+      xAxis,
+      data,
+      "price",
+      root,
+      true,
+      "Price: ${valueY}"
+    );
+    this.createAxisAndSeries(
+      chart,
+      xAxis,
+      data,
+      "ppa1",
+      root,
+      false,
+      "PPA1:  ${valueY}"
+    );
+    this.createAxisAndSeries(
+      chart,
+      xAxis,
+      data,
+      "ppa2",
+      root,
+      true,
+      "PPA2:  ${valueY}"
+    );
+    this.createAxisAndSeries(
+      chart,
+      xAxis,
+      data,
+      "combined",
+      root,
+      false,
+      "Combined:  ${valueY}"
+    );
+    this.createAxisAndSeries(
+      chart,
+      xAxis,
+      data,
+      "optimised",
+      root,
+      true,
+      "Optimised:  ${valueY}"
+    );
+
+    let legend = chart.children.push(
+      am5.Legend.new(root, {
+        nameField: "valueYField",
+        centerX: am5.percent(50),
+        x: am5.percent(50),
+      })
+    );
+    legend.data.setAll(chart.series.values);
+  };
 
   componentDidMount() {
     this.updateChart();
@@ -142,6 +198,7 @@ class AmChart extends Component {
   }
 
   render() {
+    console.log(this.props.data);
     return <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>;
   }
 }

@@ -12,26 +12,7 @@ export default class ResultsView extends Component {
   constructor() {
     super();
     this.state = {};
-    this.isDateInvalid = this.isDateInvalid.bind(this);
   }
-  isDateInvalid = () => {
-    const { startDate, endDate } = this.props;
-    console.log("checkingDate", startDate, endDate);
-    if (startDate !== "" && endDate !== "") {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      let diff = end.getTime() - start.getTime();
-      let diffDays = diff / (1000 * 3600 * 24);
-      return diffDays > 7 || diffDays <= 0;
-    }
-    if (startDate !== "" && endDate === "") {
-      return true;
-    }
-    if (startDate === "" && endDate !== "") {
-      return true;
-    }
-    return false;
-  };
 
   render() {
     return (

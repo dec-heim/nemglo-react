@@ -1,6 +1,25 @@
 import axios from "axios";
 import config from "../config.json";
 
+const runPreloadMarket = async (simConfig) => {
+  try {
+    const body = {
+      market_data: {
+        start_date: simConfig.startDate,
+        end_date: simConfig.endDate,
+        region: simConfig.region,
+        dispatch_interval_length: simConfig.dispatchIntervalLength,
+      },
+    };
+
+    const reponse = await axios.post(`${config.api}/get-market-data`, body);
+    return reponse.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 const runSimulation = async (simConfig) => {
   try {
     const body = {
@@ -44,6 +63,7 @@ const runSimulation = async (simConfig) => {
 
 
 export default {
+    runPreloadMarket,
     runSimulation
 }
 

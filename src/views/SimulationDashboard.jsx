@@ -51,6 +51,7 @@ export default class SimulationDashboard extends Component {
         region: regions[0],
       },
       dataPoints: [],
+      dataPoints_premkt: [],
       viewResults: false,
       resetConfig: false,
       runSimulation: false,
@@ -92,6 +93,20 @@ export default class SimulationDashboard extends Component {
     }
     this.setState({ dataPoints });
     console.log(dataPoints)
+  };
+
+  // Preload Market data
+  getReChartsData_premkt = (data) => {
+    let dataPoints_premkt = [];
+    for (let i = 0; i < data.time.length; i++) {
+      let dataPoint = {};
+      dataPoint["timestamp"] = data.timestamps[i];
+      dataPoint["price"] = data.prices[i];
+      dataPoints_premkt.push(dataPoint);
+    }
+    console.log("in rechartsdata_premkt")
+    console.log(dataPoints_premkt)
+    this.setState({ dataPoints_premkt: dataPoints_premkt });
   };
 
   viewResults = () => {
@@ -141,6 +156,18 @@ export default class SimulationDashboard extends Component {
     } else {
       this.getReChartsData(data);
       this.setState({ runningSimulation: false, resultsLoaded: true });
+    }
+  };
+
+  runPreloadMarket = async () => {
+    this.setState({ runPreloadMarket: true, preloadLoaded: false});
+    const data = await NemGloApi.runPreloadMarket(this.state.config);
+    if (data === null || data === undefined) {
+      alert("Preload Market Error");
+      this.setState({ runPreloadMarket: false, preloadLoaded: false});
+    } else {
+      this.getReChartsData_premkt(data);
+      this.setState({ runPreloadMarket: false, preloadLoaded: true});
     }
   };
 
@@ -326,14 +353,37 @@ export default class SimulationDashboard extends Component {
               {/* {this.getCurrentConfig()} */}
 
               {currentConfig === "plannerConfig" && (
-                <PlannerConfig
-                  setConfigValue={this.setConfigValue}
-                  dispatchIntervalLength={config.dispatchIntervalLength}
-                  startDate={config.startDate}
-                  isDateInvalid={() => this.isDateInvalid()}
-                  endDate={config.endDate}
-                  region={config.region}
-                />
+                <Container>
+                  <Row>
+                    <Col>
+                      <PlannerConfig
+                      setConfigValue={this.setConfigValue}
+                      dispatchIntervalLength={config.dispatchIntervalLength}
+                      startDate={config.startDate}
+                      isDateInvalid={() => this.isDateInvalid()}
+                      endDate={config.endDate}
+                      region={config.region}
+                      />
+                    </Col>
+                    <Col>
+                      <Card
+                        style={{
+                          paddingTop: 20,
+                          paddingLeft: 5,
+                          paddingRight: 5,
+                          paddingBottom: 5,
+                        }}
+                      >
+                        <Card.Title style={{ paddingLeft: 15 }}>Preview Data</Card.Title>
+                        <Card.Body>
+                          <Button variant={"primary"} onClick={() => console.log("button click")}>Refresh Preview</Button>
+                          <p>add amchart with price here from get-market-data api</p>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </Row>
+                  
+                </Container>
               )}
               {currentConfig === "electrolyserConfig" && (
                 <ElectrolyserLoadConfig

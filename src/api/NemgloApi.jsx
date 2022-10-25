@@ -1,6 +1,24 @@
 import axios from "axios";
 import config from "../config.json";
 
+const getMarketData = async (marketConfig) => {
+  try {
+  
+    const body = {
+      market_data: {
+        start_date: marketConfig.startDate,
+        end_date: marketConfig.endDate,
+        region: marketConfig.region
+      }
+    }
+    const reponse = await axios.post(`${config.api}/get-market-data`, body);
+    return reponse.data;
+  } catch(err) {
+    console.log(err);
+    return null;
+  }
+}
+
 const runSimulation = async (simConfig) => {
   try {
     const body = {
@@ -44,7 +62,8 @@ const runSimulation = async (simConfig) => {
 
 
 export default {
-    runSimulation
+    runSimulation,
+    getMarketData
 }
 
 

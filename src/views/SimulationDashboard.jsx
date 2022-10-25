@@ -1,16 +1,9 @@
 import React, { Component } from "react";
-import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-
-import DropDownSelector from "../components/DropDownSelector";
-import RegularInput from "../components/RegularInput";
-import SliderInput from "../components/SliderInput";
 import NemGloApi from "../api/NemgloApi";
-import AmChart from "../components/AmChart";
-import dataResponse from "../data/nemgloApiResponse.json";
-import { CirclesWithBar } from "react-loader-spinner";
 
-import { Sidebar, Menu, MenuItem, SubMenu, Icon } from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
 import PPA1Config from "./PPA1Config";
 import PPA2Config from "./PPA2Config";
@@ -60,6 +53,7 @@ export default class SimulationDashboard extends Component {
       formValidated: false,
       isLoading: false,
       currentConfig: "plannerConfig",
+      marketData: []
     };
 
     // Bindings go here
@@ -67,6 +61,8 @@ export default class SimulationDashboard extends Component {
     this.getReChartsData = this.getReChartsData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.isDateInvalid = this.isDateInvalid.bind(this);
+    this.setMarketData = this.setMarketData.bind(this);
+
   }
 
   setConfigValue = (id, val) => {
@@ -114,6 +110,9 @@ export default class SimulationDashboard extends Component {
     return config.startDate === "" || config.endDate === "";
   };
 
+  setMarketData =  (marketData) => {
+    this.setState({ marketData });
+  };
 
 
   handleSubmit = (event) => {
@@ -252,9 +251,10 @@ export default class SimulationDashboard extends Component {
       formValidated,
       isLoading,
       currentConfig,
+      marketData
     } = this.state;
     return (
-      <div style={{ display: "flex", height: "100vh" }}>
+      <div style={{ display: "flex", height: "100vh", background: "#eceff4" }}>
         <Sidebar style={{ borderRight: "None" }}>
           <Menu>
             <SubMenu label="Configure Model">
@@ -304,20 +304,18 @@ export default class SimulationDashboard extends Component {
           </Menu>
         </Sidebar>
         <Container
-
           style={{
-            background: "#eceff4",
             paddingBottom: 20,
             paddingTop: 20,
             paddingLeft: 20,
             paddingRight: 20,
           }}
         >
-          <Form
+          {/* <Form
             noValidate
             validated={formValidated}
             onSubmit={this.handleSubmit}
-          >
+          > */}
             <Container style={{ paddingLeft: 5, paddingRight: 5 }}>
               {currentConfig === "plannerConfig" && (
                 <PlannerConfig
@@ -326,6 +324,8 @@ export default class SimulationDashboard extends Component {
                   startDate={config.startDate}
                   endDate={config.endDate}
                   region={config.region}
+                  marketData={marketData}
+                  setMarketData={this.setMarketData}
                 />
               )}
               {currentConfig === "electrolyserConfig" && (
@@ -361,7 +361,7 @@ export default class SimulationDashboard extends Component {
               {currentConfig === "simulationView" && <SimulationView />}
               {currentConfig === "resultsView" && <ResultsView chart1={dataPoints}/>}
             </Container>
-          </Form>
+          {/* </Form> */}
         </Container>
       </div>
     );

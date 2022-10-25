@@ -130,52 +130,64 @@ class AmChart extends Component {
         orientation: "horizontal",
       })
     );
-    let data = this.props.data;
-    this.createAxisAndSeries(
-      chart,
-      xAxis,
-      data,
-      "price",
-      root,
-      true,
-      "Price: ${valueY}"
-    );
-    this.createAxisAndSeries(
-      chart,
-      xAxis,
-      data,
-      "ppa1",
-      root,
-      false,
-      "PPA1:  ${valueY}"
-    );
-    this.createAxisAndSeries(
-      chart,
-      xAxis,
-      data,
-      "ppa2",
-      root,
-      true,
-      "PPA2:  ${valueY}"
-    );
-    this.createAxisAndSeries(
-      chart,
-      xAxis,
-      data,
-      "combined",
-      root,
-      false,
-      "Combined:  ${valueY}"
-    );
-    this.createAxisAndSeries(
-      chart,
-      xAxis,
-      data,
-      "optimised",
-      root,
-      true,
-      "Optimised:  ${valueY}"
-    );
+    let data = this.props.data; // valueYField, tooltip
+    const {seriesSettings} = this.props;
+    for (let i = 0; i < seriesSettings.length; i++) {
+      let seriesSetting = seriesSettings[i];
+      let opposite = i % 2 == 0 ? true : false;
+      this.createAxisAndSeries(      chart,
+        xAxis,
+        data,
+        seriesSetting.valueYField,
+        root,
+        opposite,
+        seriesSetting.tooltip)
+    }
+    // this.createAxisAndSeries(
+    //   chart,
+    //   xAxis,
+    //   data,
+    //   "price",
+    //   root,
+    //   true,
+    //   "Price: ${valueY}"
+    // );
+    // this.createAxisAndSeries(
+    //   chart,
+    //   xAxis,
+    //   data,
+    //   "ppa1",
+    //   root,
+    //   false,
+    //   "PPA1:  ${valueY}"
+    // );
+    // this.createAxisAndSeries(
+    //   chart,
+    //   xAxis,
+    //   data,
+    //   "ppa2",
+    //   root,
+    //   true,
+    //   "PPA2:  ${valueY}"
+    // );
+    // this.createAxisAndSeries(
+    //   chart,
+    //   xAxis,
+    //   data,
+    //   "combined",
+    //   root,
+    //   false,
+    //   "Combined:  ${valueY}"
+    // );
+    // this.createAxisAndSeries(
+    //   chart,
+    //   xAxis,
+    //   data,
+    //   "optimised",
+    //   root,
+    //   true,
+    //   "Optimised:  ${valueY}"
+    // );
 
     let legend = chart.children.push(
       am5.Legend.new(root, {

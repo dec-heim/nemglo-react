@@ -12,6 +12,8 @@ const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
 const technologyTypes = ["PEM", "AE"];
 
+// Remove overload, rated load 
+
 export default function ElectrolyserLoadConfig(props) {
     return (
         <Card

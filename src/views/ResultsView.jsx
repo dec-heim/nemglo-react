@@ -15,6 +15,28 @@ export default class ResultsView extends Component {
   }
 
   render() {
+    const seriesSettings = [
+      {
+        valueYField: "price",
+        tooltip: "Price: ${valueY}",
+      },
+      {
+        valueYField: "ppa1",
+        tooltip: "PPA1:  ${valueY}",
+      },
+      {
+        valueYField: "ppa2",
+        tooltip: "PPA2:  ${valueY}",
+      },
+      {
+        valueYField: "combined",
+        tooltip: "Combined:  ${valueY}",
+      },
+      {
+        valueYField: "optimised",
+        tooltip: "Optimised:  ${valueY}",
+      },
+    ];
     return (
       <Card
         style={{
@@ -24,9 +46,13 @@ export default class ResultsView extends Component {
           paddingBottom: 5,
         }}
       >
-        <Card.Title style={{ paddingLeft: 15 }}>Chart 1</Card.Title>
+        <Card.Title style={{ paddingLeft: 15 }}>Simulation Results</Card.Title>
         <Card.Body>
-        <AmChart data={this.props.chart1}></AmChart>
+          <AmChart
+            data={this.props.chart1}
+            seriesSettings={seriesSettings}
+          ></AmChart>
+          // Second chart revenue,
         </Card.Body>
       </Card>
     );

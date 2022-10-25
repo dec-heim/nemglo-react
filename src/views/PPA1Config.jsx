@@ -47,3 +47,5 @@ export default function PPA1Config(props) {
       </Card>
   );
 }
+
+// Add Togggle switch

@@ -23,10 +23,10 @@ import { Sidebar, Menu, MenuItem, SubMenu, Icon } from "react-pro-sidebar";
 function App() {
   return (
     <ProSidebarProvider className="pro-sidebar">
-      <Navbar className="navbar">
-        <Container>
+      <Navbar className="navbar"  expand="lg">
+          <Container>
           <Navbar.Brand href="/">NEMGLO</Navbar.Brand>
-        </Container>
+          </Container>
       </Navbar>
       <SimulationDashboard />
     </ProSidebarProvider>

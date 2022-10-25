@@ -28,9 +28,12 @@ export default class PlannerConfig extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.marketData);
-    if (this.props.marketData.prices.length > 0) {
-      this.storeDataPoints(this.props.marketData);
+    if (this.props.marketData !== {}) {
+      if ("prices" in this.props.marketData) {
+        if (this.props.marketData.prices.length > 0) {
+          this.storeDataPoints(this.props.marketData);
+        }
+      }
     }
   }
 

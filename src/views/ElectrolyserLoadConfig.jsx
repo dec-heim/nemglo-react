@@ -55,20 +55,20 @@ export default function ElectrolyserLoadConfig(props) {
               value={props.minStableLoad}
               max={100}
             ></SliderInput>
-            <SliderInput
+            {/* <SliderInput
               id="ratedLoad"
               label="Rated Load (MW)"
               setConfigValue={props.setConfigValue}
               value={props.ratedLoad}
               max={100}
-            ></SliderInput>
-            <SliderInput
+            ></SliderInput> */}
+            {/* <SliderInput
               id="overload"
               label="Overload (MW)"
               setConfigValue={props.setConfigValue}
               value={props.overload}
               max={100}
-            ></SliderInput>
+            ></SliderInput> */}
             <Container style={{ height: 50 }}></Container>
             <RegularInput
               id="nominalSec"

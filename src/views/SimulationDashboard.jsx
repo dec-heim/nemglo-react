@@ -5,8 +5,7 @@ import NemGloApi from "../api/NemgloApi";
 
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
-import PPA1Config from "./PPA1Config";
-import PPA2Config from "./PPA2Config";
+import PPAConfig from "./PPAConfig";
 import PlannerConfig from "./PlannerConfig";
 import SimulationView from "./SimulationView";
 import ResultsView from "./ResultsView";
@@ -36,8 +35,8 @@ export default class SimulationDashboard extends Component {
         secProfile: secProfiles[0],
         conversionFactor: 50,
         nominalSec: 6,
-        overload: 0,
-        ratedLoad: 50,
+        // overload: 0,
+        // ratedLoad: 50,
         minStableLoad: 50,
         h2Price: 6,
         technologyType: technologyTypes[0],
@@ -53,7 +52,9 @@ export default class SimulationDashboard extends Component {
       formValidated: false,
       isLoading: false,
       currentConfig: "plannerConfig",
-      marketData: []
+      marketData: {},
+      ppa1Disabled: false,
+      ppa2Disabled: false,
     };
 
     // Bindings go here
@@ -62,8 +63,9 @@ export default class SimulationDashboard extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.isDateInvalid = this.isDateInvalid.bind(this);
     this.setMarketData = this.setMarketData.bind(this);
-
+    this.setPPADisabled = this.setPPADisabled.bind(this);
   }
+
 
   setConfigValue = (id, val) => {
     console.log(id, val);
@@ -87,7 +89,7 @@ export default class SimulationDashboard extends Component {
       dataPoints.push(dataPoint);
     }
     this.setState({ dataPoints });
-    console.log(dataPoints)
+    console.log(dataPoints);
   };
 
   viewResults = () => {
@@ -110,10 +112,18 @@ export default class SimulationDashboard extends Component {
     return config.startDate === "" || config.endDate === "";
   };
 
-  setMarketData =  (marketData) => {
+  setMarketData = (marketData) => {
     this.setState({ marketData });
   };
 
+  setPPADisabled = (PPANum, isDisabled) => {
+    console.log(PPANum, isDisabled);
+    if (PPANum === 'duid1') {
+      this.setState({ppa1Disabled : isDisabled});
+    } else if (PPANum === 'duid2') {
+      this.setState({ppa2Disabled : isDisabled});
+    }
+  }
 
   handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -166,8 +176,8 @@ export default class SimulationDashboard extends Component {
         secProfile: secProfiles[0],
         conversionFactor: 50,
         nominalSec: 6,
-        overload: 0,
-        ratedLoad: 50,
+        // overload: 0,
+        // ratedLoad: 50,
         minStableLoad: 50,
         h2Price: 6,
         technologyType: technologyTypes[0],
@@ -186,58 +196,58 @@ export default class SimulationDashboard extends Component {
   };
 
   getCurrentConfig = () => {
-    const { currentConfig, config } = this.state;
-    switch (currentConfig) {
-      case "plannerConfig":
-        return (
-          <PlannerConfig
-            setConfigValue={this.setConfigValue}
-            dispatchIntervalLength={config.dispatchIntervalLength}
-            startDate={config.startDate}
-            endDate={config.endDate}
-            region={config.region}
-          />
-        );
-      case "electrolyserConfig":
-        return (
-          <ElectrolyserLoadConfig
-            setConfigValue={this.setConfigValue}
-            technologyType={config.technologyType}
-            h2Price={config.h2Price}
-            electrolyserCapacity={config.electrolyserCapacity}
-            minStableLoad={config.minStableLoad}
-            ratedLoad={config.ratedLoad}
-            overload={config.overload}
-            nominalSec={config.nominalSec}
-            conversionFactor={config.conversionFactor}
-            secProfile={config.secProfile}
-          />
-        );
-      case "ppa1Config":
-        return (
-          <PPA1Config
-            setConfigValue={this.setConfigValue}
-            duid1={config.duid1}
-            ppa1Capacity={config.ppa1Capacity}
-            ppa1StrikePrice={config.ppa1StrikePrice}
-          />
-        );
-      case "ppa2Config":
-        return (
-          <PPA2Config
-            setConfigValue={this.setConfigValue}
-            duid2={config.duid2}
-            ppa2Capacity={config.ppa2Capacity}
-            ppa2StrikePrice={config.ppa2StrikePrice}
-          />
-        );
-      case "simulationView":
-        return <SimulationView />;
-      // case "emissionsConfig":
-      //   return "bar";
-      default:
-        return "foo";
-    }
+    // const { currentConfig, config } = this.state;
+    // switch (currentConfig) {
+    //   case "plannerConfig":
+    //     return (
+    //       <PlannerConfig
+    //         setConfigValue={this.setConfigValue}
+    //         dispatchIntervalLength={config.dispatchIntervalLength}
+    //         startDate={config.startDate}
+    //         endDate={config.endDate}
+    //         region={config.region}
+    //       />
+    //     );
+    //   case "electrolyserConfig":
+    //     return (
+    //       <ElectrolyserLoadConfig
+    //         setConfigValue={this.setConfigValue}
+    //         technologyType={config.technologyType}
+    //         h2Price={config.h2Price}
+    //         electrolyserCapacity={config.electrolyserCapacity}
+    //         minStableLoad={config.minStableLoad}
+    //         ratedLoad={config.ratedLoad}
+    //         overload={config.overload}
+    //         nominalSec={config.nominalSec}
+    //         conversionFactor={config.conversionFactor}
+    //         secProfile={config.secProfile}
+    //       />
+    //     );
+    //   case "ppa1Config":
+    //     return (
+    //       <PPAConfig
+    //         setConfigValue={this.setConfigValue}
+    //         duid1={config.duid1}
+    //         ppa1Capacity={config.ppa1Capacity}
+    //         ppa1StrikePrice={config.ppa1StrikePrice}
+    //       />
+    //     );
+    //   case "ppa2Config":
+    //     return (
+    //       <PPA2Config
+    //         setConfigValue={this.setConfigValue}
+    //         duid2={config.duid2}
+    //         ppa2Capacity={config.ppa2Capacity}
+    //         ppa2StrikePrice={config.ppa2StrikePrice}
+    //       />
+    //     );
+    //   case "simulationView":
+    //     return <SimulationView />;
+    //   // case "emissionsConfig":
+    //   //   return "bar";
+    //   default:
+    //     return "foo";
+    // }
   };
 
   render() {
@@ -251,7 +261,9 @@ export default class SimulationDashboard extends Component {
       formValidated,
       isLoading,
       currentConfig,
-      marketData
+      marketData,
+      ppa1Disabled,
+      ppa2Disabled
     } = this.state;
     return (
       <div style={{ display: "flex", height: "100vh", background: "#eceff4" }}>
@@ -316,51 +328,69 @@ export default class SimulationDashboard extends Component {
             validated={formValidated}
             onSubmit={this.handleSubmit}
           > */}
-            <Container style={{ paddingLeft: 5, paddingRight: 5 }}>
-              {currentConfig === "plannerConfig" && (
-                <PlannerConfig
-                  setConfigValue={this.setConfigValue}
-                  dispatchIntervalLength={config.dispatchIntervalLength}
-                  startDate={config.startDate}
-                  endDate={config.endDate}
-                  region={config.region}
-                  marketData={marketData}
-                  setMarketData={this.setMarketData}
-                />
-              )}
-              {currentConfig === "electrolyserConfig" && (
-                <ElectrolyserLoadConfig
-                  setConfigValue={this.setConfigValue}
-                  technologyType={config.technologyType}
-                  h2Price={config.h2Price}
-                  electrolyserCapacity={config.electrolyserCapacity}
-                  minStableLoad={config.minStableLoad}
-                  ratedLoad={config.ratedLoad}
-                  overload={config.overload}
-                  nominalSec={config.nominalSec}
-                  conversionFactor={config.conversionFactor}
-                  secProfile={config.secProfile}
-                />
-              )}
-              {currentConfig === "ppa1Config" && (
-                <PPA1Config
-                  setConfigValue={this.setConfigValue}
-                  duid1={config.duid1}
-                  ppa1Capacity={config.ppa1Capacity}
-                  ppa1StrikePrice={config.ppa1StrikePrice}
-                />
-              )}
-              {currentConfig === "ppa2Config" && (
-                <PPA2Config
-                  setConfigValue={this.setConfigValue}
-                  duid2={config.duid2}
-                  ppa2Capacity={config.ppa2Capacity}
-                  ppa2StrikePrice={config.ppa2StrikePrice}
-                />
-              )}
-              {currentConfig === "simulationView" && <SimulationView />}
-              {currentConfig === "resultsView" && <ResultsView chart1={dataPoints}/>}
-            </Container>
+          <Container style={{ paddingLeft: 5, paddingRight: 5 }}>
+            {currentConfig === "plannerConfig" && (
+              <PlannerConfig
+                setConfigValue={this.setConfigValue}
+                dispatchIntervalLength={config.dispatchIntervalLength}
+                startDate={config.startDate}
+                endDate={config.endDate}
+                region={config.region}
+                marketData={marketData}
+                setMarketData={this.setMarketData}
+              />
+            )}
+            {currentConfig === "electrolyserConfig" && (
+              <ElectrolyserLoadConfig
+                setConfigValue={this.setConfigValue}
+                technologyType={config.technologyType}
+                h2Price={config.h2Price}
+                electrolyserCapacity={config.electrolyserCapacity}
+                minStableLoad={config.minStableLoad}
+                ratedLoad={config.ratedLoad}
+                overload={config.overload}
+                nominalSec={config.nominalSec}
+                conversionFactor={config.conversionFactor}
+                secProfile={config.secProfile}
+              />
+            )}
+            {currentConfig === "ppa1Config" && (
+              <PPAConfig
+                title="PPA 1"
+                duidId="duid1"
+                capacityId="ppa1Capacity"
+                strikePriceId="ppa1StrikePrice"
+                setConfigValue={this.setConfigValue}
+                duid={config.duid1}
+                ppaCapacity={config.ppa1Capacity}
+                ppaStrikePrice={config.ppa1StrikePrice}
+                marketData={marketData}
+                otherPPADuid={config.duid2}
+                isDisabled={ppa1Disabled}
+                setPPADisabled={this.setPPADisabled}
+              />
+            )}
+            {currentConfig === "ppa2Config" && (
+              <PPAConfig
+                title="PPA 2"
+                duidId="duid2"
+                capacityId="ppa2Capacity"
+                strikePriceId="ppa2StrikePrice"
+                setConfigValue={this.setConfigValue}
+                duid={config.duid2}
+                ppaCapacity={config.ppa2Capacity}
+                ppaStrikePrice={config.ppa2StrikePrice}
+                marketData={marketData}
+                otherPPADuid={config.duid1}
+                isDisabled={ppa2Disabled}
+                setPPADisabled={this.setPPADisabled}
+              />
+            )}
+            {currentConfig === "simulationView" && <SimulationView />}
+            {currentConfig === "resultsView" && (
+              <ResultsView chart1={dataPoints} />
+            )}
+          </Container>
           {/* </Form> */}
         </Container>
       </div>

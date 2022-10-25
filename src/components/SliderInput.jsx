@@ -25,12 +25,14 @@ export default function SliderInput(props) {
       </Form.Label>
       <Stack direction="horizontal" gap={5}>
         <Form.Control 
-          required
+          disabled={props.disabled}
+          required = {!props.disabled}
           value={value}
           type="number"
           onChange={(e) => updateValue(e)}
         />
         <RangeSlider
+          disabled={props.disabled}
           max={props.max}
           value={value}
           tooltip="off"

@@ -258,7 +258,7 @@ export default class SimulationDashboard extends Component {
       currentConfig,
     } = this.state;
     return (
-      <div style={{ display: "flex", height: "100%" }}>
+      <div style={{ display: "flex", height: "100vh" }}>
         <Sidebar style={{ borderRight: "None" }}>
           <Menu>
             <SubMenu label="Configure Model">
@@ -308,7 +308,7 @@ export default class SimulationDashboard extends Component {
           </Menu>
         </Sidebar>
         <Container
-          fluid
+
           style={{
             background: "#eceff4",
             paddingBottom: 20,
@@ -323,8 +323,6 @@ export default class SimulationDashboard extends Component {
             onSubmit={this.handleSubmit}
           >
             <Container style={{ paddingLeft: 5, paddingRight: 5 }}>
-              {/* {this.getCurrentConfig()} */}
-
               {currentConfig === "plannerConfig" && (
                 <PlannerConfig
                   setConfigValue={this.setConfigValue}

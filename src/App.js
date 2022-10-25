@@ -29,31 +29,6 @@ function App() {
         </Container>
       </Navbar>
       <SimulationDashboard />
-  
-      {/* <div style={{ display: "flex", height: "100%" }}>
-        <Sidebar style={{ "border-right": "None" }}>
-          <Menu>
-            <SubMenu label="Configure Model">
-              <MenuItem> Planner </MenuItem>
-              <MenuItem> Electrolyser </MenuItem>
-              <MenuItem> Renewable PPA 1 </MenuItem>
-              <MenuItem>Renewable PPA 2 </MenuItem>
-              <MenuItem> Emissions </MenuItem>
-            </SubMenu>
-            <MenuItem> Results </MenuItem>
-            <MenuItem> About </MenuItem>
-          </Menu>
-        </Sidebar>
-
-        <Container style={{ background: "#eceff4" }}>
-          <Router>
-            <Routes>
-              <Route path="/" element={<SimulationDashboard />} />
-              <Route path="/test" element={<AmChart />} />
-            </Routes>
-          </Router>
-        </Container>
-      </div> */}
     </ProSidebarProvider>
   );
 }

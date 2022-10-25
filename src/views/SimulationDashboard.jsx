@@ -195,60 +195,6 @@ export default class SimulationDashboard extends Component {
     });
   };
 
-  getCurrentConfig = () => {
-    // const { currentConfig, config } = this.state;
-    // switch (currentConfig) {
-    //   case "plannerConfig":
-    //     return (
-    //       <PlannerConfig
-    //         setConfigValue={this.setConfigValue}
-    //         dispatchIntervalLength={config.dispatchIntervalLength}
-    //         startDate={config.startDate}
-    //         endDate={config.endDate}
-    //         region={config.region}
-    //       />
-    //     );
-    //   case "electrolyserConfig":
-    //     return (
-    //       <ElectrolyserLoadConfig
-    //         setConfigValue={this.setConfigValue}
-    //         technologyType={config.technologyType}
-    //         h2Price={config.h2Price}
-    //         electrolyserCapacity={config.electrolyserCapacity}
-    //         minStableLoad={config.minStableLoad}
-    //         ratedLoad={config.ratedLoad}
-    //         overload={config.overload}
-    //         nominalSec={config.nominalSec}
-    //         conversionFactor={config.conversionFactor}
-    //         secProfile={config.secProfile}
-    //       />
-    //     );
-    //   case "ppa1Config":
-    //     return (
-    //       <PPAConfig
-    //         setConfigValue={this.setConfigValue}
-    //         duid1={config.duid1}
-    //         ppa1Capacity={config.ppa1Capacity}
-    //         ppa1StrikePrice={config.ppa1StrikePrice}
-    //       />
-    //     );
-    //   case "ppa2Config":
-    //     return (
-    //       <PPA2Config
-    //         setConfigValue={this.setConfigValue}
-    //         duid2={config.duid2}
-    //         ppa2Capacity={config.ppa2Capacity}
-    //         ppa2StrikePrice={config.ppa2StrikePrice}
-    //       />
-    //     );
-    //   case "simulationView":
-    //     return <SimulationView />;
-    //   // case "emissionsConfig":
-    //   //   return "bar";
-    //   default:
-    //     return "foo";
-    // }
-  };
 
   render() {
     const {
@@ -323,11 +269,6 @@ export default class SimulationDashboard extends Component {
             paddingRight: 20,
           }}
         >
-          {/* <Form
-            noValidate
-            validated={formValidated}
-            onSubmit={this.handleSubmit}
-          > */}
           <Container style={{ paddingLeft: 5, paddingRight: 5 }}>
             {currentConfig === "plannerConfig" && (
               <PlannerConfig
@@ -386,12 +327,11 @@ export default class SimulationDashboard extends Component {
                 setPPADisabled={this.setPPADisabled}
               />
             )}
-            {currentConfig === "simulationView" && <SimulationView />}
+            {currentConfig === "simulationView" && <SimulationView state={this.state} />}
             {currentConfig === "resultsView" && (
               <ResultsView chart1={dataPoints} />
             )}
           </Container>
-          {/* </Form> */}
         </Container>
       </div>
     );

@@ -70,7 +70,6 @@ export default class SimulationDashboard extends Component {
   };
 
   setConfigValue = (id, val) => {
-    console.log(id, val);
     const { config } = this.state;
     config[id] = val;
     this.setState({
@@ -115,7 +114,11 @@ export default class SimulationDashboard extends Component {
   };
 
   setMarketData = (marketData) => {
-    this.setState({ marketData });
+    const duid1 = marketData.availgens[0];
+    const duid2 =  marketData.availgens[1];
+    this.setConfigValue("duid1", duid1);
+    this.setConfigValue("duid2", duid2);
+    this.setState({ marketData, duid1, duid2 });
   };
 
   setPPADisabled = (PPANum, isDisabled) => {

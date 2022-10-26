@@ -11,7 +11,6 @@ import SimulationView from "./SimulationView";
 import ResultsView from "./ResultsView";
 
 const secProfiles = ["fixed", "variable"];
-const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
 const technologyTypes = ["PEM", "AE"];
 
@@ -30,8 +29,8 @@ export default class SimulationDashboard extends Component {
         ppa1Capacity: 30,
         ppa2StrikePrice: 30,
         ppa2Capacity: 30,
-        duid1: duids[0],
-        duid2: duids[0],
+        duid1: "",
+        duid2: "",
         secProfile: secProfiles[0],
         conversionFactor: 50,
         nominalSec: 6,
@@ -66,6 +65,9 @@ export default class SimulationDashboard extends Component {
     this.setPPADisabled = this.setPPADisabled.bind(this);
   }
 
+  isMarketDataLoaded = () => {
+    return Object.keys(this.state.marketData).length > 0;
+  };
 
   setConfigValue = (id, val) => {
     console.log(id, val);
@@ -118,12 +120,12 @@ export default class SimulationDashboard extends Component {
 
   setPPADisabled = (PPANum, isDisabled) => {
     console.log(PPANum, isDisabled);
-    if (PPANum === 'duid1') {
-      this.setState({ppa1Disabled : isDisabled});
-    } else if (PPANum === 'duid2') {
-      this.setState({ppa2Disabled : isDisabled});
+    if (PPANum === "duid1") {
+      this.setState({ ppa1Disabled: isDisabled });
+    } else if (PPANum === "duid2") {
+      this.setState({ ppa2Disabled: isDisabled });
     }
-  }
+  };
 
   handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -140,7 +142,11 @@ export default class SimulationDashboard extends Component {
 
   runSimulation = async () => {
     this.setState({ runningSimulation: true, resultsLoaded: false });
-    const data = await NemGloApi.runSimulation(this.state.config);
+    const data = await NemGloApi.runSimulation(
+      this.state.config,
+      this.state.ppa1Disabled,
+      this.state.ppa2Disabled
+    );
     if (data === null || data === undefined) {
       alert("Simulation Error");
       this.setState({ runningSimulation: false, resultsLoaded: false });
@@ -150,7 +156,7 @@ export default class SimulationDashboard extends Component {
     }
   };
 
-  onSelectModelConfig = (id) => {
+  onSelectView = (id) => {
     let { currentConfig } = this.state;
     currentConfig = id;
     this.setState({
@@ -171,8 +177,8 @@ export default class SimulationDashboard extends Component {
         ppa1Capacity: 30,
         ppa2StrikePrice: 30,
         ppa2Capacity: 30,
-        duid1: duids[0],
-        duid2: duids[0],
+        duid1: "",
+        duid2: "",
         secProfile: secProfiles[0],
         conversionFactor: 50,
         nominalSec: 6,
@@ -195,7 +201,6 @@ export default class SimulationDashboard extends Component {
     });
   };
 
-
   render() {
     const {
       config,
@@ -209,8 +214,9 @@ export default class SimulationDashboard extends Component {
       currentConfig,
       marketData,
       ppa1Disabled,
-      ppa2Disabled
+      ppa2Disabled,
     } = this.state;
+    console.log(marketData);
     return (
       <div style={{ display: "flex", height: "100vh", background: "#eceff4" }}>
         <Sidebar style={{ borderRight: "None" }}>
@@ -218,41 +224,48 @@ export default class SimulationDashboard extends Component {
             <SubMenu label="Configure Model">
               <MenuItem
                 id="plannerConfig"
-                onClick={() => this.onSelectModelConfig("plannerConfig")}
+                onClick={() => this.onSelectView("plannerConfig")}
               >
                 {" "}
                 Planner{" "}
               </MenuItem>
-              <MenuItem
-                id="electrolyserConfig"
-                onClick={() => this.onSelectModelConfig("electrolyserConfig")}
-              >
-                {" "}
-                Electrolyser{" "}
-              </MenuItem>
-              <MenuItem
-                id="ppa1Config"
-                onClick={() => this.onSelectModelConfig("ppa1Config")}
-              >
-                {" "}
-                Renewable PPA 1{" "}
-              </MenuItem>
-              <MenuItem
-                id="ppa2Config"
-                onClick={() => this.onSelectModelConfig("ppa2Config")}
-              >
-                {" "}
-                Renewable PPA 2{" "}
-              </MenuItem>
+              {this.isMarketDataLoaded() && (
+                <MenuItem
+                  id="electrolyserConfig"
+                  onClick={() => this.onSelectView("electrolyserConfig")}
+                >
+                  {" "}
+                  Electrolyser{" "}
+                </MenuItem>
+              )}
+
+              {this.isMarketDataLoaded() && (
+                <MenuItem
+                  id="ppa1Config"
+                  onClick={() => this.onSelectView("ppa1Config")}
+                >
+                  {" "}
+                  Renewable PPA 1{" "}
+                </MenuItem>
+              )}
+              {this.isMarketDataLoaded() && (
+                <MenuItem
+                  id="ppa2Config"
+                  onClick={() => this.onSelectView("ppa2Config")}
+                >
+                  {" "}
+                  Renewable PPA 2{" "}
+                </MenuItem>
+              )}
             </SubMenu>
-            <MenuItem
-              onClick={() => this.onSelectModelConfig("simulationView")}
-            >
-              {" "}
-              Simulate{" "}
-            </MenuItem>
+            {this.isMarketDataLoaded() && (
+              <MenuItem onClick={() => this.onSelectView("simulationView")}>
+                {" "}
+                Simulate{" "}
+              </MenuItem>
+            )}
             {resultsLoaded && (
-              <MenuItem onClick={() => this.onSelectModelConfig("resultsView")}>
+              <MenuItem onClick={() => this.onSelectView("resultsView")}>
                 {" "}
                 Results{" "}
               </MenuItem>
@@ -302,13 +315,14 @@ export default class SimulationDashboard extends Component {
                 capacityId="ppa1Capacity"
                 strikePriceId="ppa1StrikePrice"
                 setConfigValue={this.setConfigValue}
-                duid={config.duid1}
+                duid={config.duid1 === "" ? marketData.availgens[0] : config.duid1}
                 ppaCapacity={config.ppa1Capacity}
                 ppaStrikePrice={config.ppa1StrikePrice}
                 marketData={marketData}
                 otherPPADuid={config.duid2}
                 isDisabled={ppa1Disabled}
                 setPPADisabled={this.setPPADisabled}
+                availableGens={marketData.availgens}
               />
             )}
             {currentConfig === "ppa2Config" && (
@@ -318,16 +332,22 @@ export default class SimulationDashboard extends Component {
                 capacityId="ppa2Capacity"
                 strikePriceId="ppa2StrikePrice"
                 setConfigValue={this.setConfigValue}
-                duid={config.duid2}
+                duid={config.duid2 === "" ? marketData.availgens[1] : config.duid2}
                 ppaCapacity={config.ppa2Capacity}
                 ppaStrikePrice={config.ppa2StrikePrice}
                 marketData={marketData}
                 otherPPADuid={config.duid1}
                 isDisabled={ppa2Disabled}
                 setPPADisabled={this.setPPADisabled}
+                availableGens={marketData.availgens}
               />
             )}
-            {currentConfig === "simulationView" && <SimulationView state={this.state} />}
+            {currentConfig === "simulationView" && (
+              <SimulationView
+                state={this.state}
+                runSimulation={this.runSimulation}
+              />
+            )}
             {currentConfig === "resultsView" && (
               <ResultsView chart1={dataPoints} />
             )}

@@ -7,10 +7,7 @@ import SliderInput from "../components/SliderInput";
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 
-const secProfiles = ["fixed", "variable"];
 const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
-const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
-const technologyTypes = ["PEM", "AE"];
 
 export default class PPAConfig extends Component {
 
@@ -52,7 +49,8 @@ export default class PPAConfig extends Component {
 
 
 render () {
-  const {duidId, capacityId, strikePriceId,  setConfigValue, duid, isDisabled, ppaStrikePrice, title, ppaCapacity} = this.props;
+  let {duidId, capacityId, strikePriceId,  setConfigValue, duid, isDisabled, ppaStrikePrice, title, ppaCapacity, availableGens, otherPPADuid} = this.props;
+  let filteredOptions = availableGens.filter(item => item !== otherPPADuid);
   return (
     <Card>
       <Card.Header  style={{
@@ -83,7 +81,7 @@ render () {
         <DropDownSelector
           id={duidId}
           label="DUID (Unit)"
-          options={duids}
+          options={filteredOptions}
           setConfigValue={setConfigValue}
           value={duid}
           disabled={isDisabled}

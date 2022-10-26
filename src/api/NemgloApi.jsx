@@ -3,7 +3,6 @@ import config from "../config.json";
 
 const getMarketData = async (marketConfig) => {
   try {
-  
     const body = {
       market_data: {
         start_date: marketConfig.startDate,
@@ -19,24 +18,14 @@ const getMarketData = async (marketConfig) => {
   }
 }
 
-const runSimulation = async (simConfig) => {
+const runSimulation = async (simConfig, ppa1Disabled, ppa2Disabled) => {
   try {
-    const body = {
+    let body = {
       market_data: {
         start_date: simConfig.startDate,
         end_date: simConfig.endDate,
         region: simConfig.region,
         dispatch_interval_length: simConfig.dispatchIntervalLength,
-      },
-      ppa_1: {
-        duid:simConfig.duid1,
-        capacity: simConfig.ppa1Capacity,
-        strike_price: simConfig.ppa1StrikePrice,
-      },
-      ppa_2: {
-        duid: simConfig.duid2,
-        capacity: simConfig.ppa2Capacity,
-        strike_price: simConfig.ppa2StrikePrice,
       },
       electrolyser_load: {
         technology_type: simConfig.technologyType,
@@ -50,6 +39,22 @@ const runSimulation = async (simConfig) => {
         sec_profile: simConfig.secProfile,
       },
     };
+
+    if (!ppa1Disabled) {
+      body['ppa_1'] = {
+        duid:simConfig.duid1,
+        capacity: simConfig.ppa1Capacity,
+        strike_price: simConfig.ppa1StrikePrice,
+      }
+    }
+    if (!ppa2Disabled) {
+      body['ppa_2'] = {
+        duid:simConfig.duid2,
+        capacity: simConfig.ppa2Capacity,
+        strike_price: simConfig.ppa2StrikePrice,
+      }
+    }
+
 
     const reponse = await axios.post(`${config.api}/get-data`, body);
     return reponse.data;

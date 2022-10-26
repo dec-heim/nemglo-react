@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-import { Card, Container } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
 import AmChart from "../components/AmChart";
 
-const secProfiles = ["fixed", "variable"];
-const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
-const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
-const technologyTypes = ["PEM", "AE"];
 
 export default class ResultsView extends Component {
   constructor() {
@@ -15,18 +11,10 @@ export default class ResultsView extends Component {
   }
 
   render() {
-    const seriesSettings = [
+    let seriesSettings = [
       {
         valueYField: "price",
         tooltip: "Price: ${valueY}",
-      },
-      {
-        valueYField: "ppa1",
-        tooltip: "PPA1:  ${valueY}",
-      },
-      {
-        valueYField: "ppa2",
-        tooltip: "PPA2:  ${valueY}",
       },
       {
         valueYField: "combined",
@@ -37,6 +25,18 @@ export default class ResultsView extends Component {
         tooltip: "Optimised:  ${valueY}",
       },
     ];
+    if (!this.props.ppa1Disabled) {
+      seriesSettings.push({
+        valueYField: "ppa1",
+        tooltip: "PPA1:  ${valueY}",
+      });
+    }
+    if (!this.props.ppa2Disabled) {
+      seriesSettings.push({
+        valueYField: "ppa2",
+        tooltip: "PPA2:  ${valueY}",
+      });
+    }
     return (
       <Card
         style={{

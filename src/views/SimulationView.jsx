@@ -110,7 +110,7 @@ export default function SimulationView(props) {
           </div>
         )}
         <br></br>
-        <Button  variant={"primary"}>Run Simulation</Button>{" "}
+        <Button  variant={"primary"} onClick={props.runSimulation}>Run Simulation</Button>{" "}
         <Button  variant={"danger"} onClick={() => window.location.reload(false)}>Reset Model Config</Button>
       </Card.Body>
     </Card>

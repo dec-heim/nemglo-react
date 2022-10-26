@@ -18,6 +18,50 @@ const getMarketData = async (marketConfig) => {
   }
 }
 
+const getGeneratorData_ppa1 = async (simConfig) => {
+  try {
+    const body = {
+      market_data: {
+        start_date: simConfig.startDate,
+        end_date: simConfig.endDate,
+        region: simConfig.region,
+        dispatch_interval_length: simConfig.dispatchIntervalLength,
+      },
+      ppa_1: {
+        duid:simConfig.duid1,
+        capacity: simConfig.ppa1Capacity,
+      }
+    }
+    const reponse = await axios.post(`${config.api}/get-generator-data`, body);
+    return reponse.data;
+  } catch(err) {
+    console.log(err);
+    return null;
+  }
+}
+
+const getGeneratorData_ppa2 = async (simConfig) => {
+  try {
+    const body = {
+      market_data: {
+        start_date: simConfig.startDate,
+        end_date: simConfig.endDate,
+        region: simConfig.region,
+        dispatch_interval_length: simConfig.dispatchIntervalLength,
+      },
+      ppa_2: {
+        duid:simConfig.duid2,
+        capacity: simConfig.ppa2Capacity,
+      }
+    }
+    const reponse = await axios.post(`${config.api}/get-generator-data`, body);
+    return reponse.data;
+  } catch(err) {
+    console.log(err);
+    return null;
+  }
+}
+
 const runSimulation = async (simConfig, ppa1Disabled, ppa2Disabled) => {
   try {
     let body = {
@@ -65,10 +109,11 @@ const runSimulation = async (simConfig, ppa1Disabled, ppa2Disabled) => {
 };
 
 
-
 export default {
     runSimulation,
-    getMarketData
+    getMarketData,
+    getGeneratorData_ppa1,
+    getGeneratorData_ppa2
 }
 
 

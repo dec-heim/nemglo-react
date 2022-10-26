@@ -12,6 +12,8 @@ const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
 const technologyTypes = ["PEM", "AE"];
 
+// Remove overload, rated load 
+
 export default function ElectrolyserLoadConfig(props) {
     return (
         <Card
@@ -53,20 +55,20 @@ export default function ElectrolyserLoadConfig(props) {
               value={props.minStableLoad}
               max={100}
             ></SliderInput>
-            <SliderInput
+            {/* <SliderInput
               id="ratedLoad"
               label="Rated Load (MW)"
               setConfigValue={props.setConfigValue}
               value={props.ratedLoad}
               max={100}
-            ></SliderInput>
-            <SliderInput
+            ></SliderInput> */}
+            {/* <SliderInput
               id="overload"
               label="Overload (MW)"
               setConfigValue={props.setConfigValue}
               value={props.overload}
               max={100}
-            ></SliderInput>
+            ></SliderInput> */}
             <Container style={{ height: 50 }}></Container>
             <RegularInput
               id="nominalSec"

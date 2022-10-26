@@ -1,39 +1,42 @@
 import React, { Component } from "react";
-import { Card, Container } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
 import AmChart from "../components/AmChart";
 
-const secProfiles = ["fixed", "variable"];
-const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
-const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
-const technologyTypes = ["PEM", "AE"];
 
 export default class ResultsView extends Component {
   constructor() {
     super();
     this.state = {};
-    this.isDateInvalid = this.isDateInvalid.bind(this);
   }
-  isDateInvalid = () => {
-    const { startDate, endDate } = this.props;
-    console.log("checkingDate", startDate, endDate);
-    if (startDate !== "" && endDate !== "") {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      let diff = end.getTime() - start.getTime();
-      let diffDays = diff / (1000 * 3600 * 24);
-      return diffDays > 7 || diffDays <= 0;
-    }
-    if (startDate !== "" && endDate === "") {
-      return true;
-    }
-    if (startDate === "" && endDate !== "") {
-      return true;
-    }
-    return false;
-  };
 
   render() {
+    let seriesSettings = [
+      {
+        valueYField: "price",
+        tooltip: "Price: ${valueY}",
+      },
+      {
+        valueYField: "combined",
+        tooltip: "Combined:  ${valueY}",
+      },
+      {
+        valueYField: "optimised",
+        tooltip: "Optimised:  ${valueY}",
+      },
+    ];
+    if (!this.props.ppa1Disabled) {
+      seriesSettings.push({
+        valueYField: "ppa1",
+        tooltip: "PPA1:  ${valueY}",
+      });
+    }
+    if (!this.props.ppa2Disabled) {
+      seriesSettings.push({
+        valueYField: "ppa2",
+        tooltip: "PPA2:  ${valueY}",
+      });
+    }
     return (
       <Card
         style={{
@@ -43,9 +46,13 @@ export default class ResultsView extends Component {
           paddingBottom: 5,
         }}
       >
-        <Card.Title style={{ paddingLeft: 15 }}>Chart 1</Card.Title>
+        <Card.Title style={{ paddingLeft: 15 }}>Simulation Results</Card.Title>
         <Card.Body>
-        <AmChart data={this.props.chart1}></AmChart>
+          <AmChart
+            data={this.props.chart1}
+            seriesSettings={seriesSettings}
+          ></AmChart>
+          // Second chart revenue,
         </Card.Body>
       </Card>
     );

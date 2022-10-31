@@ -1,32 +1,6 @@
 import React, { Component } from "react";
-import { Card, Container, Button } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";;
 
-const secProfiles = ["fixed", "variable"];
-const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
-const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
-const technologyTypes = ["PEM", "AE"];
-
-// dispatchIntervalLength: 30,
-// startDate: "",
-// startTime: "",
-// endDate: "",
-// endTime: "",
-// electrolyserCapacity: 50,
-// ppa1StrikePrice: 20,
-// ppa1Capacity: 30,
-// ppa2StrikePrice: 30,
-// ppa2Capacity: 30,
-// duid1: duids[0],
-// duid2: duids[0],
-// secProfile: secProfiles[0],
-// conversionFactor: 50,
-// nominalSec: 6,
-// // overload: 0,
-// // ratedLoad: 50,
-// minStableLoad: 50,
-// h2Price: 6,
-// technologyType: technologyTypes[0],
-// region: regions[0],
 export default function SimulationView(props) {
   let { config, ppa1Disabled, ppa2Disabled } = props.state;
   return (

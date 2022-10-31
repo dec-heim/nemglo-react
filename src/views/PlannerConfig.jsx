@@ -5,13 +5,8 @@ import NemGloApi from "../api/NemgloApi";
 import AmChart from "../components/AmChart";
 
 import DropDownSelector from "../components/DropDownSelector";
-import RegularInput from "../components/RegularInput";
-import SliderInput from "../components/SliderInput";
 
-const secProfiles = ["fixed", "variable"];
-const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
-const technologyTypes = ["PEM", "AE"];
 
 export default class PlannerConfig extends Component {
   constructor() {

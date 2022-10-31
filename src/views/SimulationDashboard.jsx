@@ -31,6 +31,8 @@ export default class SimulationDashboard extends Component {
         ppa2Capacity: 30,
         duid1: "",
         duid2: "",
+        ppa1Data: {},
+        ppa2Data: {},
         secProfile: secProfiles[0],
         conversionFactor: 50,
         nominalSec: 6,
@@ -63,6 +65,7 @@ export default class SimulationDashboard extends Component {
     this.isDateInvalid = this.isDateInvalid.bind(this);
     this.setMarketData = this.setMarketData.bind(this);
     this.setPPADisabled = this.setPPADisabled.bind(this);
+    this.setPPAData = this.setPPAData.bind(this);
   }
 
   isMarketDataLoaded = () => {
@@ -121,8 +124,18 @@ export default class SimulationDashboard extends Component {
     this.setState({ marketData, duid1, duid2 });
   };
 
+  setPPAData = (ppaData, PPANum) => {
+    const { config } = this.state;
+    if (PPANum === "duid1") {
+      config.ppa1Data = ppaData;
+    } else if (PPANum === "duid2") {
+      config.ppa2Data = ppaData; 
+    }
+    console.log(config);
+    this.setState({ config });
+  }
+
   setPPADisabled = (PPANum, isDisabled) => {
-    console.log(PPANum, isDisabled);
     if (PPANum === "duid1") {
       this.setState({ ppa1Disabled: isDisabled });
     } else if (PPANum === "duid2") {
@@ -132,9 +145,7 @@ export default class SimulationDashboard extends Component {
 
   handleSubmit = (event) => {
     const form = event.currentTarget;
-    console.log(form.checkValidity());
     event.preventDefault();
-    console.log(this.isDateInvalid());
     if (form.checkValidity() === false || this.isDateInvalid()) {
       event.stopPropagation();
     } else {
@@ -182,6 +193,8 @@ export default class SimulationDashboard extends Component {
         ppa2Capacity: 30,
         duid1: "",
         duid2: "",
+        ppa1Data: {},
+        ppa2Data: {},
         secProfile: secProfiles[0],
         conversionFactor: 50,
         nominalSec: 6,
@@ -207,19 +220,13 @@ export default class SimulationDashboard extends Component {
   render() {
     const {
       config,
-      runningSimulation,
       resultsLoaded,
-      viewConfig,
-      viewResults,
       dataPoints,
-      formValidated,
-      isLoading,
       currentConfig,
       marketData,
       ppa1Disabled,
       ppa2Disabled,
     } = this.state;
-    console.log(marketData);
     return (
       <div style={{ display: "flex", height: "100vh", background: "#eceff4" }}>
         <Sidebar style={{ borderRight: "None" }}>
@@ -326,6 +333,12 @@ export default class SimulationDashboard extends Component {
                 isDisabled={ppa1Disabled}
                 setPPADisabled={this.setPPADisabled}
                 availableGens={marketData.availgens}
+                startDate={config.startDate}
+                endDate={config.endDate}
+                region={config.region}
+                dispatchIntervalLength={config.dispatchIntervalLength}
+                ppaData={config.ppa1Data}
+                setPPAData={this.setPPAData}
               />
             )}
             {currentConfig === "ppa2Config" && (
@@ -343,7 +356,13 @@ export default class SimulationDashboard extends Component {
                 isDisabled={ppa2Disabled}
                 setPPADisabled={this.setPPADisabled}
                 availableGens={marketData.availgens}
-              />
+                startDate={config.startDate}
+                endDate={config.endDate}
+                region={config.region}
+                dispatchIntervalLength={config.dispatchIntervalLength}
+                ppaData={config.ppa2Data}
+                setPPAData={this.setPPAData}
+                />
             )}
             {currentConfig === "simulationView" && (
               <SimulationView

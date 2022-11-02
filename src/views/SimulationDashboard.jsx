@@ -35,10 +35,10 @@ export default class SimulationDashboard extends Component {
         ppa2Data: {},
         secProfile: secProfiles[0],
         conversionFactor: 50,
-        nominalSec: 6,
+        nominalSec: 66,
         // overload: 0,
         // ratedLoad: 50,
-        minStableLoad: 50,
+        minStableLoad: 10,
         h2Price: 6,
         technologyType: technologyTypes[0],
         region: regions[0],
@@ -84,16 +84,23 @@ export default class SimulationDashboard extends Component {
   };
 
   getResultsChartsData = (data) => {
+    const {config } = this.state;
     let dataPoints = [];
     let revenueResults = [];
     for (let i = 0; i < data.time.length; i++) {
       let dataPoint = {};
       dataPoint["timestamp"] = data.timestamps[i];
       dataPoint["price"] = data.prices[i];
-      dataPoint["ppa1"] = data.ppa1.data[i];
-      dataPoint["ppa2"] = data.ppa2.data[i];
-      dataPoint["combined"] = data.combined_vre[i];
-      dataPoint["optimised"] = data.optimised_load[i];
+      if ("ppa1" in data) {
+        dataPoint["ppa1"] = data.ppa1.data[i] * config.ppa1Capacity;
+      }
+      if ("ppa2" in data) {
+        dataPoint["ppa2"] = data.ppa2.data[i] * config.ppa2Capacity;
+      }
+      if (("ppa2" in data) & ("ppa1" in data)) {
+        dataPoint["combined"] = data.combined_vre[i];
+      }
+      dataPoint["load"] = data.optimised_load[i];
       dataPoints.push(dataPoint);
       let revenueResult = {};
       revenueResult["timestamp"] = data.timestamps[i];
@@ -104,7 +111,7 @@ export default class SimulationDashboard extends Component {
         revenueResult["vre1"] = data.cost_vre1[i];
       }
       if ("cost_vre2" in data) {
-        revenueResult["vre2"] = data.cost_vre1[i];
+        revenueResult["vre2"] = data.cost_vre2[i];
       }
       revenueResults.push(revenueResult);
     }
@@ -236,27 +243,27 @@ export default class SimulationDashboard extends Component {
     let seriesSettings = [
       {
         valueYField: "price",
-        tooltip: "Price: ${valueY}",
+        tooltip: "Price: ${valueY}/MWh",
       },
       {
         valueYField: "combined",
-        tooltip: "Combined:  ${valueY}",
+        tooltip: "Combined:  {valueY} MW",
       },
       {
-        valueYField: "optimised",
-        tooltip: "Optimised:  ${valueY}",
+        valueYField: "load",
+        tooltip: "Load:  {valueY} MW",
       },
     ];
     if (!this.props.ppa1Disabled) {
       seriesSettings.push({
         valueYField: "ppa1",
-        tooltip: "PPA1:  ${valueY}",
+        tooltip: "PPA1:  {valueY} MW",
       });
     }
     if (!this.props.ppa2Disabled) {
       seriesSettings.push({
         valueYField: "ppa2",
-        tooltip: "PPA2:  ${valueY}",
+        tooltip: "PPA2:  {valueY} MW",
       });
     }
     return seriesSettings;

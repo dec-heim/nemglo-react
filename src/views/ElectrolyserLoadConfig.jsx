@@ -33,10 +33,10 @@ export default function ElectrolyserLoadConfig(props) {
         ></DropDownSelector>
         <SliderInput
           id="h2Price"
-          label="H2 Price ($/kh)"
+          label="H2 Price ($/kg)"
           setConfigValue={props.setConfigValue}
           value={props.h2Price}
-          max={100}
+          max={20}
         ></SliderInput>
         <SliderInput
           id="electrolyserCapacity"
@@ -51,7 +51,7 @@ export default function ElectrolyserLoadConfig(props) {
           label="Minimum Stable Load"
           setConfigValue={props.setConfigValue}
           value={props.minStableLoad}
-          max={100}
+          max={60}
         ></SliderInput>
         {/* <SliderInput
               id="ratedLoad"
@@ -70,7 +70,7 @@ export default function ElectrolyserLoadConfig(props) {
         <Container style={{ height: 50 }}></Container>
         <RegularInput
           id="nominalSec"
-          label="Nominal SEC (KWH/kg)"
+          label="Nominal SEC (kWh/kg)"
           placeholder={50}
           setConfigValue={props.setConfigValue}
           value={props.nominalSec}
@@ -79,7 +79,7 @@ export default function ElectrolyserLoadConfig(props) {
         <RegularInput
           id="conversionFactor"
           label="Conversion Factor (%)"
-          placeholder={50}
+          placeholder={100}
           setConfigValue={props.setConfigValue}
           value={props.conversionFactor}
           type="number"

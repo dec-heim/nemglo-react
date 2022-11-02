@@ -103,7 +103,7 @@ class AmChart extends Component {
         groupData: false,
         baseInterval: {
           timeUnit: "minute",
-          count: 1,
+          count: 5,
         },
         renderer: am5xy.AxisRendererX.new(root, {}),
         tooltip: am5.Tooltip.new(root, {}),

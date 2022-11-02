@@ -3,7 +3,7 @@ import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
-class AmChart extends Component {
+class RevenueChart extends Component {
   constructor() {
     super();
     this.state = {};
@@ -72,13 +72,14 @@ class AmChart extends Component {
   };
 
   updateChart = () => {
+    // const {id} = this.props;
     am5.array.each(am5.registry.rootElements, function (root) {
-      if (root.dom.id == "chartdiv") {
+      if (root.dom.id == "revenue") {
         root.dispose();
       }
     });
 
-    let root = am5.Root.new("chartdiv");
+    let root = am5.Root.new("revenue");
 
     root.setThemes([am5themes_Animated.new(root)]);
 
@@ -144,6 +145,7 @@ class AmChart extends Component {
         seriesSetting.tooltip)
     }
 
+
     let legend = chart.children.push(
       am5.Legend.new(root, {
         nameField: "valueYField",
@@ -165,9 +167,9 @@ class AmChart extends Component {
   }
 
   render() {
-    const {id} = this.props;
-    return <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>;
+    console.log(this.props.data);
+    return <div id="revenue" style={{ width: "100%", height: "500px" }}></div>;
   }
 }
 
-export default AmChart;
+export default RevenueChart;

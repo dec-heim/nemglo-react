@@ -3,6 +3,7 @@ import { Card, Container, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import NemGloApi from "../api/NemgloApi";
 import AmChart from "../components/AmChart";
+import { Audio } from "react-loader-spinner";
 
 import DropDownSelector from "../components/DropDownSelector";
 
@@ -15,6 +16,7 @@ export default class PlannerConfig extends Component {
       marketData: null,
       formValidated: false,
       dataPoints: [],
+      isMakingApiCall: false,
     };
     this.isDateInvalid = this.isDateInvalid.bind(this);
     this.getMarketData = this.getMarketData.bind(this);
@@ -63,14 +65,16 @@ export default class PlannerConfig extends Component {
   };
 
   getMarketData = async () => {
-    this.setState({dataPoints : []});
+    this.setState({ dataPoints: [] });
     const { startDate, endDate, region } = this.props;
     const config = {
       startDate: startDate,
       endDate: endDate,
       region: region,
     };
+    this.setState({ isMakingApiCall: true });
     const marketData = await NemGloApi.getMarketData(config);
+    this.setState({ isMakingApiCall: false });
     this.storeDataPoints(marketData);
     this.props.setMarketData(marketData);
     this.setState({ marketData });
@@ -84,8 +88,8 @@ export default class PlannerConfig extends Component {
       dataPoint["price"] = marketData.prices[i];
       dataPoints.push(dataPoint);
     }
-    this.setState({dataPoints});
-  } 
+    this.setState({ dataPoints });
+  };
 
   render() {
     const seriesSettings = [
@@ -94,7 +98,7 @@ export default class PlannerConfig extends Component {
         tooltip: "Price: ${valueY}",
       },
     ];
-    const { formValidated, dataPoints } = this.state;
+    const { formValidated, dataPoints, isMakingApiCall } = this.state;
     return (
       <Card
         style={{
@@ -107,83 +111,104 @@ export default class PlannerConfig extends Component {
         <Card.Title style={{ paddingLeft: 15 }}>Market Data</Card.Title>
 
         <Card.Body>
-          <Form
-            noValidate
-            validated={formValidated}
-            onSubmit={this.handleSubmit}
-          >
-            {dataPoints.length > 0 && (
-              <AmChart
-                data={dataPoints}
-                seriesSettings={seriesSettings}
-              ></AmChart>
-            )}
+          {!isMakingApiCall ? (
+            <Form
+              noValidate
+              validated={formValidated}
+              onSubmit={this.handleSubmit}
+            >
+              {dataPoints.length > 0 && (
+                <AmChart
+                  id="planner"
+                  data={dataPoints}
+                  seriesSettings={seriesSettings}
+                ></AmChart>
+              )}
 
-            <DropDownSelector
-              id="dispatchIntervalLength"
-              label="Dispatch Interval Length"
-              value={this.props.dispatchIntervalLength}
-              options={[30, 60, 90]}
-              setConfigValue={this.props.setConfigValue}
-            ></DropDownSelector>
+              <DropDownSelector
+                id="dispatchIntervalLength"
+                label="Dispatch Interval Length"
+                value={this.props.dispatchIntervalLength}
+                options={[30, 60, 90]}
+                setConfigValue={this.props.setConfigValue}
+              ></DropDownSelector>
 
-            <Form.Group style={{ paddingBottom: 10 }}>
-              <Form.Label
-                style={{
-                  textAlign: "text-center text-md-right",
+              <Form.Group style={{ paddingBottom: 10 }}>
+                <Form.Label
+                  style={{
+                    textAlign: "text-center text-md-right",
+                  }}
+                >
+                  Start Date
+                </Form.Label>
+                <Form.Control
+                  required
+                  id="startDate"
+                  type="date"
+                  format="dd/MM/yyyy"
+                  onChange={(e) =>
+                    this.props.setConfigValue("startDate", e.target.value)
+                  }
+                  value={this.props.startDate}
+                  isInvalid={this.isDateInvalid()}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please select a valid date. Maximum date range is 7 days.
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group style={{ paddingBottom: 10 }}>
+                <Form.Label
+                  style={{
+                    textAlign: "text-center text-md-right",
+                  }}
+                >
+                  End Date
+                </Form.Label>
+                <Form.Control
+                  required
+                  id="endDate"
+                  type="date"
+                  format="dd/MM/yyyy"
+                  onChange={(e) =>
+                    this.props.setConfigValue("endDate", e.target.value)
+                  }
+                  value={this.props.endDate}
+                  isInvalid={this.isDateInvalid()}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please select a valid date. Maximum date range is 7 days.
+                </Form.Control.Feedback>
+              </Form.Group>
+              <DropDownSelector
+                id="region"
+                label="Region"
+                value={this.props.region}
+                options={regions}
+                setConfigValue={this.props.setConfigValue}
+              ></DropDownSelector>
+              {}
+              <Button className="float-end" type="submit" variant={"primary"}>
+                Get Market Data
+              </Button>
+            </Form>
+          ) : (
+            <Audio
+              height="80"
+              width="80"
+              radius="9"
+              color="green"
+              ariaLabel="loading"
+              wrapperStyle
+              wrapperClass
+              style={{
+                height: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
                 }}
-              >
-                Start Date
-              </Form.Label>
-              <Form.Control
-                required
-                id="startDate"
-                type="date"
-                format="dd/MM/yyyy"
-                onChange={(e) =>
-                  this.props.setConfigValue("startDate", e.target.value)
-                }
-                value={this.props.startDate}
-                isInvalid={this.isDateInvalid()}
-              />
-              <Form.Control.Feedback type="invalid">
-                Please select a valid date. Maximum date range is 7 days.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group style={{ paddingBottom: 10 }}>
-              <Form.Label
-                style={{
-                  textAlign: "text-center text-md-right",
-                }}
-              >
-                End Date
-              </Form.Label>
-              <Form.Control
-                required
-                id="endDate"
-                type="date"
-                format="dd/MM/yyyy"
-                onChange={(e) =>
-                  this.props.setConfigValue("endDate", e.target.value)
-                }
-                value={this.props.endDate}
-                isInvalid={this.isDateInvalid()}
-              />
-              <Form.Control.Feedback type="invalid">
-                Please select a valid date. Maximum date range is 7 days.
-              </Form.Control.Feedback>
-            </Form.Group>
-            <DropDownSelector
-              id="region"
-              label="Region"
-              value={this.props.region}
-              options={regions}
-              setConfigValue={this.props.setConfigValue}
-            ></DropDownSelector>
-            <Button className="float-end" type="submit" variant={"primary"}>
-              Get Market Data
-            </Button>
-          </Form>
+            />
+          )}
         </Card.Body>
       </Card>
     );

@@ -8,6 +8,8 @@ import DropDownSelector from "../components/DropDownSelector";
 import SliderInput from "../components/SliderInput";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
+import { Audio } from "react-loader-spinner";
+
 
 export default class PPAConfig extends Component {
   constructor() {
@@ -25,15 +27,24 @@ export default class PPAConfig extends Component {
         { name: "Active", value: "1" },
         { name: "Disabled", value: "2" },
       ],
+      isMakingApiCall: false,
+
     };
     this.setIsDisabled = this.setIsDisabled.bind(this);
     this.isDisabled = this.isDisabled.bind(this);
+    this.setCapacity = this.setCapacity.bind(this);
   }
 
-  componentDidMount() {
-    const {startDate, endDate, region, dispatchIntervalLength, isDisabled } = this.props;
-    let radioValue = isDisabled ? "2" : "1";
-    this.setState({ radioValue, startDate, endDate, region, dispatchIntervalLength});
+  setCapacity(id, capacity) {
+    const { setConfigValue, ppaData } = this.props;
+    setConfigValue(id, capacity);
+    if (
+      "cf_trace" in ppaData
+    ) {
+      if (this.props.ppaData.time.length > 0) {
+        this.storeDataPoints(this.props.ppaData);
+      }
+    }
   }
 
   handleSubmit = (event) => {
@@ -42,6 +53,7 @@ export default class PPAConfig extends Component {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
+
       this.getGeneratorData(); // NEED TO CONSIDER EITHER PPA 1 OR 2
     }
     this.setState({ formValidated: true });
@@ -49,24 +61,47 @@ export default class PPAConfig extends Component {
 
   getGeneratorData = async () => {
     this.setState({ dataPoints: [] });
-    const { startDate, endDate, region, dispatchIntervalLength, duid , ppaCapacity, duidId, setPPAData} = this.props;
+    const {
+      startDate,
+      endDate,
+      region,
+      dispatchIntervalLength,
+      duid,
+      ppaCapacity,
+      duidId,
+      setPPAData,
+    } = this.props;
     const config = {
       startDate: startDate,
       endDate: endDate,
       region: region,
       dispatchIntervalLength: dispatchIntervalLength,
       duid: duid,
-      ppaCapacity: ppaCapacity
+      ppaCapacity: ppaCapacity,
     };
-    const ppaData = await NemGloApi.getGeneratorData(config); // NEED TO CONSIDER EITHER PPA 1 OR 2
+    this.setState({ isMakingApiCall: true });
+    const ppaData = await NemGloApi.getGeneratorData(config);
+    this.setState({ isMakingApiCall: false });
     this.storeDataPoints(ppaData);
     setPPAData(ppaData, duidId);
   };
 
   componentDidMount() {
-    console.log(this.props.ppaData);
+    const { startDate, endDate, region, dispatchIntervalLength, isDisabled } =
+      this.props;
+    let radioValue = isDisabled ? "2" : "1";
+    this.setState({
+      radioValue,
+      startDate,
+      endDate,
+      region,
+      dispatchIntervalLength,
+    });
     if (this.props.ppaData !== {}) {
-      if ("mw_trace" in this.props.ppaData && "cf_trace" in this.props.ppaData) {
+      if (
+        "mw_trace" in this.props.ppaData &&
+        "cf_trace" in this.props.ppaData
+      ) {
         if (this.props.ppaData.time.length > 0) {
           this.storeDataPoints(this.props.ppaData);
         }
@@ -75,16 +110,17 @@ export default class PPAConfig extends Component {
   }
 
   storeDataPoints = (ppaData) => {
+    const { ppaCapacity } = this.props;
+    console.log(ppaCapacity)
     let dataPoints = [];
     for (let i = 0; i < ppaData.time.length; i++) {
       let dataPoint = {};
       dataPoint["timestamp"] = ppaData.timestamps[i];
-      dataPoint["mw"] = ppaData.mw_trace[i];
-      dataPoint["cf"] = ppaData.cf_trace[i];
+      dataPoint["mw"] = ppaCapacity * ppaData.cf_trace[i];
       dataPoints.push(dataPoint);
     }
-    this.setState({dataPoints});
-  } 
+    this.setState({ dataPoints });
+  };
 
   setIsDisabled = (value) => {
     const { setPPADisabled, duidId } = this.props;
@@ -106,10 +142,6 @@ export default class PPAConfig extends Component {
         valueYField: "mw",
         tooltip: "MW: {valueY}",
       },
-      {
-        valueYField: "cf",
-        tooltip: "CF: {valueY}",
-      },
     ];
     let {
       duidId,
@@ -125,7 +157,7 @@ export default class PPAConfig extends Component {
       otherPPADuid,
     } = this.props;
     let filteredOptions = availableGens.filter((item) => item !== otherPPADuid);
-    const { formValidated, dataPoints } = this.state;
+    const { formValidated, dataPoints, isMakingApiCall } = this.state;
     return (
       <Card>
         <Card.Header
@@ -157,12 +189,15 @@ export default class PPAConfig extends Component {
           {title}
         </Card.Title>
         <Card.Body>
+        {!isMakingApiCall ? 
+          <div>
         {dataPoints.length > 0 && (
-              <AmChart
-                data={dataPoints}
-                seriesSettings={seriesSettings}
-              ></AmChart>
-            )}
+            <AmChart
+              id={duid}
+              data={dataPoints}
+              seriesSettings={seriesSettings}
+            ></AmChart>
+          )}
           <Form
             noValidate
             validated={formValidated}
@@ -179,7 +214,7 @@ export default class PPAConfig extends Component {
             <SliderInput
               id={capacityId}
               label="Capacity (MW)"
-              setConfigValue={setConfigValue}
+              setConfigValue={this.setCapacity}
               value={ppaCapacity}
               max={100}
               disabled={isDisabled}
@@ -196,6 +231,22 @@ export default class PPAConfig extends Component {
               Get Renewables Data
             </Button>
           </Form>
+          </div>
+          : <Audio
+          height="80"
+          width="80"
+          radius="9"
+          color="green"
+          ariaLabel="loading"
+          wrapperStyle
+          wrapperClass
+          style={{
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            }} /> }
         </Card.Body>
       </Card>
     );

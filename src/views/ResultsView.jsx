@@ -1,16 +1,13 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 
-import AmChart from "../components/AmChart";
-import RevenueChart from "../components/RevenueChart";
+import PriceDispatchChart from "../components/PriceDispach";
 
 export default class ResultsView extends Component {
   constructor() {
     super();
     this.state = {};
   }
-
-
 
   render() {
     return (
@@ -26,10 +23,10 @@ export default class ResultsView extends Component {
             {this.props.title}
           </Card.Title>
           <Card.Body>
-            <AmChart
+            <PriceDispatchChart
               data={this.props.chart1}
               seriesSettings={this.props.chartSettings}
-            ></AmChart>
+            ></PriceDispatchChart>
           </Card.Body>
         </Card>
     );

@@ -9,6 +9,7 @@ import SliderInput from "../components/SliderInput";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import { Audio } from "react-loader-spinner";
+import PPA1Chart from "../components/PPA1Chart";
 
 
 export default class PPAConfig extends Component {

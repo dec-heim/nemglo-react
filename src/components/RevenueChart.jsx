@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Container, Card } from "react-bootstrap";
+
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
@@ -6,7 +8,9 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 class RevenueChart extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      root: null
+    };
     this.createAxisAndSeries = this.createAxisAndSeries.bind(this);
     this.updateChart = this.updateChart.bind(this);
   }
@@ -14,28 +18,20 @@ class RevenueChart extends Component {
   createAxisAndSeries = (
     chart,
     xAxis,
+    yAxis,
     data,
     valueYField,
     root,
-    opposite,
-    tooltip
+    tooltip,
+    yRenderer
   ) => {
-    let yRenderer = am5xy.AxisRendererY.new(root, {
-      opposite: opposite,
-    });
-    let yAxis = chart.yAxes.push(
-      am5xy.ValueAxis.new(root, {
-        maxDeviation: 1,
-        renderer: yRenderer,
-      })
-    );
+
+    // Add series
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 
     if (chart.yAxes.indexOf(yAxis) > 0) {
       yAxis.set("syncWithAxis", chart.yAxes.getIndex(0));
     }
-
-    // Add series
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 
     let series = chart.series.push(
       am5xy.LineSeries.new(root, {
@@ -74,12 +70,17 @@ class RevenueChart extends Component {
   updateChart = () => {
     // const {id} = this.props;
     am5.array.each(am5.registry.rootElements, function (root) {
-      if (root.dom.id == "revenue") {
-        root.dispose();
+      if (root  !== undefined) {
+        if (root.dom.id == "revenue") {
+          root.dispose();
+        }
       }
+    
     });
 
     let root = am5.Root.new("revenue");
+
+    this.setState({root});
 
     root.setThemes([am5themes_Animated.new(root)]);
 
@@ -91,6 +92,8 @@ class RevenueChart extends Component {
         wheelX: "panX",
         wheelY: "zoomX",
         pinchZoomX: true,
+        maxTooltipDistance:0,
+        pinchZoomX:true,
         layout: root.verticalLayout,
       })
     );
@@ -104,7 +107,7 @@ class RevenueChart extends Component {
         groupData: false,
         baseInterval: {
           timeUnit: "minute",
-          count: 1,
+          count: 30,
         },
         renderer: am5xy.AxisRendererX.new(root, {}),
         tooltip: am5.Tooltip.new(root, {}),
@@ -133,16 +136,24 @@ class RevenueChart extends Component {
     );
     let data = this.props.data; // valueYField, tooltip
     const {seriesSettings} = this.props;
+    let yRenderer = am5xy.AxisRendererY.new(root, {
+    });
+    let yAxis = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        maxDeviation: 1,
+        renderer: yRenderer,
+      })
+    );
+
     for (let i = 0; i < seriesSettings.length; i++) {
       let seriesSetting = seriesSettings[i];
-      let opposite = i % 2 == 0 ? true : false;
-      this.createAxisAndSeries(      chart,
+      this.createAxisAndSeries( chart,
         xAxis,
+        yAxis,
         data,
         seriesSetting.valueYField,
         root,
-        opposite,
-        seriesSetting.tooltip)
+        seriesSetting.tooltip, yRenderer)
     }
 
 

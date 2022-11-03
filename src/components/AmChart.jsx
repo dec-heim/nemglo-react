@@ -18,7 +18,7 @@ class AmChart extends Component {
     valueYField,
     root,
     opposite,
-    tooltip
+    tooltip,
   ) => {
     let yRenderer = am5xy.AxisRendererY.new(root, {
       opposite: opposite,
@@ -73,9 +73,12 @@ class AmChart extends Component {
 
   updateChart = () => {
     am5.array.each(am5.registry.rootElements, function (root) {
-      if (root.dom.id == "chartdiv") {
-        root.dispose();
+      if (root !== undefined) {
+        if ( root.dom.id == "chartdiv") {
+          root.dispose();
+        }
       }
+      
     });
 
     let root = am5.Root.new("chartdiv");
@@ -132,16 +135,19 @@ class AmChart extends Component {
     );
     let data = this.props.data; // valueYField, tooltip
     const {seriesSettings} = this.props;
+
+
     for (let i = 0; i < seriesSettings.length; i++) {
       let seriesSetting = seriesSettings[i];
       let opposite = i % 2 == 0 ? true : false;
-      this.createAxisAndSeries(      chart,
+      this.createAxisAndSeries( chart,
         xAxis,
         data,
         seriesSetting.valueYField,
         root,
         opposite,
-        seriesSetting.tooltip)
+        seriesSetting.tooltip,
+        seriesSetting.enableYAxis)
     }
 
     let legend = chart.children.push(

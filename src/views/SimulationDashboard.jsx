@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Card } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import NemGloApi from "../api/NemgloApi";
 
@@ -9,6 +9,8 @@ import PPAConfig from "./PPAConfig";
 import PlannerConfig from "./PlannerConfig";
 import SimulationView from "./SimulationView";
 import ResultsView from "./ResultsView";
+import RevenueChart from "../components/RevenueChart";
+import RevenueChartView from "../components/RevenueChartView";
 
 const secProfiles = ["fixed", "variable"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
@@ -244,26 +246,33 @@ export default class SimulationDashboard extends Component {
       {
         valueYField: "price",
         tooltip: "Price: ${valueY}/MWh",
+        enableYAxis: true,
       },
       {
         valueYField: "combined",
         tooltip: "Combined:  {valueY} MW",
+        enableYAxis: true,
       },
       {
         valueYField: "load",
         tooltip: "Load:  {valueY} MW",
+        enableYAxis: false,
       },
     ];
     if (!this.props.ppa1Disabled) {
       seriesSettings.push({
         valueYField: "ppa1",
         tooltip: "PPA1:  {valueY} MW",
+        enableYAxis: false,
+
       });
     }
     if (!this.props.ppa2Disabled) {
       seriesSettings.push({
         valueYField: "ppa2",
         tooltip: "PPA2:  {valueY} MW",
+        enableYAxis: false,
+
       });
     }
     return seriesSettings;
@@ -274,26 +283,36 @@ export default class SimulationDashboard extends Component {
       {
         valueYField: "energy",
         tooltip: "Energy: ${valueY}",
+        enableYAxis: true,
+
       },
       {
         valueYField: "h2",
         tooltip: "H2:  ${valueY}",
+        enableYAxis: false,
+
       },
       {
         valueYField: "total",
         tooltip: "Total:  ${valueY}",
+        enableYAxis: false,
+
       },
     ];
     if (!this.props.ppa1Disabled) {
       seriesSettings.push({
         valueYField: "vre1",
         tooltip: "VRE1:  ${valueY}",
+        enableYAxis: false,
+
       });
     }
     if (!this.props.ppa2Disabled) {
       seriesSettings.push({
         valueYField: "vre2",
         tooltip: "VRE2:  ${valueY}",
+        enableYAxis: false,
+
       });
     }
     return seriesSettings;
@@ -361,7 +380,7 @@ export default class SimulationDashboard extends Component {
               {resultsLoaded && (
                 <MenuItem onClick={() => this.onSelectView("viewChart1")}>
                   {" "}
-                  View Chart 1{" "}
+                  Price & Dispatch{" "}
                 </MenuItem>
               )}
               {resultsLoaded && (
@@ -473,7 +492,7 @@ export default class SimulationDashboard extends Component {
               />
             )}
             {currentConfig === "viewChart2" && (
-              <ResultsView
+              <RevenueChartView
                 chart1={revenueResults}
                 chartSettings={this.getChart2Settings()}
                 title={"Costs"}

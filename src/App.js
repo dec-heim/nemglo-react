@@ -1,12 +1,11 @@
 import React from "react";
+import { Button, Card, Col, Container, Nav, Navbar, Row } from "react-bootstrap";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-  import { Button, Card, Col, Container, Row, Navbar, Nav} from "react-bootstrap";
+
 import SimulationDashboard from "./views/SimulationDashboard";
 
-import './App.scss';
-
-// import 'bootstrap/dist/css/bootstrap.min.css'
-
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   return (

@@ -44,6 +44,3 @@ input[type=number]::-webkit-outer-spin-button {
 .pro-sidebar {
     color: var(--frost-4);
 }
-@import "../node_modules/bootstrap/scss/bootstrap";
-
-@import '~react-bootstrap-sidebar-menu/dist/sidebar-menu.scss'

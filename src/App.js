@@ -1,17 +1,17 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { Button, Card, Col, Container, Row, Navbar, Nav} from "react-bootstrap";
+  import { Button, Card, Col, Container, Row, Navbar, Nav} from "react-bootstrap";
 import SimulationDashboard from "./views/SimulationDashboard";
 
-import './App.css';
+import './App.scss';
 
-import 'bootstrap/dist/css/bootstrap.min.css'
+// import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 function App() {
   return (
     <div className="App">
-       <Navbar bg="primary" variant="dark">
+      <Navbar className="navbar">
         <Container >
           <Navbar.Brand href="/">NEMGLO</Navbar.Brand>
           <Nav className="me-auto">
@@ -22,6 +22,7 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
+      
       <Router>
         <Routes>
           <Route path="/" element={<SimulationDashboard />} />
@@ -30,5 +31,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

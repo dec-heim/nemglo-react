@@ -24,7 +24,8 @@ export default function SliderInput(props) {
         {props.label}
       </Form.Label>
       <Stack direction="horizontal" gap={5}>
-        <Form.Control
+        <Form.Control 
+          required
           value={value}
           type="number"
           onChange={(e) => updateValue(e)}

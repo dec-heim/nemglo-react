@@ -44,3 +44,22 @@ input[type=number]::-webkit-outer-spin-button {
 .pro-sidebar {
     color: var(--frost-4);
 }
+
+@import '~antd/dist/antd.css';
+
+.logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 0px 16px 5px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.ant-row-rtl .logo {
+  float: right;
+  margin: 16px 24px 16px 24px;
+}
+
+.site-layout-background {
+  background: #fff;
+}

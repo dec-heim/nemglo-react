@@ -1,29 +1,22 @@
-import MailIcon from '@mui/icons-material/Mail';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import React, { Component } from "react";
 import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
-import SidebarMenu, { SidebarMenuBody } from "react-bootstrap-sidebar-menu";
 import Form from "react-bootstrap/Form";
-import { CirclesWithBar } from "react-loader-spinner";
 
-import NemGloApi from "../api/NemgloApi";
-import AmChart from "../components/AmChart";
 import DropDownSelector from "../components/DropDownSelector";
 import RegularInput from "../components/RegularInput";
 import SliderInput from "../components/SliderInput";
+import NemGloApi from "../api/NemgloApi";
+import AmChart from "../components/AmChart";
 import dataResponse from "../data/nemgloApiResponse.json";
+import { CirclesWithBar } from "react-loader-spinner";
+import SidebarMenu, { SidebarMenuBody } from "react-bootstrap-sidebar-menu";
+
+import {
+  AppstoreOutlined,
+  MailOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
+import { Menu, Switch } from "antd";
 
 const secProfiles = ["fixed", "variable"];
 const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
@@ -73,7 +66,6 @@ export default class SimulationDashboard extends Component {
     this.getReChartsData = this.getReChartsData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.isDateInvalid = this.isDateInvalid.bind(this);
-    this.onSelect = this.onSelect.bind(this);
   }
 
   setConfigValue = (id, val) => {
@@ -185,11 +177,6 @@ export default class SimulationDashboard extends Component {
     });
   };
 
-  onSelect = (eventKey) => {
-    if (eventKey)
-      document.getElementById(`${eventKey}`)?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   render() {
     const {
       config,
@@ -204,49 +191,7 @@ export default class SimulationDashboard extends Component {
     return (
       <div>
         <Container>
-          <Row>
-            <Col style={{ maxWidth: 300, maxHeight: 5 }}>
-            <Drawer
-        sx={{
-          width: 240,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: 240,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="permanent"
-        anchor="left"
-      >
-        <Toolbar />
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-            </Col>
+          <Row >
             <Col>
               <Form
                 noValidate

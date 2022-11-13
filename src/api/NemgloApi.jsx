@@ -1,24 +1,31 @@
 import axios from "axios";
 import config from "../config.json";
 
-const runSimulation = async (simConfig) => {
+const getMarketData = async (marketConfig) => {
   try {
     const body = {
+      market_data: {
+        start_date: marketConfig.startDate,
+        end_date: marketConfig.endDate,
+        region: marketConfig.region
+      }
+    }
+    const reponse = await axios.post(`${config.api}/get-market-data`, body);
+    return reponse.data;
+  } catch(err) {
+    console.log(err);
+    return null;
+  }
+}
+
+const runSimulation = async (simConfig, ppa1Disabled, ppa2Disabled) => {
+  try {
+    let body = {
       market_data: {
         start_date: simConfig.startDate,
         end_date: simConfig.endDate,
         region: simConfig.region,
         dispatch_interval_length: simConfig.dispatchIntervalLength,
-      },
-      ppa_1: {
-        duid:simConfig.duid1,
-        capacity: simConfig.ppa1Capacity,
-        strike_price: simConfig.ppa1StrikePrice,
-      },
-      ppa_2: {
-        duid: simConfig.duid2,
-        capacity: simConfig.ppa2Capacity,
-        strike_price: simConfig.ppa2StrikePrice,
       },
       electrolyser_load: {
         technology_type: simConfig.technologyType,
@@ -33,6 +40,22 @@ const runSimulation = async (simConfig) => {
       },
     };
 
+    if (!ppa1Disabled) {
+      body['ppa_1'] = {
+        duid:simConfig.duid1,
+        capacity: simConfig.ppa1Capacity,
+        strike_price: simConfig.ppa1StrikePrice,
+      }
+    }
+    if (!ppa2Disabled) {
+      body['ppa_2'] = {
+        duid:simConfig.duid2,
+        capacity: simConfig.ppa2Capacity,
+        strike_price: simConfig.ppa2StrikePrice,
+      }
+    }
+
+
     const reponse = await axios.post(`${config.api}/get-data`, body);
     return reponse.data;
   } catch (err) {
@@ -44,7 +67,8 @@ const runSimulation = async (simConfig) => {
 
 
 export default {
-    runSimulation
+    runSimulation,
+    getMarketData
 }
 
 

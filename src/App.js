@@ -1,25 +1,15 @@
 import React from "react";
 import { Button, Card, Col, Container, Nav, Navbar, Row } from "react-bootstrap";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Row,
-  Navbar,
-  Nav,
-} from "react-bootstrap";
-import SimulationDashboard from "./views/SimulationDashboard";
-import { ProSidebarProvider } from "react-pro-sidebar";
 import { HiAdjustments } from "react-icons/hi";
+import { ProSidebarProvider } from "react-pro-sidebar";
+import { Icon, Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
+import AmChart from "./components/AmChart";
+import SimulationDashboard from "./views/SimulationDashboard";
 
 import "./App.css";
-
 import "bootstrap/dist/css/bootstrap.min.css";
-import AmChart from "./components/AmChart";
-
-import { Sidebar, Menu, MenuItem, SubMenu, Icon } from "react-pro-sidebar";
 
 function App() {
   return (

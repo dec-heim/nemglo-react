@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Container, Button } from "react-bootstrap";
+import { Card, Button, Row, Col, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import NemGloApi from "../api/NemgloApi";
 import AmChart from "../components/AmChart";
@@ -124,70 +124,78 @@ export default class PlannerConfig extends Component {
                   seriesSettings={seriesSettings}
                 ></AmChart>
               )}
+              <Row>
+                <Col>
+                  <DropDownSelector
+                    id="dispatchIntervalLength"
+                    label="Dispatch Interval Length"
+                    value={this.props.dispatchIntervalLength}
+                    options={[30, 60, 90]}
+                    setConfigValue={this.props.setConfigValue}
+                  ></DropDownSelector>
+                  <DropDownSelector
+                    id="region"
+                    label="Region"
+                    value={this.props.region}
+                    options={regions}
+                    setConfigValue={this.props.setConfigValue}
+                  ></DropDownSelector>
+                </Col>
 
-              <DropDownSelector
-                id="dispatchIntervalLength"
-                label="Dispatch Interval Length"
-                value={this.props.dispatchIntervalLength}
-                options={[30, 60, 90]}
-                setConfigValue={this.props.setConfigValue}
-              ></DropDownSelector>
+                <Col>
+                  <Form.Group style={{ paddingBottom: 10 }}>
+                    <Form.Label
+                      style={{
+                        textAlign: "text-center text-md-right",
+                      }}
+                    >
+                      Start Date
+                    </Form.Label>
+                    <Form.Control
+                      required
+                      id="startDate"
+                      type="date"
+                      format="dd/MM/yyyy"
+                      onChange={(e) =>
+                        this.props.setConfigValue("startDate", e.target.value)
+                      }
+                      value={this.props.startDate}
+                      isInvalid={this.isDateInvalid()}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Please select a valid date. Maximum date range is 7 days.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group style={{ paddingBottom: 10 }}>
+                    <Form.Label
+                      style={{
+                        textAlign: "text-center text-md-right",
+                      }}
+                    >
+                      End Date
+                    </Form.Label>
+                    <Form.Control
+                      required
+                      id="endDate"
+                      type="date"
+                      format="dd/MM/yyyy"
+                      onChange={(e) =>
+                        this.props.setConfigValue("endDate", e.target.value)
+                      }
+                      value={this.props.endDate}
+                      isInvalid={this.isDateInvalid()}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Please select a valid date. Maximum date range is 7 days.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Container style ={{height: 10}}>
 
-              <Form.Group style={{ paddingBottom: 10 }}>
-                <Form.Label
-                  style={{
-                    textAlign: "text-center text-md-right",
-                  }}
-                >
-                  Start Date
-                </Form.Label>
-                <Form.Control
-                  required
-                  id="startDate"
-                  type="date"
-                  format="dd/MM/yyyy"
-                  onChange={(e) =>
-                    this.props.setConfigValue("startDate", e.target.value)
-                  }
-                  value={this.props.startDate}
-                  isInvalid={this.isDateInvalid()}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Please select a valid date. Maximum date range is 7 days.
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group style={{ paddingBottom: 10 }}>
-                <Form.Label
-                  style={{
-                    textAlign: "text-center text-md-right",
-                  }}
-                >
-                  End Date
-                </Form.Label>
-                <Form.Control
-                  required
-                  id="endDate"
-                  type="date"
-                  format="dd/MM/yyyy"
-                  onChange={(e) =>
-                    this.props.setConfigValue("endDate", e.target.value)
-                  }
-                  value={this.props.endDate}
-                  isInvalid={this.isDateInvalid()}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Please select a valid date. Maximum date range is 7 days.
-                </Form.Control.Feedback>
-              </Form.Group>
-              <DropDownSelector
-                id="region"
-                label="Region"
-                value={this.props.region}
-                options={regions}
-                setConfigValue={this.props.setConfigValue}
-              ></DropDownSelector>
-              {}
-              <Button className="float-end" type="submit" variant={"primary"}>
+              </Container>
+  
+                <Button className="float-end" type="submit" variant={"primary"}>
                 Get Market Data
               </Button>
             </Form>
@@ -201,12 +209,12 @@ export default class PlannerConfig extends Component {
               wrapperStyle
               wrapperClass
               style={{
-                height: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                }}
+                height: "100vh",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             />
           )}
         </Card.Body>

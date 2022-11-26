@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Container, Card } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import { Container } from "react-bootstrap";
 import NemGloApi from "../api/NemgloApi";
 
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
@@ -330,7 +329,7 @@ export default class SimulationDashboard extends Component {
       revenueResults,
     } = this.state;
     return (
-      <div style={{ display: "flex", height: "100vh", background: "#eceff4" }}>
+      <div className="full-screen-div" style={{ display: "flex",  background: "#eceff4" }} >
         <Sidebar style={{ borderRight: "None" }}>
           <Menu>
             <SubMenu label="Configure Model">
@@ -402,7 +401,7 @@ export default class SimulationDashboard extends Component {
             paddingRight: 20,
           }}
         >
-          <Container style={{ paddingLeft: 5, paddingRight: 5 }}>
+          <Container style={{ paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}>
             {currentConfig === "plannerConfig" && (
               <PlannerConfig
                 setConfigValue={this.setConfigValue}

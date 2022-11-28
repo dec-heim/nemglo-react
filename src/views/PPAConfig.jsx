@@ -88,8 +88,10 @@ export default class PPAConfig extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props);
     const { startDate, endDate, region, dispatchIntervalLength, isDisabled } =
       this.props;
+      console.log(this.props.duidId, isDisabled)
     let radioValue = isDisabled ? "2" : "1";
     this.setState({
       radioValue,
@@ -125,10 +127,13 @@ export default class PPAConfig extends Component {
 
   setIsDisabled = (value) => {
     const { setPPADisabled, duidId } = this.props;
+
     if (value === "1") {
       setPPADisabled(duidId, false);
+      console.log(duidId, "active")
     } else {
       setPPADisabled(duidId, true);
+      console.log(duidId, "disabled")
     }
     this.setState({ radioValue: value });
   };
@@ -136,6 +141,8 @@ export default class PPAConfig extends Component {
   isDisabled = () => {
     return this.state.radioValue === "2";
   };
+
+
 
   render() {
     const seriesSettings = [
@@ -172,8 +179,8 @@ export default class PPAConfig extends Component {
           <ButtonGroup className="float-end">
             {this.state.radios.map((radio, idx) => (
               <ToggleButton
-                key={idx}
-                id={`radio-${idx}`}
+                key={`${duid}-${idx}`}
+                id={`${duid}-radio-${idx}`}
                 type="radio"
                 variant={idx % 2 ? "outline-danger" : "outline-success"}
                 name="radio"

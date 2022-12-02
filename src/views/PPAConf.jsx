@@ -99,7 +99,7 @@ export default class PPAConf extends Component {
       region,
       dispatchIntervalLength,
     });
-    if (config.ppa1Data !== undefined || config.ppa2Data !== undefined) {
+    if (config.ppa1Data.time !== undefined || config.ppa2Data.time !== undefined) {
       if (config.ppa1Data.time.length > 0) {
         this.storeDataPoints(config.ppa1Data, config.ppa2Data);
       }

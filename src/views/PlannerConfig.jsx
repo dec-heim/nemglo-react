@@ -100,125 +100,151 @@ export default class PlannerConfig extends Component {
     ];
     const { formValidated, dataPoints, isMakingApiCall } = this.state;
     return (
-      <Card
-        style={{
-          paddingTop: 20,
-          paddingLeft: 5,
-          paddingRight: 5,
-          paddingBottom: 5,
-        }}
-      >
-        <Card.Title style={{ paddingLeft: 15 }}>Market Data</Card.Title>
+      <Col>
+        {dataPoints.length > 0 && (
+          <Card
+            style={{
+              paddingTop: 20,
+              paddingLeft: 5,
+              paddingRight: 5,
+              paddingBottom: 5,
+            }}
+          >
+            <Card.Title style={{ paddingLeft: 15 }}>Market Data</Card.Title>
 
-        <Card.Body>
-          {!isMakingApiCall ? (
-            <Form
-              noValidate
-              validated={formValidated}
-              onSubmit={this.handleSubmit}
-            >
-              {dataPoints.length > 0 && (
-                <AmChart
-                  id="planner"
-                  data={dataPoints}
-                  seriesSettings={seriesSettings}
-                ></AmChart>
-              )}
-              <Row>
-                <Col>
-                  <DropDownSelector
-                    id="dispatchIntervalLength"
-                    label="Dispatch Interval Length"
-                    value={this.props.dispatchIntervalLength}
-                    options={[30, 60, 90]}
-                    setConfigValue={this.props.setConfigValue}
-                  ></DropDownSelector>
-                  <DropDownSelector
-                    id="region"
-                    label="Region"
-                    value={this.props.region}
-                    options={regions}
-                    setConfigValue={this.props.setConfigValue}
-                  ></DropDownSelector>
-                </Col>
+            <Card.Body>
+              <AmChart
+                id="planner-plot"
+                data={dataPoints}
+                seriesSettings={seriesSettings}
+              ></AmChart>
+            </Card.Body>  
+          </Card>
+        )}
+        <br></br>
 
-                <Col>
-                  <Form.Group style={{ paddingBottom: 10 }}>
-                    <Form.Label
-                      style={{
-                        textAlign: "text-center text-md-right",
-                      }}
-                    >
-                      Start Date
-                    </Form.Label>
-                    <Form.Control
-                      required
-                      id="startDate"
-                      type="date"
-                      format="dd/MM/yyyy"
-                      onChange={(e) =>
-                        this.props.setConfigValue("startDate", e.target.value)
-                      }
-                      value={this.props.startDate}
-                      isInvalid={this.isDateInvalid()}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Please select a valid date. Maximum date range is 7 days.
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group style={{ paddingBottom: 10 }}>
-                    <Form.Label
-                      style={{
-                        textAlign: "text-center text-md-right",
-                      }}
-                    >
-                      End Date
-                    </Form.Label>
-                    <Form.Control
-                      required
-                      id="endDate"
-                      type="date"
-                      format="dd/MM/yyyy"
-                      onChange={(e) =>
-                        this.props.setConfigValue("endDate", e.target.value)
-                      }
-                      value={this.props.endDate}
-                      isInvalid={this.isDateInvalid()}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Please select a valid date. Maximum date range is 7 days.
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Container style ={{height: 10}}>
-
-              </Container>
-  
-                <Button className="float-end" type="submit" variant={"primary"}>
-                Get Market Data
-              </Button>
-            </Form>
-          ) : (
-            <Audio
-              height="80"
-              width="80"
-              radius="9"
-              color="green"
-              ariaLabel="loading"
-              wrapperStyle
-              wrapperClass
-              style={{
-                height: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            />
+        <Card
+          style={{
+            paddingTop: 20,
+            paddingLeft: 5,
+            paddingRight: 5,
+            paddingBottom: 5,
+          }}
+        >
+          {dataPoints.length === 0 && (
+            <Card.Title style={{ paddingLeft: 15 }}>Market Data</Card.Title>
           )}
-        </Card.Body>
-      </Card>
+
+          <Card.Body>
+            {!isMakingApiCall ? (
+              <Form
+                noValidate
+                validated={formValidated}
+                onSubmit={this.handleSubmit}
+              >
+                {/* {dataPoints.length > 0 && (
+                  <AmChart
+                    id="planner"
+                    data={dataPoints}
+                    seriesSettings={seriesSettings}
+                  ></AmChart>
+                )} */}
+                <Row>
+                  <Col>
+                    <DropDownSelector
+                      id="dispatchIntervalLength"
+                      label="Dispatch Interval Length"
+                      value={this.props.dispatchIntervalLength}
+                      options={[30, 60, 90]}
+                      setConfigValue={this.props.setConfigValue}
+                    ></DropDownSelector>
+                    <DropDownSelector
+                      id="region"
+                      label="Region"
+                      value={this.props.region}
+                      options={regions}
+                      setConfigValue={this.props.setConfigValue}
+                    ></DropDownSelector>
+                  </Col>
+
+                  <Col>
+                    <Form.Group style={{ paddingBottom: 10 }}>
+                      <Form.Label
+                        style={{
+                          textAlign: "text-center text-md-right",
+                        }}
+                      >
+                        Start Date
+                      </Form.Label>
+                      <Form.Control
+                        required
+                        id="startDate"
+                        type="date"
+                        format="dd/MM/yyyy"
+                        onChange={(e) =>
+                          this.props.setConfigValue("startDate", e.target.value)
+                        }
+                        value={this.props.startDate}
+                        isInvalid={this.isDateInvalid()}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please select a valid date. Maximum date range is 7
+                        days.
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group style={{ paddingBottom: 10 }}>
+                      <Form.Label
+                        style={{
+                          textAlign: "text-center text-md-right",
+                        }}
+                      >
+                        End Date
+                      </Form.Label>
+                      <Form.Control
+                        required
+                        id="endDate"
+                        type="date"
+                        format="dd/MM/yyyy"
+                        onChange={(e) =>
+                          this.props.setConfigValue("endDate", e.target.value)
+                        }
+                        value={this.props.endDate}
+                        isInvalid={this.isDateInvalid()}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please select a valid date. Maximum date range is 7
+                        days.
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Container style={{ height: 10 }}></Container>
+
+                <Button className="float-end" type="submit" variant={"primary"}>
+                  Get Market Data
+                </Button>
+              </Form>
+            ) : (
+              <Audio
+                height="80"
+                width="80"
+                radius="9"
+                color="green"
+                ariaLabel="loading"
+                wrapperStyle
+                wrapperClass
+                style={{
+                  height: "100vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              />
+            )}
+          </Card.Body>
+        </Card>
+      </Col>
     );
   }
 }

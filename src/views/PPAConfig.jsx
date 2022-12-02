@@ -10,7 +10,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import { Audio } from "react-loader-spinner";
 import PPA1Chart from "../components/PPA1Chart";
-
+import Switch from "react-bootstrap-switch";
 
 export default class PPAConfig extends Component {
   constructor() {
@@ -29,19 +29,15 @@ export default class PPAConfig extends Component {
         { name: "Disabled", value: "2" },
       ],
       isMakingApiCall: false,
-
     };
     this.setIsDisabled = this.setIsDisabled.bind(this);
-    this.isDisabled = this.isDisabled.bind(this);
     this.setCapacity = this.setCapacity.bind(this);
   }
 
   setCapacity(id, capacity) {
     const { setConfigValue, ppaData } = this.props;
     setConfigValue(id, capacity);
-    if (
-      "cf_trace" in ppaData
-    ) {
+    if ("cf_trace" in ppaData) {
       if (this.props.ppaData.time.length > 0) {
         this.storeDataPoints(this.props.ppaData);
       }
@@ -49,15 +45,17 @@ export default class PPAConfig extends Component {
   }
 
   handleSubmit = (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-    } else {
-
-      this.getGeneratorData(); // NEED TO CONSIDER EITHER PPA 1 OR 2
+    console.log(this.props.isDisabled);
+    if (!this.props.isDisabled) {
+      const form = event.currentTarget;
+      event.preventDefault();
+      if (form.checkValidity() === false) {
+        event.stopPropagation();
+      } else {
+        this.getGeneratorData();
+      }
+      this.setState({ formValidated: true });
     }
-    this.setState({ formValidated: true });
   };
 
   getGeneratorData = async () => {
@@ -91,7 +89,6 @@ export default class PPAConfig extends Component {
     console.log(this.props);
     const { startDate, endDate, region, dispatchIntervalLength, isDisabled } =
       this.props;
-      console.log(this.props.duidId, isDisabled)
     let radioValue = isDisabled ? "2" : "1";
     this.setState({
       radioValue,
@@ -114,7 +111,6 @@ export default class PPAConfig extends Component {
 
   storeDataPoints = (ppaData) => {
     const { ppaCapacity } = this.props;
-    console.log(ppaCapacity)
     let dataPoints = [];
     for (let i = 0; i < ppaData.time.length; i++) {
       let dataPoint = {};
@@ -126,23 +122,14 @@ export default class PPAConfig extends Component {
   };
 
   setIsDisabled = (value) => {
-    const { setPPADisabled, duidId } = this.props;
-
-    if (value === "1") {
-      setPPADisabled(duidId, false);
-      console.log(duidId, "active")
-    } else {
+    const { setPPADisabled, duidId, title } = this.props;
+    console.log(title);
+    if (!value) {
       setPPADisabled(duidId, true);
-      console.log(duidId, "disabled")
+    } else {
+      setPPADisabled(duidId, false);
     }
-    this.setState({ radioValue: value });
   };
-
-  isDisabled = () => {
-    return this.state.radioValue === "2";
-  };
-
-
 
   render() {
     const seriesSettings = [
@@ -164,97 +151,66 @@ export default class PPAConfig extends Component {
       availableGens,
       otherPPADuid,
     } = this.props;
+    console.log(duidId);
     let filteredOptions = availableGens.filter((item) => item !== otherPPADuid);
-    const { formValidated, dataPoints, isMakingApiCall } = this.state;
+    const { formValidated, dataPoints } = this.state;
     return (
       <Card>
-        <Card.Header
-          style={{
-            paddingTop: 15,
-            paddingBottom: 15,
-            paddingLeft: 15,
-            paddingRight: 15,
-          }}
-        >
-          <ButtonGroup className="float-end">
-            {this.state.radios.map((radio, idx) => (
-              <ToggleButton
-                key={`${duid}-${idx}`}
-                id={`${duid}-radio-${idx}`}
-                type="radio"
-                variant={idx % 2 ? "outline-danger" : "outline-success"}
-                name="radio"
-                value={radio.value}
-                checked={this.state.radioValue === radio.value}
-                onChange={(e) => this.setIsDisabled(e.currentTarget.value)}
-              >
-                {radio.name}
-              </ToggleButton>
-            ))}
-          </ButtonGroup>
-        </Card.Header>
+
         <Card.Title style={{ paddingLeft: 15, paddingTop: 15 }}>
           {title}
         </Card.Title>
         <Card.Body>
-        {!isMakingApiCall ? 
           <div>
-        {dataPoints.length > 0 && (
-            <AmChart
-              id={duid}
-              data={dataPoints}
-              seriesSettings={seriesSettings}
-            ></AmChart>
-          )}
-          <Form
-            noValidate
-            validated={formValidated}
-            onSubmit={this.handleSubmit}
-          >
-            <DropDownSelector
-              id={duidId}
-              label="DUID (Unit)"
-              options={filteredOptions}
-              setConfigValue={setConfigValue}
-              value={duid}
-              disabled={isDisabled}
-            ></DropDownSelector>
-            <SliderInput
-              id={capacityId}
-              label="Capacity (MW)"
-              setConfigValue={this.setCapacity}
-              value={ppaCapacity}
-              max={100}
-              disabled={isDisabled}
-            ></SliderInput>
-            <SliderInput
-              id={strikePriceId}
-              label="PPA Strike ($/MWh)"
-              setConfigValue={setConfigValue}
-              value={ppaStrikePrice}
-              max={100}
-              disabled={isDisabled}
-            ></SliderInput>
-            <Button className="float-end" type="submit" variant={"primary"}>
-              Get Renewables Data
-            </Button>
-          </Form>
+            {/* {dataPoints.length > 0 && (
+              <AmChart
+                id={duid}
+                data={dataPoints}
+                seriesSettings={seriesSettings}
+              ></AmChart>
+            )} */}
+            <Form
+              noValidate
+              validated={formValidated}
+              onSubmit={this.handleSubmit}
+            >
+              <DropDownSelector
+                id={duidId}
+                label="DUID (Unit)"
+                options={filteredOptions}
+                setConfigValue={setConfigValue}
+                value={duid}
+                disabled={isDisabled}
+              ></DropDownSelector>
+              <SliderInput
+                id={capacityId}
+                label="Capacity (MW)"
+                setConfigValue={this.setCapacity}
+                value={ppaCapacity}
+                max={100}
+                disabled={isDisabled}
+              ></SliderInput>
+              <SliderInput
+                id={strikePriceId}
+                label="PPA Strike ($/MWh)"
+                setConfigValue={setConfigValue}
+                value={ppaStrikePrice}
+                max={100}
+                disabled={isDisabled}
+              ></SliderInput>
+              <ToggleButton
+                className="mb-2"
+                id={duidId}
+                type="checkbox"
+                variant={!isDisabled ? "outline-primary" : "secondary"}
+                checked={!isDisabled}
+                value="1"
+                onChange={(e) => this.setIsDisabled(e.currentTarget.checked)}
+              >
+                Enabled
+              </ToggleButton>
+            </Form>
           </div>
-          : <Audio
-          height="80"
-          width="80"
-          radius="9"
-          color="green"
-          ariaLabel="loading"
-          wrapperStyle
-          wrapperClass
-          style={{
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            }} /> }
         </Card.Body>
       </Card>
     );

@@ -74,7 +74,7 @@ class AmChart extends Component {
   updateChart = () => {
     am5.array.each(am5.registry.rootElements, function (root) {
       if (root !== undefined) {
-        if ( root.dom.id == "chartdiv") {
+        if ( root.dom.id === "chartdiv") {
           root.dispose();
         }
       }

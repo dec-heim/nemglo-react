@@ -22,7 +22,7 @@ import { Sidebar, Menu, MenuItem, SubMenu, Icon } from "react-pro-sidebar";
 
 function App() {
   return (
-    <div style={{ height: "100vh"}}>
+    // <div style={{ height: "100vh * 2"}}>
     <ProSidebarProvider className="pro-sidebar">
       <Navbar className="navbar"  expand="lg">
           <Container>
@@ -31,7 +31,7 @@ function App() {
       </Navbar>
       <SimulationDashboard />
     </ProSidebarProvider>
-    </div>
+    // </div>
   );
 }
 

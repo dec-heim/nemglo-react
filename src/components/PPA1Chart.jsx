@@ -103,7 +103,7 @@ export default class PPA1Chart extends Component {
         groupData: false,
         baseInterval: {
           timeUnit: "minute",
-          count: 5,
+          count: 30,
         },
         renderer: am5xy.AxisRendererX.new(root, {}),
         tooltip: am5.Tooltip.new(root, {}),

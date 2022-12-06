@@ -21,7 +21,6 @@ class PriceDispatchChart extends Component {
     tooltip,
     yRenderer
   ) => {
-
     if (chart.yAxes.indexOf(yAxis) > 0) {
       yAxis.set("syncWithAxis", chart.yAxes.getIndex(0));
     }
@@ -65,12 +64,11 @@ class PriceDispatchChart extends Component {
 
   updateChart = () => {
     am5.array.each(am5.registry.rootElements, function (root) {
-        if (root !== undefined) {
-            if (root.dom.id == "priceDispatch") {
-                root.dispose();
-              }
+      if (root !== undefined) {
+        if (root.dom.id === "priceDispatch") {
+          root.dispose();
         }
-
+      }
     });
 
     let root = am5.Root.new("priceDispatch");
@@ -126,41 +124,46 @@ class PriceDispatchChart extends Component {
       })
     );
     let data = this.props.data; // valueYField, tooltip
-    const {seriesSettings} = this.props;
+    const { seriesSettings } = this.props;
 
     let priceRenderer = am5xy.AxisRendererY.new(root, {
-        opposite: true,
-      });
-      let yAxisPrice = chart.yAxes.push(
-        am5xy.ValueAxis.new(root, {
-          maxDeviation: 1,
-          renderer: priceRenderer,
-        })
-      );
+      opposite: true,
+    });
+    let yAxisPrice = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        maxDeviation: 1,
+        renderer: priceRenderer,
+      })
+    );
 
-      let dispatchRenderer = am5xy.AxisRendererY.new(root, {
-        opposite: false,
-      });
-      let yAxisDispatch = chart.yAxes.push(
-        am5xy.ValueAxis.new(root, {
-          maxDeviation: 1,
-          renderer: dispatchRenderer,
-        })
-      );
-
+    let dispatchRenderer = am5xy.AxisRendererY.new(root, {
+      opposite: false,
+    });
+    let yAxisDispatch = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        maxDeviation: 1,
+        renderer: dispatchRenderer,
+      })
+    );
 
     for (let i = 0; i < seriesSettings.length; i++) {
       let seriesSetting = seriesSettings[i];
-      let yAxis = seriesSetting.valueYField === "price" ? yAxisPrice : yAxisDispatch;
-      let yRenderer = seriesSetting.valueYField === "price" ? priceRenderer : dispatchRenderer;
-      this.createAxisAndSeries( chart,
+      let yAxis =
+        seriesSetting.valueYField === "price" ? yAxisPrice : yAxisDispatch;
+      let yRenderer =
+        seriesSetting.valueYField === "price"
+          ? priceRenderer
+          : dispatchRenderer;
+      this.createAxisAndSeries(
+        chart,
         xAxis,
         yAxis,
         data,
         seriesSetting.valueYField,
         root,
         seriesSetting.tooltip,
-        yRenderer)
+        yRenderer
+      );
     }
 
     let legend = chart.children.push(
@@ -184,8 +187,9 @@ class PriceDispatchChart extends Component {
   }
 
   render() {
-    const {id} = this.props;
-    return <div id="priceDispatch" style={{ width: "100%", height: "500px" }}></div>;
+    return (
+      <div id="priceDispatch" style={{ width: "100%", height: "500px" }}></div>
+    );
   }
 }
 

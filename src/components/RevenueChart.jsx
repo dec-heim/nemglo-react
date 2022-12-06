@@ -8,9 +8,7 @@ import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 class RevenueChart extends Component {
   constructor() {
     super();
-    this.state = {
-      root: null
-    };
+    this.state = {};
     this.createAxisAndSeries = this.createAxisAndSeries.bind(this);
     this.updateChart = this.updateChart.bind(this);
   }
@@ -68,10 +66,9 @@ class RevenueChart extends Component {
   };
 
   updateChart = () => {
-    // const {id} = this.props;
     am5.array.each(am5.registry.rootElements, function (root) {
       if (root  !== undefined) {
-        if (root.dom.id == "revenue") {
+        if (root.dom.id === "revenue") {
           root.dispose();
         }
       }
@@ -92,8 +89,8 @@ class RevenueChart extends Component {
         wheelX: "panX",
         wheelY: "zoomX",
         pinchZoomX: true,
-        maxTooltipDistance:0,
-        pinchZoomX:true,
+        // maxTooltipDistance:0,
+        // pinchZoomX:true,
         layout: root.verticalLayout,
       })
     );
@@ -137,6 +134,7 @@ class RevenueChart extends Component {
     let data = this.props.data; // valueYField, tooltip
     const {seriesSettings} = this.props;
     let yRenderer = am5xy.AxisRendererY.new(root, {
+      opposite: true,
     });
     let yAxis = chart.yAxes.push(
       am5xy.ValueAxis.new(root, {
@@ -178,7 +176,6 @@ class RevenueChart extends Component {
   }
 
   render() {
-    console.log(this.props.data);
     return <div id="revenue" style={{ width: "100%", height: "500px" }}></div>;
   }
 }

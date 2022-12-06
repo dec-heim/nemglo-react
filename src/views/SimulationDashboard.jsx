@@ -160,7 +160,6 @@ export default class SimulationDashboard extends Component {
   };
 
   setPPADisabled = (PPANum, isDisabled) => {
-    console.log(PPANum, "DISABLED:" + isDisabled);
     if (PPANum === "duid1") {
       this.setState({ ppa1Disabled: isDisabled });
     } else if (PPANum === "duid2") {
@@ -441,90 +440,7 @@ export default class SimulationDashboard extends Component {
                 region={config.region}
                 dispatchIntervalLength={config.dispatchIntervalLength}
               />
-              // <Container>
-              //   <Row className="show-grid">
-              //     <Col>
-              //       <PPAConfig
-              //         title="PPA 1"
-              //         duidId="duid1"
-              //         capacityId="ppa1Capacity"
-              //         strikePriceId="ppa1StrikePrice"
-              //         setConfigValue={this.setConfigValue}
-              //         duid={
-              //           config.duid1 === ""
-              //             ? marketData.availgens[0]
-              //             : config.duid1
-              //         }
-              //         ppaCapacity={config.ppa1Capacity}
-              //         ppaStrikePrice={config.ppa1StrikePrice}
-              //         marketData={marketData}
-              //         otherPPADuid={config.duid2}
-              //         isDisabled={ppa1Disabled}
-              //         setPPADisabled={this.setPPADisabled}
-              //         availableGens={marketData.availgens}
-              // startDate={config.startDate}
-              // endDate={config.endDate}
-              // region={config.region}
-              // dispatchIntervalLength={config.dispatchIntervalLength}
-              //         ppaData={config.ppa1Data}
-              //         setPPAData={this.setPPAData}
-              //       />
-              //     </Col>
-              //     <Col>
-              //     <PPAConfig
-              //       title="PPA 2"
-              //       duidId="duid2"
-              //       capacityId="ppa2Capacity"
-              //       strikePriceId="ppa2StrikePrice"
-              //       setConfigValue={this.setConfigValue}
-              //       duid={
-              //         config.duid2 === ""
-              //           ? marketData.availgens[1]
-              //           : config.duid2
-              //       }
-              //       ppaCapacity={config.ppa2Capacity}
-              //       ppaStrikePrice={config.ppa2StrikePrice}
-              //       marketData={marketData}
-              //       otherPPADuid={config.duid1}
-              //       isDisabled={ppa2Disabled}
-              //       setPPADisabled={this.setPPADisabled}
-              //       availableGens={marketData.availgens}
-              //       startDate={config.startDate}
-              //       endDate={config.endDate}
-              //       region={config.region}
-              //       dispatchIntervalLength={config.dispatchIntervalLength}
-              //       ppaData={config.ppa2Data}
-              //       setPPAData={this.setPPAData}
-              //     />
-              //    </Col>
-              //   </Row>
-              // </Container>
             )}
-            {/* {currentConfig === "ppa2Config" && (
-              <PPAConfig
-                title="PPA 2"
-                duidId="duid2"
-                capacityId="ppa2Capacity"
-                strikePriceId="ppa2StrikePrice"
-                setConfigValue={this.setConfigValue}
-                duid={
-                  config.duid2 === "" ? marketData.availgens[1] : config.duid2
-                }
-                ppaCapacity={config.ppa2Capacity}
-                ppaStrikePrice={config.ppa2StrikePrice}
-                marketData={marketData}
-                otherPPADuid={config.duid1}
-                isDisabled={ppa2Disabled}
-                setPPADisabled={this.setPPADisabled}
-                availableGens={marketData.availgens}
-                startDate={config.startDate}
-                endDate={config.endDate}
-                region={config.region}
-                dispatchIntervalLength={config.dispatchIntervalLength}
-                ppaData={config.ppa2Data}
-                setPPAData={this.setPPAData}
-              />
-            )} */}
             {currentConfig === "simulationView" && (
               <SimulationView
                 state={this.state}

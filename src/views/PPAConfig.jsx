@@ -123,7 +123,7 @@ export default class PPAConfig extends Component {
 
   setIsDisabled = (value) => {
     const { setPPADisabled, duidId, title } = this.props;
-    console.log(title);
+    console.log(title, value);
     if (!value) {
       setPPADisabled(duidId, true);
     } else {
@@ -132,12 +132,6 @@ export default class PPAConfig extends Component {
   };
 
   render() {
-    const seriesSettings = [
-      {
-        valueYField: "mw",
-        tooltip: "MW: {valueY}",
-      },
-    ];
     let {
       duidId,
       capacityId,
@@ -151,9 +145,9 @@ export default class PPAConfig extends Component {
       availableGens,
       otherPPADuid,
     } = this.props;
-    console.log(duidId);
     let filteredOptions = availableGens.filter((item) => item !== otherPPADuid);
-    const { formValidated, dataPoints } = this.state;
+    const { formValidated } = this.state;
+    const {setCapacity} = this.props;
     return (
       <Card>
 
@@ -162,13 +156,6 @@ export default class PPAConfig extends Component {
         </Card.Title>
         <Card.Body>
           <div>
-            {/* {dataPoints.length > 0 && (
-              <AmChart
-                id={duid}
-                data={dataPoints}
-                seriesSettings={seriesSettings}
-              ></AmChart>
-            )} */}
             <Form
               noValidate
               validated={formValidated}
@@ -185,7 +172,7 @@ export default class PPAConfig extends Component {
               <SliderInput
                 id={capacityId}
                 label="Capacity (MW)"
-                setConfigValue={this.setCapacity}
+                setConfigValue={setCapacity}
                 value={ppaCapacity}
                 max={100}
                 disabled={isDisabled}

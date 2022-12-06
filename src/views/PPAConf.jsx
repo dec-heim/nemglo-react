@@ -23,17 +23,60 @@ export default class PPAConf extends Component {
       dataPoints: [],
       isMakingApiCall: false,
     };
-    this.setIsDisabled = this.setIsDisabled.bind(this);
     this.isDisabled = this.isDisabled.bind(this);
     this.setCapacity = this.setCapacity.bind(this);
+    this.setPPADisabled = this.setPPADisabled.bind(this);
+  }
+
+  setPPADisabled(PPANum, isDisabled) {
+    this.props.setPPADisabled(PPANum, isDisabled);
+    const { config } = this.props;
+    let ppa1Capacity = config.ppa1Capacity;
+    let ppa2Capacity = config.ppa2Capacity;
+    let ppa1Disabled = this.props.ppa1Disabled;
+    let ppa2Disabled = this.props.ppa2Disabled;
+
+    console.log("ppa1Capacity", ppa1Capacity)
+    console.log("ppa2Capacity", ppa2Capacity)
+    console.log("ppa1Disabled", ppa1Disabled)
+    console.log("ppa2Disabled", ppa2Disabled)
+    if (isDisabled) {
+        if (PPANum === "duid1") {
+            ppa1Capacity = 0;
+        } else if (PPANum === "duid2") {
+            ppa2Capacity = 0;
+        }
+    }
+
+    this.storeDataPoints(
+      config.ppa1Data,
+      config.ppa2Data,
+      ppa1Capacity,
+      ppa2Capacity, 
+      ppa1Disabled,
+      ppa2Disabled
+    );
   }
 
   setCapacity(id, capacity) {
-    const { setConfigValue, ppaData } = this.props;
+    const { setConfigValue, config, ppa1Disabled, ppa2Disabled} = this.props;
     setConfigValue(id, capacity);
-    if ("cf_trace" in ppaData) {
-      if (this.props.ppaData.time.length > 0) {
-        this.storeDataPoints(this.props.ppaData);
+    console.log(id, capacity);
+    if (
+      config.ppa1Data.time !== undefined ||
+      config.ppa2Data.time !== undefined
+    ) {
+      if (config.ppa1Data.time.length > 0) {
+        let ppa1Capacity = id.includes("ppa1") ? capacity : config.ppa1Capacity;
+        let ppa2Capacity = id.includes("ppa2") ? capacity : config.ppa2Capacity;
+        this.storeDataPoints(
+          config.ppa1Data,
+          config.ppa2Data,
+          ppa1Capacity,
+          ppa2Capacity, 
+          ppa1Disabled,
+          ppa2Disabled
+        );
       }
     }
   }
@@ -56,12 +99,11 @@ export default class PPAConf extends Component {
       endDate,
       region,
       dispatchIntervalLength,
-      duid,
-      ppaCapacity,
-      duidId,
       setPPAData,
       config,
       marketData,
+      ppa1Disabled,
+      ppa2Disabled
     } = this.props;
     const duid1Body = {
       startDate: startDate,
@@ -83,15 +125,14 @@ export default class PPAConf extends Component {
     const ppaData1 = await NemGloApi.getGeneratorData(duid1Body);
     const ppaData2 = await NemGloApi.getGeneratorData(duid2Body);
     console.log("making call", ppaData1);
-    this.storeDataPoints(ppaData1, ppaData2);
-    setPPAData(ppaData1, "duid1");
+    this.storeDataPoints(ppaData1, ppaData2, config.ppa1Capacity, config.ppa2Capacity, ppa1Disabled, ppa2Disabled);
+    setPPAData(ppaData1, "duid1"); 
     setPPAData(ppaData2, "duid2");
     this.setState({ isMakingApiCall: false });
   };
 
   componentDidMount() {
-    console.log(this.props);
-    const { startDate, endDate, region, dispatchIntervalLength, config } =
+    const { startDate, endDate, region, dispatchIntervalLength, config, ppa1Disabled, ppa2Disabled } =
       this.props;
     this.setState({
       startDate,
@@ -99,37 +140,37 @@ export default class PPAConf extends Component {
       region,
       dispatchIntervalLength,
     });
-    if (config.ppa1Data.time !== undefined || config.ppa2Data.time !== undefined) {
+    if (
+      config.ppa1Data.time !== undefined ||
+      config.ppa2Data.time !== undefined
+    ) {
       if (config.ppa1Data.time.length > 0) {
-        this.storeDataPoints(config.ppa1Data, config.ppa2Data);
+        this.storeDataPoints(
+          config.ppa1Data,
+          config.ppa2Data,
+          config.ppa1Capacity,
+          config.ppa2Capacity,
+          ppa1Disabled,
+          ppa2Disabled
+        );
       }
     }
   }
 
-  storeDataPoints = (ppaData1, ppaData2) => {
-    const { config, ppa1Disabled, ppa2Disabled } = this.props;
+  storeDataPoints = (ppaData1, ppaData2, ppa1Capacity, ppa2Capacity, ppa1Disabled, ppa2Disabled) => {
+    console.log(ppa1Disabled, ppa2Disabled);
     let dataPoints = [];
     for (let i = 0; i < ppaData1.time.length; i++) {
       let dataPoint = {};
       dataPoint["timestamp"] = ppaData1.timestamps[i];
-      //   dataPoint["mw"] = ppaCapacity * ppaData.cf_trace[i];
       if (!ppa1Disabled)
-        dataPoint["ppa1"] = config.ppa1Capacity * ppaData1.cf_trace[i];
+        dataPoint["ppa1"] = ppa1Capacity * ppaData1.cf_trace[i];
       if (!ppa2Disabled)
-        dataPoint["ppa2"] = config.ppa2Capacity * ppaData2.cf_trace[i];
+        dataPoint["ppa2"] = ppa2Capacity * ppaData2.cf_trace[i];
       dataPoints.push(dataPoint);
     }
+    console.log(dataPoints)
     this.setState({ dataPoints });
-  };
-
-  setIsDisabled = (value) => {
-    const { setPPADisabled, duidId, title } = this.props;
-    console.log(title);
-    if (!value) {
-      setPPADisabled(duidId, true);
-    } else {
-      setPPADisabled(duidId, false);
-    }
   };
 
   isDisabled = () => {
@@ -137,6 +178,10 @@ export default class PPAConf extends Component {
   };
 
   render() {
+    const baseInterval = {
+      timeUnit: "minute",
+      count: 30,
+    };
     const seriesSettings = [
       {
         valueYField: "ppa1",
@@ -149,7 +194,6 @@ export default class PPAConf extends Component {
     ];
     let {
       setConfigValue,
-      title,
       config,
       marketData,
       ppa1Disabled,
@@ -178,6 +222,7 @@ export default class PPAConf extends Component {
                   id={"ppa-plot"}
                   data={dataPoints}
                   seriesSettings={seriesSettings}
+                  baseInterval={baseInterval}
                 ></AmChart>
               )}
               <Container
@@ -198,6 +243,7 @@ export default class PPAConf extends Component {
                         capacityId="ppa1Capacity"
                         strikePriceId="ppa1StrikePrice"
                         setConfigValue={setConfigValue}
+                        setCapacity={this.setCapacity}
                         duid={
                           config.duid1 === ""
                             ? marketData.availgens[0]
@@ -208,7 +254,7 @@ export default class PPAConf extends Component {
                         marketData={marketData}
                         otherPPADuid={config.duid2}
                         isDisabled={ppa1Disabled}
-                        setPPADisabled={setPPADisabled}
+                        setPPADisabled={this.setPPADisabled}
                         availableGens={marketData.availgens}
                         startDate={config.startDate}
                         endDate={config.endDate}
@@ -225,6 +271,7 @@ export default class PPAConf extends Component {
                         capacityId="ppa2Capacity"
                         strikePriceId="ppa2StrikePrice"
                         setConfigValue={setConfigValue}
+                        setCapacity={this.setCapacity}
                         duid={
                           config.duid2 === ""
                             ? marketData.availgens[1]
@@ -235,7 +282,7 @@ export default class PPAConf extends Component {
                         marketData={marketData}
                         otherPPADuid={config.duid1}
                         isDisabled={ppa2Disabled}
-                        setPPADisabled={setPPADisabled}
+                        setPPADisabled={this.setPPADisabled}
                         availableGens={marketData.availgens}
                         startDate={config.startDate}
                         endDate={config.endDate}

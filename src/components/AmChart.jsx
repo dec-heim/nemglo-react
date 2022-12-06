@@ -99,15 +99,13 @@ class AmChart extends Component {
 
     let easing = am5.ease.linear;
     chart.get("colors").set("step", 3);
+    const {baseInterval} = this.props;
     // Create axis
     let xAxis = chart.xAxes.push(
       am5xy.DateAxis.new(root, {
         maxDeviation: 0.1,
         groupData: false,
-        baseInterval: {
-          timeUnit: "minute",
-          count: 5,
-        },
+        baseInterval: baseInterval,
         renderer: am5xy.AxisRendererX.new(root, {}),
         tooltip: am5.Tooltip.new(root, {}),
       })
@@ -139,7 +137,7 @@ class AmChart extends Component {
 
     for (let i = 0; i < seriesSettings.length; i++) {
       let seriesSetting = seriesSettings[i];
-      let opposite = i % 2 == 0 ? true : false;
+      let opposite = i % 2 === 0 ? true : false;
       this.createAxisAndSeries( chart,
         xAxis,
         data,
@@ -160,6 +158,11 @@ class AmChart extends Component {
     legend.data.setAll(chart.series.values);
   };
 
+  componentDidUpdate() {
+    // console.log(this.props.data);
+    this.updateChart();
+  }
+
   componentDidMount() {
     this.updateChart();
   }
@@ -171,7 +174,6 @@ class AmChart extends Component {
   }
 
   render() {
-    const {id} = this.props;
     return <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>;
   }
 }

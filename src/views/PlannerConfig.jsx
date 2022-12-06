@@ -92,6 +92,10 @@ export default class PlannerConfig extends Component {
   };
 
   render() {
+    const baseInterval = {
+      timeUnit: "minute",
+      count: 5,
+    }
     const seriesSettings = [
       {
         valueYField: "price",
@@ -117,6 +121,7 @@ export default class PlannerConfig extends Component {
                 id="planner-plot"
                 data={dataPoints}
                 seriesSettings={seriesSettings}
+                baseInterval={baseInterval}
               ></AmChart>
             </Card.Body>  
           </Card>

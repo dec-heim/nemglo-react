@@ -35,16 +35,18 @@ export default class PPAConf extends Component {
     let ppa2Capacity = config.ppa2Capacity;
     let ppa1Disabled = this.props.ppa1Disabled;
     let ppa2Disabled = this.props.ppa2Disabled;
-
-    console.log("ppa1Capacity", ppa1Capacity)
-    console.log("ppa2Capacity", ppa2Capacity)
-    console.log("ppa1Disabled", ppa1Disabled)
-    console.log("ppa2Disabled", ppa2Disabled)
+    
     if (isDisabled) {
         if (PPANum === "duid1") {
-            ppa1Capacity = 0;
+            ppa1Disabled = true;
         } else if (PPANum === "duid2") {
-            ppa2Capacity = 0;
+            ppa2Disabled = true;
+        }
+    } else {
+        if (PPANum === "duid1") {
+            ppa1Disabled = false;
+        } else if (PPANum === "duid2") {
+            ppa2Disabled = false;
         }
     }
 

@@ -23,9 +23,9 @@ export default class SimulationDashboard extends Component {
     this.state = {
       config: {
         dispatchIntervalLength: 30,
-        startDate: "",
+        startDate: "2021-01-01",
         startTime: "",
-        endDate: "",
+        endDate: "2021-01-07",
         endTime: "",
         electrolyserCapacity: 50,
         ppa1StrikePrice: 20,
@@ -37,7 +37,7 @@ export default class SimulationDashboard extends Component {
         ppa1Data: {},
         ppa2Data: {},
         secProfile: secProfiles[0],
-        conversionFactor: 50,
+        conversionFactor: 100,
         nominalSec: 66,
         // overload: 0,
         // ratedLoad: 50,
@@ -59,7 +59,7 @@ export default class SimulationDashboard extends Component {
       currentConfig: "plannerConfig",
       marketData: {},
       ppa1Disabled: false,
-      ppa2Disabled: false,
+      ppa2Disabled: true,
     };
 
     // Bindings go here

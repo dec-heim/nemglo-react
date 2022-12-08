@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Container } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import { Container, Row, Grid, Col } from "react-bootstrap";
 import NemGloApi from "../api/NemgloApi";
 
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
@@ -9,6 +8,10 @@ import PPAConfig from "./PPAConfig";
 import PlannerConfig from "./PlannerConfig";
 import SimulationView from "./SimulationView";
 import ResultsView from "./ResultsView";
+import RevenueChart from "../components/RevenueChart";
+import RevenueChartView from "../components/RevenueChartView";
+import AmChart from "../components/AmChart";
+import PPAConf from "./PPAConf";
 
 const secProfiles = ["fixed", "variable"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
@@ -31,17 +34,20 @@ export default class SimulationDashboard extends Component {
         ppa2Capacity: 30,
         duid1: "",
         duid2: "",
+        ppa1Data: {},
+        ppa2Data: {},
         secProfile: secProfiles[0],
         conversionFactor: 50,
-        nominalSec: 6,
+        nominalSec: 66,
         // overload: 0,
         // ratedLoad: 50,
-        minStableLoad: 50,
+        minStableLoad: 10,
         h2Price: 6,
         technologyType: technologyTypes[0],
         region: regions[0],
       },
       dataPoints: [],
+      revenueResults: [],
       viewResults: false,
       resetConfig: false,
       runSimulation: false,
@@ -58,11 +64,14 @@ export default class SimulationDashboard extends Component {
 
     // Bindings go here
     this.setConfigValue = this.setConfigValue.bind(this);
-    this.getReChartsData = this.getReChartsData.bind(this);
+    this.getResultsChartsData = this.getResultsChartsData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.isDateInvalid = this.isDateInvalid.bind(this);
     this.setMarketData = this.setMarketData.bind(this);
     this.setPPADisabled = this.setPPADisabled.bind(this);
+    this.setPPAData = this.setPPAData.bind(this);
+    this.getChart1Settings = this.getChart1Settings.bind(this);
+    this.getChart2Settings = this.getChart2Settings.bind(this);
   }
 
   isMarketDataLoaded = () => {
@@ -77,20 +86,39 @@ export default class SimulationDashboard extends Component {
     });
   };
 
-  getReChartsData = (data) => {
+  getResultsChartsData = (data) => {
+    const { config } = this.state;
     let dataPoints = [];
+    let revenueResults = [];
     for (let i = 0; i < data.time.length; i++) {
       let dataPoint = {};
       dataPoint["timestamp"] = data.timestamps[i];
       dataPoint["price"] = data.prices[i];
-      dataPoint["ppa1"] = data.ppa1.data[i];
-      dataPoint["ppa2"] = data.ppa2.data[i];
-      dataPoint["combined"] = data.combined_vre[i];
-      dataPoint["optimised"] = data.optimised_load[i];
+      if ("ppa1" in data) {
+        dataPoint["ppa1"] = data.ppa1.data[i] * config.ppa1Capacity;
+      }
+      if ("ppa2" in data) {
+        dataPoint["ppa2"] = data.ppa2.data[i] * config.ppa2Capacity;
+      }
+      if (("ppa2" in data) & ("ppa1" in data)) {
+        dataPoint["combined"] = data.combined_vre[i];
+      }
+      dataPoint["load"] = data.optimised_load[i];
       dataPoints.push(dataPoint);
+      let revenueResult = {};
+      revenueResult["timestamp"] = data.timestamps[i];
+      revenueResult["energy"] = data.cost_energy[i];
+      revenueResult["h2"] = data.cost_h2[i];
+      revenueResult["total"] = data.cost_total[i];
+      if ("cost_vre1" in data) {
+        revenueResult["vre1"] = data.cost_vre1[i];
+      }
+      if ("cost_vre2" in data) {
+        revenueResult["vre2"] = data.cost_vre2[i];
+      }
+      revenueResults.push(revenueResult);
     }
-    this.setState({ dataPoints });
-    console.log(dataPoints);
+    this.setState({ dataPoints, revenueResults });
   };
 
   viewResults = () => {
@@ -115,14 +143,23 @@ export default class SimulationDashboard extends Component {
 
   setMarketData = (marketData) => {
     const duid1 = marketData.availgens[0];
-    const duid2 =  marketData.availgens[1];
+    const duid2 = marketData.availgens[1];
     this.setConfigValue("duid1", duid1);
     this.setConfigValue("duid2", duid2);
     this.setState({ marketData, duid1, duid2 });
   };
 
+  setPPAData = (ppaData, PPANum) => {
+    const { config } = this.state;
+    if (PPANum === "duid1") {
+      config.ppa1Data = ppaData;
+    } else if (PPANum === "duid2") {
+      config.ppa2Data = ppaData;
+    }
+    this.setState({ config });
+  };
+
   setPPADisabled = (PPANum, isDisabled) => {
-    console.log(PPANum, isDisabled);
     if (PPANum === "duid1") {
       this.setState({ ppa1Disabled: isDisabled });
     } else if (PPANum === "duid2") {
@@ -132,9 +169,7 @@ export default class SimulationDashboard extends Component {
 
   handleSubmit = (event) => {
     const form = event.currentTarget;
-    console.log(form.checkValidity());
     event.preventDefault();
-    console.log(this.isDateInvalid());
     if (form.checkValidity() === false || this.isDateInvalid()) {
       event.stopPropagation();
     } else {
@@ -154,7 +189,7 @@ export default class SimulationDashboard extends Component {
       alert("Simulation Error");
       this.setState({ runningSimulation: false, resultsLoaded: false });
     } else {
-      this.getReChartsData(data);
+      this.getResultsChartsData(data);
       this.setState({ runningSimulation: false, resultsLoaded: true });
     }
   };
@@ -182,6 +217,8 @@ export default class SimulationDashboard extends Component {
         ppa2Capacity: 30,
         duid1: "",
         duid2: "",
+        ppa1Data: {},
+        ppa2Data: {},
         secProfile: secProfiles[0],
         conversionFactor: 50,
         nominalSec: 6,
@@ -204,24 +241,92 @@ export default class SimulationDashboard extends Component {
     });
   };
 
+  getChart1Settings = () => {
+    let seriesSettings = [
+      {
+        valueYField: "price",
+        tooltip: "Price: ${valueY}/MWh",
+        enableYAxis: true,
+      },
+      {
+        valueYField: "combined",
+        tooltip: "Combined:  {valueY} MW",
+        enableYAxis: true,
+      },
+      {
+        valueYField: "load",
+        tooltip: "Load:  {valueY} MW",
+        enableYAxis: false,
+      },
+    ];
+    if (!this.props.ppa1Disabled) {
+      seriesSettings.push({
+        valueYField: "ppa1",
+        tooltip: "PPA1:  {valueY} MW",
+        enableYAxis: false,
+      });
+    }
+    if (!this.props.ppa2Disabled) {
+      seriesSettings.push({
+        valueYField: "ppa2",
+        tooltip: "PPA2:  {valueY} MW",
+        enableYAxis: false,
+      });
+    }
+    return seriesSettings;
+  };
+
+  getChart2Settings = () => {
+    let seriesSettings = [
+      {
+        valueYField: "energy",
+        tooltip: "Energy: ${valueY}",
+        enableYAxis: true,
+      },
+      {
+        valueYField: "h2",
+        tooltip: "H2:  ${valueY}",
+        enableYAxis: false,
+      },
+      {
+        valueYField: "total",
+        tooltip: "Total:  ${valueY}",
+        enableYAxis: false,
+      },
+    ];
+    if (!this.props.ppa1Disabled) {
+      seriesSettings.push({
+        valueYField: "vre1",
+        tooltip: "VRE1:  ${valueY}",
+        enableYAxis: false,
+      });
+    }
+    if (!this.props.ppa2Disabled) {
+      seriesSettings.push({
+        valueYField: "vre2",
+        tooltip: "VRE2:  ${valueY}",
+        enableYAxis: false,
+      });
+    }
+    return seriesSettings;
+  };
+
   render() {
     const {
       config,
-      runningSimulation,
       resultsLoaded,
-      viewConfig,
-      viewResults,
       dataPoints,
-      formValidated,
-      isLoading,
       currentConfig,
       marketData,
       ppa1Disabled,
       ppa2Disabled,
+      revenueResults,
     } = this.state;
-    console.log(marketData);
     return (
-      <div style={{ display: "flex", height: "100vh", background: "#eceff4" }}>
+      <div
+        className="full-screen-div"
+        style={{ display: "flex", background: "#eceff4" }}
+      >
         <Sidebar style={{ borderRight: "None" }}>
           <Menu>
             <SubMenu label="Configure Model">
@@ -248,10 +353,10 @@ export default class SimulationDashboard extends Component {
                   onClick={() => this.onSelectView("ppa1Config")}
                 >
                   {" "}
-                  Renewable PPA 1{" "}
+                  Renewable PPAs{" "}
                 </MenuItem>
               )}
-              {this.isMarketDataLoaded() && (
+              {/* {this.isMarketDataLoaded() && (
                 <MenuItem
                   id="ppa2Config"
                   onClick={() => this.onSelectView("ppa2Config")}
@@ -259,7 +364,7 @@ export default class SimulationDashboard extends Component {
                   {" "}
                   Renewable PPA 2{" "}
                 </MenuItem>
-              )}
+              )} */}
             </SubMenu>
             {this.isMarketDataLoaded() && (
               <MenuItem onClick={() => this.onSelectView("simulationView")}>
@@ -267,12 +372,20 @@ export default class SimulationDashboard extends Component {
                 Simulate{" "}
               </MenuItem>
             )}
-            {resultsLoaded && (
-              <MenuItem onClick={() => this.onSelectView("resultsView")}>
-                {" "}
-                Results{" "}
-              </MenuItem>
-            )}
+            <SubMenu label="Results" defaultOpen={true}>
+              {resultsLoaded && (
+                <MenuItem onClick={() => this.onSelectView("viewChart1")}>
+                  {" "}
+                  Price & Dispatch{" "}
+                </MenuItem>
+              )}
+              {resultsLoaded && (
+                <MenuItem onClick={() => this.onSelectView("viewChart2")}>
+                  {" "}
+                  View Costings{" "}
+                </MenuItem>
+              )}
+            </SubMenu>
 
             <MenuItem> About </MenuItem>
           </Menu>
@@ -285,7 +398,9 @@ export default class SimulationDashboard extends Component {
             paddingRight: 20,
           }}
         >
-          <Container style={{ paddingLeft: 5, paddingRight: 5 }}>
+          <Container
+            style={{ paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}
+          >
             {currentConfig === "plannerConfig" && (
               <PlannerConfig
                 setConfigValue={this.setConfigValue}
@@ -312,37 +427,18 @@ export default class SimulationDashboard extends Component {
               />
             )}
             {currentConfig === "ppa1Config" && (
-              <PPAConfig
-                title="PPA 1"
-                duidId="duid1"
-                capacityId="ppa1Capacity"
-                strikePriceId="ppa1StrikePrice"
-                setConfigValue={this.setConfigValue}
-                duid={config.duid1 === "" ? marketData.availgens[0] : config.duid1}
-                ppaCapacity={config.ppa1Capacity}
-                ppaStrikePrice={config.ppa1StrikePrice}
+              <PPAConf
+                config={config}
                 marketData={marketData}
-                otherPPADuid={config.duid2}
-                isDisabled={ppa1Disabled}
-                setPPADisabled={this.setPPADisabled}
-                availableGens={marketData.availgens}
-              />
-            )}
-            {currentConfig === "ppa2Config" && (
-              <PPAConfig
-                title="PPA 2"
-                duidId="duid2"
-                capacityId="ppa2Capacity"
-                strikePriceId="ppa2StrikePrice"
+                ppa1Disabled={ppa1Disabled}
+                ppa2Disabled={ppa2Disabled}
                 setConfigValue={this.setConfigValue}
-                duid={config.duid2 === "" ? marketData.availgens[1] : config.duid2}
-                ppaCapacity={config.ppa2Capacity}
-                ppaStrikePrice={config.ppa2StrikePrice}
-                marketData={marketData}
-                otherPPADuid={config.duid1}
-                isDisabled={ppa2Disabled}
+                setPPAData={this.setPPAData}
                 setPPADisabled={this.setPPADisabled}
-                availableGens={marketData.availgens}
+                startDate={config.startDate}
+                endDate={config.endDate}
+                region={config.region}
+                dispatchIntervalLength={config.dispatchIntervalLength}
               />
             )}
             {currentConfig === "simulationView" && (
@@ -351,8 +447,19 @@ export default class SimulationDashboard extends Component {
                 runSimulation={this.runSimulation}
               />
             )}
-            {currentConfig === "resultsView" && (
-              <ResultsView chart1={dataPoints} />
+            {currentConfig === "viewChart1" && (
+              <ResultsView
+                chart1={dataPoints}
+                chartSettings={this.getChart1Settings()}
+                title={"Simulation Results"}
+              />
+            )}
+            {currentConfig === "viewChart2" && (
+              <RevenueChartView
+                chart1={revenueResults}
+                chartSettings={this.getChart2Settings()}
+                title={"Costs"}
+              />
             )}
           </Container>
         </Container>

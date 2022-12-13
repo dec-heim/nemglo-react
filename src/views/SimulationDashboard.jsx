@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import { Container, Row, Grid, Col } from "react-bootstrap";
-import NemGloApi from "../api/NemgloApi";
+import { Col, Container, Grid, Row } from "react-bootstrap";
+import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
 
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
-import PPAConfig from "./PPAConfig";
-import PlannerConfig from "./PlannerConfig";
-import SimulationView from "./SimulationView";
-import ResultsView from "./ResultsView";
+import NemGloApi from "../api/NemgloApi";
+import AmChart from "../components/AmChart";
 import RevenueChart from "../components/RevenueChart";
 import RevenueChartView from "../components/RevenueChartView";
-import AmChart from "../components/AmChart";
+import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
+import PlannerConfig from "./PlannerConfig";
 import PPAConf from "./PPAConf";
+import PPAConfig from "./PPAConfig";
+import ResultsView from "./ResultsView";
+import SimulationView from "./SimulationView";
 
 const secProfiles = ["fixed", "variable"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
@@ -325,7 +325,7 @@ export default class SimulationDashboard extends Component {
     return (
       <div
         className="full-screen-div"
-        style={{ display: "flex", background: "#eceff4" }}
+        style={{ display: "flex", background: "#eceff4", minHeight: "100vh"}}
       >
         <Sidebar style={{ borderRight: "None" }}>
           <Menu>

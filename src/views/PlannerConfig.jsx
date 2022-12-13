@@ -138,7 +138,7 @@ export default class PlannerConfig extends Component {
                       id="dispatchIntervalLength"
                       label="Dispatch Interval Length"
                       value={this.props.dispatchIntervalLength}
-                      options={[30, 60, 90]}
+                      options={[5, 30, 60]}
                       setConfigValue={this.props.setConfigValue}
                     ></DropDownSelector>
 

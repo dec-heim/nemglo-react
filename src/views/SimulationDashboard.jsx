@@ -1,15 +1,12 @@
 import React, { Component } from "react";
-import { Col, Container, Grid, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
 
 import NemGloApi from "../api/NemgloApi";
-import AmChart from "../components/AmChart";
-import RevenueChart from "../components/RevenueChart";
 import RevenueChartView from "../components/RevenueChartView";
 import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
 import PlannerConfig from "./PlannerConfig";
 import PPAConf from "./PPAConf";
-import PPAConfig from "./PPAConfig";
 import ResultsView from "./ResultsView";
 import SimulationView from "./SimulationView";
 

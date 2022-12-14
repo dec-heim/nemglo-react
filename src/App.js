@@ -3,6 +3,9 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { ProSidebarProvider } from "react-pro-sidebar";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
+import Linux from "./media/linux.png";
+import NemgloLogo from "./media/nemgloLogo.png";
+import About from "./views/About";
 import LandingPage from "./views/LandingPage";
 import SimulationDashboard from "./views/SimulationDashboard";
 
@@ -14,7 +17,16 @@ function App() {
     <ProSidebarProvider className="pro-sidebar">
       <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
-          <Navbar.Brand>NEMGLO</Navbar.Brand>
+          <Navbar.Brand >
+            {/* <img
+              src={Linux}
+              width="30"
+              height="30"
+              className="d-inline-block align-top"
+              alt="nemglo logo"
+            /> */}
+            NEMGLO
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
@@ -28,12 +40,12 @@ function App() {
       <Router>
         <div>
           <Routes>
-            <Route path="dashboard" element={<SimulationDashboard />} />
-            <Route path="/" element={<LandingPage />} />
+            <Route exact path="/" element={<LandingPage />} />
+            <Route exact path="dashboard" element={<SimulationDashboard />} />
+            <Route exact path="/about" element={<About />} />
           </Routes>
         </div>
       </Router>
-      {/* <SimulationDashboard /> */}
     </ProSidebarProvider>
     //  </div>
   );

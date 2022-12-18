@@ -20,7 +20,7 @@ function LandingPage() {
         <Col sm={6}>
           <h1 class="font-weigh-line">National Electricity Market <br></br>Green-Energy Load Optimisation</h1>
           <p class="mt-4">NEMGLO, the NEM Green-energy Load Optimisation tool is a mixed-integer linear program (MILP) which allows users to solve counterfactual operating strategies for a hypothetical flexible load participating in the NEM energy market.
-          Case studies can be constructed using this tool which provides techno-economic-environmental considerations of a flexible load in a historical period of a NEM region.<br></br><br></br>
+          Case studies can be constructed using this tool which provides the ability to study techno-economic-environmental considerations of a flexible load such as a Hydrogen Electrolyser or large C&I consumer, in a historical period and NEM region.<br></br><br></br>
           Curious and Interested? Find out more about the tool below or try it now!</p>
           <Button variant="outline-primary" href="/dashboard">Go to Tool</Button>
         </Col>

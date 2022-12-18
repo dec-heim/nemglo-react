@@ -67,7 +67,7 @@ function LandingPage() {
           <Card.Body>
             <h2 class="font-weigh-line">Acknowledgements</h2>
             <Container>
-              <Row sm={1}>
+              <Row>
                 <Col sm={4}>
                   <a href="https://www.unsw.edu.au/engineering" target="_blank">
                     <img src={unswlogo} alt="unswlogo" width={180} ></img>
@@ -92,8 +92,13 @@ function LandingPage() {
       </Row>
     </Container>
       </main>
-      <footer class="py-5 my-5 bg-dark">
-        <Container className="px-4"><p class="text-center text-white">Copyright &copy; 2022, Declan Heim www.nemglo.com.au</p></Container>
+      <footer class="py-5 my-5 bg-dark" justify="center">
+        <Container className="px-4" justify="center">
+          <p class="text-center text-white">Copyright &copy; Declan Heim and Jay Anand, 2022</p>
+          <div class="text-center">
+            <a href="/about">Licence and Disclaimer</a>
+          </div>
+        </Container>
       </footer>
     </div>
   );

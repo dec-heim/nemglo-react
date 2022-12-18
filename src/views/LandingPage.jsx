@@ -2,6 +2,10 @@ import { Button, Card, Col, Container, Grid, Image, Nav, Navbar, NavDropdown, Ro
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import ceemlogo from '../media/UNSWCEEMLogoTransparent.png'
+import dgfilogo from '../media/DGFILogo.gif'
+import unswlogo from '../media/unswlogo.jpg'
+
 function LandingPage() {
   return (
     <div className="LandingPage">
@@ -10,58 +14,86 @@ function LandingPage() {
       <main>
       <Container>
       <Row className="px-4 my-5">
-        <Col sm={7}>
+        <Col sm={6}>
           <Image src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.incimages.com%2Fuploaded_files%2Fimage%2F1920x1080%2Fgetty_586163548_334517.jpg&f=1&nofb=1&ipt=36b3132ee4337311bb90675be76bdb2c638f80245a8f3127060cee8eb5b631f0&ipo=images" fluid rounded className=""/>
         </Col>
-        <Col sm={5}>
-          <h1 class="font-weigh-line">Tagline</h1>
-          <p class="mt-4">Non sint consequuntur voluptas sit quia animi omnis placeat. Non consequatur est excepturi blanditiis quia. Ut aut nisi et soluta molestias doloribus totam et. Quos aut occaecati voluptatibus dignissimos deserunt totam dicta. Nesciunt excepturi impedit distinctio nesciunt iusto corrupti.</p>
-          <Button variant="outline-primary">Call to Action</Button>
+        <Col sm={6}>
+          <h1 class="font-weigh-line">National Electricity Market <br></br>Green-Energy Load Optimisation</h1>
+          <p class="mt-4">NEMGLO, the NEM Green-energy Load Optimisation tool is a mixed-integer linear program (MILP) which allows users to solve counterfactual operating strategies for a hypothetical flexible load participating in the NEM energy market.
+          Case studies can be constructed using this tool which provides techno-economic-environmental considerations of a flexible load in a historical period of a NEM region.<br></br><br></br>
+          Curious and Interested? Find out more about the tool below or try it now!</p>
+          <Button variant="outline-primary" href="/dashboard">Go to Tool</Button>
         </Col>
       </Row>
       <Row>
-        <Card className="text-center bg-secondary text-white my-5 py-4">
+        <Col sm={1}></Col>
+        <Col>
+        <Card style={{width: "18rem"}}>
+          <Card.Img variant="top" src="https://images.unsplash.com/photo-1490775949603-0e355e8e01ba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1466&q=80"></Card.Img>
           <Card.Body>
-              This call to action card is a great place to showcase some important information or display a clever tagline!
+            <Card.Title>Getting Started</Card.Title>
+            <Card.Text>A quick start guide, tutorial page and walkthrough of the NEMGLO Web Interface.</Card.Text>
+            <Button variant="secondary" disabled={true}>Coming Soon</Button>
           </Card.Body>
         </Card>
+        </Col>
+        <Col>
+        <Card style={{width: "18rem"}}>
+          <Card.Img variant="top" src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"></Card.Img>
+          <Card.Body>
+            <Card.Title>Python Package</Card.Title>
+            <Card.Text>Check out the GitHub Repository for advanced use of the tool & full customisability.</Card.Text>
+            <a href="https://github.com/dec-heim/NEMGLO" target="_blank">
+              <Button variant="primary">GitHub Repo</Button>
+            </a>
+          </Card.Body>
+        </Card>
+        </Col>
+        <Col>
+        <Card style={{width: "18rem"}}>
+          <Card.Img variant="top" src="https://images.unsplash.com/photo-1647166545674-ce28ce93bdca?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"></Card.Img>
+          <Card.Body>
+            <Card.Title>Python Documentation</Card.Title>
+            <Card.Text>See the readthedocs for NEMGLO python package documentation with examples.</Card.Text>
+            <a href="https://nemglo.readthedocs.io/en/latest/" target="_blank">
+              <Button variant="primary">Read the Docs</Button>
+            </a>
+          </Card.Body>
+        </Card>
+        </Col>
       </Row>
       <Row>
-        <Col>
-        <Card style={{width: "18rem"}}>
-          <Card.Img variant="top" src="https://picsum.photos/320/200"></Card.Img>
+        <Card className="text-center bg-white text-black my-5 py-4">
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>Some quick example text to build on the card title and make up the bulk of the cards statement</Card.Text>
-            <Button variant="primary">Go somewhere</Button>
+            <h2 class="font-weigh-line">Acknowledgements</h2>
+            <Container>
+              <Row sm={1}>
+                <Col sm={4}>
+                  <a href="https://www.unsw.edu.au/engineering" target="_blank">
+                    <img src={unswlogo} alt="unswlogo" width={180} ></img>
+                  </a>
+                </Col>
+                <Col sm={4}>
+                  <br></br>
+                  <a href="https://www.ceem.unsw.edu.au/" target="_blank">
+                    <img src={ceemlogo} alt="ceemlogo" width={220}></img>
+                  </a>
+                </Col>
+                <Col sm={4}>
+                  <br></br>
+                  <a href="https://www.dgfi.unsw.edu.au/" target="_blank">
+                    <img src={dgfilogo} alt="dgfilogo" width={200}></img>
+                  </a>
+                </Col>
+              </Row>
+            </Container>
           </Card.Body>
         </Card>
-        </Col>
-        <Col>
-        <Card style={{width: "18rem"}}>
-          <Card.Img variant="top" src="https://picsum.photos/320/200"></Card.Img>
-          <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>Some quick example text to build on the card title and make up the bulk of the cards statement</Card.Text>
-            <Button variant="primary">Go somewhere</Button>
-          </Card.Body>
-        </Card>
-        </Col>
-        <Col>
-        <Card style={{width: "18rem"}}>
-          <Card.Img variant="top" src="https://picsum.photos/320/200"></Card.Img>
-          <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>Some quick example text to build on the card title and make up the bulk of the cards statement</Card.Text>
-            <Button variant="primary">Go somewhere</Button>
-          </Card.Body>
-        </Card>
-        </Col>
       </Row>
     </Container>
       </main>
       <footer class="py-5 my-5 bg-dark">
-        <Container className="px-4"><p class="text-center text-white">Copyright &copy; www.nemglo.com.au 2022</p></Container>
+        <Container className="px-4"><p class="text-center text-white">Copyright &copy; 2022, Declan Heim www.nemglo.com.au</p></Container>
       </footer>
     </div>
   );

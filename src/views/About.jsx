@@ -1,6 +1,6 @@
 import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
 
-import ceem from "../media/ceemLogo.jpeg";
+import ceem from "../media/UNSWCEEMLogoTransparent.png";
 import dgfi from "../media/DGFILogo.gif";
 import unsw from "../media/unswlogo.jpg";
 

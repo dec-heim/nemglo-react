@@ -137,7 +137,7 @@ class AmChart extends Component {
 
     for (let i = 0; i < seriesSettings.length; i++) {
       let seriesSetting = seriesSettings[i];
-      let opposite = i % 2 === 0 ? true : false;
+      let opposite = i % 2 === 0 ? false : true;
       this.createAxisAndSeries( chart,
         xAxis,
         data,

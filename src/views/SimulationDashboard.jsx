@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import { Container, Row, Grid, Col } from "react-bootstrap";
-import NemGloApi from "../api/NemgloApi";
+import { Col, Container, Grid, Row, Alert } from "react-bootstrap";
+import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
 
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
-import PPAConfig from "./PPAConfig";
-import PlannerConfig from "./PlannerConfig";
-import SimulationView from "./SimulationView";
-import ResultsView from "./ResultsView";
+import NemGloApi from "../api/NemgloApi";
+import AmChart from "../components/AmChart";
 import RevenueChart from "../components/RevenueChart";
 import RevenueChartView from "../components/RevenueChartView";
-import AmChart from "../components/AmChart";
+import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
+import PlannerConfig from "./PlannerConfig";
 import PPAConf from "./PPAConf";
+import PPAConfig from "./PPAConfig";
+import ResultsView from "./ResultsView";
+import SimulationView from "./SimulationView";
 
 const secProfiles = ["fixed", "variable"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
@@ -23,9 +23,9 @@ export default class SimulationDashboard extends Component {
     this.state = {
       config: {
         dispatchIntervalLength: 30,
-        startDate: "",
+        startDate: "2021-01-01",
         startTime: "",
-        endDate: "",
+        endDate: "2021-01-07",
         endTime: "",
         electrolyserCapacity: 50,
         ppa1StrikePrice: 20,
@@ -37,7 +37,7 @@ export default class SimulationDashboard extends Component {
         ppa1Data: {},
         ppa2Data: {},
         secProfile: secProfiles[0],
-        conversionFactor: 50,
+        conversionFactor: 100,
         nominalSec: 66,
         // overload: 0,
         // ratedLoad: 50,
@@ -59,7 +59,7 @@ export default class SimulationDashboard extends Component {
       currentConfig: "plannerConfig",
       marketData: {},
       ppa1Disabled: false,
-      ppa2Disabled: false,
+      ppa2Disabled: true,
     };
 
     // Bindings go here
@@ -325,7 +325,7 @@ export default class SimulationDashboard extends Component {
     return (
       <div
         className="full-screen-div"
-        style={{ display: "flex", background: "#eceff4" }}
+        style={{ display: "flex", background: "#eceff4", minHeight: "100vh"}}
       >
         <Sidebar style={{ borderRight: "None" }}>
           <Menu>
@@ -398,6 +398,7 @@ export default class SimulationDashboard extends Component {
             paddingRight: 20,
           }}
         >
+          <Alert variant="warning">This is a <b>Beta</b> release of NEMGLO. Check back later for a production release!</Alert>
           <Container
             style={{ paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}
           >

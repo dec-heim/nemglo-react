@@ -1,37 +1,41 @@
 import React from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Row,
-  Navbar,
-  Nav,
-} from "react-bootstrap";
-import SimulationDashboard from "./views/SimulationDashboard";
+import { Container, Nav, Navbar } from "react-bootstrap";
 import { ProSidebarProvider } from "react-pro-sidebar";
-import { HiAdjustments } from "react-icons/hi";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
+import LandingPage from "./views/LandingPage";
+import SimulationDashboard from "./views/SimulationDashboard";
 
 import "./App.css";
-
 import "bootstrap/dist/css/bootstrap.min.css";
-import AmChart from "./components/AmChart";
-
-import { Sidebar, Menu, MenuItem, SubMenu, Icon } from "react-pro-sidebar";
 
 function App() {
   return (
-    // <div style={{ height: "100vh * 2"}}>
     <ProSidebarProvider className="pro-sidebar">
-      <Navbar className="navbar"  expand="lg">
-          <Container>
-          <Navbar.Brand href="/">NEMGLO</Navbar.Brand>
-          </Container>
+      <Navbar bg="dark" variant="dark" expand="lg">
+        <Container>
+          <Navbar.Brand>NEMGLO</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="/">Home</Nav.Link>
+              <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+              <Nav.Link href="/about">About</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
-      <SimulationDashboard />
+      <Router>
+        <div>
+          <Routes>
+            <Route path="dashboard" element={<SimulationDashboard />} />
+            <Route path="/" element={<LandingPage />} />
+          </Routes>
+        </div>
+      </Router>
+      {/* <SimulationDashboard /> */}
     </ProSidebarProvider>
-    // </div>
+    //  </div>
   );
 }
 

@@ -6,6 +6,7 @@ import AmChart from "../components/AmChart";
 
 import DropDownSelector from "../components/DropDownSelector";
 import SliderInput from "../components/SliderInput";
+import SliderInputOptional from "../components/SliderInputOptional";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import { Audio } from "react-loader-spinner";
@@ -136,10 +137,12 @@ export default class PPAConfig extends Component {
       duidId,
       capacityId,
       strikePriceId,
+      floorPriceId,
       setConfigValue,
       duid,
       isDisabled,
       ppaStrikePrice,
+      ppaFloorPrice,
       title,
       ppaCapacity,
       availableGens,
@@ -185,6 +188,15 @@ export default class PPAConfig extends Component {
                 max={100}
                 disabled={isDisabled}
               ></SliderInput>
+              <SliderInputOptional // Floor price input needs to be configurable as optional field, if unchecked (disabled) api call should be None.
+              // Probably could do without the slider for floor input, just have the numerical field input?
+                id={floorPriceId}
+                label="Floor Price ($/MWh)"
+                setConfigValue={setConfigValue}
+                value={ppaFloorPrice}
+                max={10} // Value range for floor price should be say -100 (min) to 0 (max)
+                disabled={isDisabled}
+              ></SliderInputOptional>
               <ToggleButton
                 className="mb-2"
                 id={duidId}

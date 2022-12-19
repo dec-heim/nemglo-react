@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Card, Button, Row, Col, Container } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import NemGloApi from "../api/NemgloApi";
-import AmChart from "../components/AmChart";
 import { Audio } from "react-loader-spinner";
 
+import NemGloApi from "../api/NemgloApi";
+import AmChart from "../components/AmChart";
 import DropDownSelector from "../components/DropDownSelector";
 
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
@@ -95,7 +95,7 @@ export default class PlannerConfig extends Component {
     const baseInterval = {
       timeUnit: "minute",
       count: 5,
-    }
+    };
     const seriesSettings = [
       {
         valueYField: "price",
@@ -105,29 +105,6 @@ export default class PlannerConfig extends Component {
     const { formValidated, dataPoints, isMakingApiCall } = this.state;
     return (
       <Col>
-        {dataPoints.length > 0 && (
-          <Card
-            style={{
-              paddingTop: 20,
-              paddingLeft: 5,
-              paddingRight: 5,
-              paddingBottom: 5,
-            }}
-          >
-            <Card.Title style={{ paddingLeft: 15 }}>Market Data</Card.Title>
-
-            <Card.Body>
-              <AmChart
-                id="planner-plot"
-                data={dataPoints}
-                seriesSettings={seriesSettings}
-                baseInterval={baseInterval}
-              ></AmChart>
-            </Card.Body>  
-          </Card>
-        )}
-        <br></br>
-
         <Card
           style={{
             paddingTop: 20,
@@ -136,43 +113,35 @@ export default class PlannerConfig extends Component {
             paddingBottom: 5,
           }}
         >
-          {dataPoints.length === 0 && (
-            <Card.Title style={{ paddingLeft: 15 }}>Market Data</Card.Title>
-          )}
+          <Card.Title style={{ paddingLeft: 15 }}>Market Data</Card.Title>
 
           <Card.Body>
+            {dataPoints.length > 0 && (
+              <div>
+                <AmChart
+                  id="planner-plot"
+                  data={dataPoints}
+                  seriesSettings={seriesSettings}
+                  baseInterval={baseInterval}
+                ></AmChart>
+              </div>
+            )}
             {!isMakingApiCall ? (
               <Form
                 noValidate
                 validated={formValidated}
                 onSubmit={this.handleSubmit}
               >
-                {/* {dataPoints.length > 0 && (
-                  <AmChart
-                    id="planner"
-                    data={dataPoints}
-                    seriesSettings={seriesSettings}
-                  ></AmChart>
-                )} */}
                 <Row>
                   <Col>
                     <DropDownSelector
                       id="dispatchIntervalLength"
                       label="Dispatch Interval Length"
                       value={this.props.dispatchIntervalLength}
-                      options={[30, 60, 90]}
+                      options={[5, 30, 60]}
                       setConfigValue={this.props.setConfigValue}
                     ></DropDownSelector>
-                    <DropDownSelector
-                      id="region"
-                      label="Region"
-                      value={this.props.region}
-                      options={regions}
-                      setConfigValue={this.props.setConfigValue}
-                    ></DropDownSelector>
-                  </Col>
 
-                  <Col>
                     <Form.Group style={{ paddingBottom: 10 }}>
                       <Form.Label
                         style={{
@@ -197,6 +166,17 @@ export default class PlannerConfig extends Component {
                         days.
                       </Form.Control.Feedback>
                     </Form.Group>
+                  </Col>
+
+                  <Col>
+                    <DropDownSelector
+                      id="region"
+                      label="Region"
+                      value={this.props.region}
+                      options={regions}
+                      setConfigValue={this.props.setConfigValue}
+                    ></DropDownSelector>
+
                     <Form.Group style={{ paddingBottom: 10 }}>
                       <Form.Label
                         style={{

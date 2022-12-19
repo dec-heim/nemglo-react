@@ -1,16 +1,17 @@
-import { Button, Card, Col, Container, Grid, Image, Nav, Navbar, NavDropdown, Row } from "react-bootstrap";
+import { Button, Col, Container, Image, Row } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
-import ceemlogo from '../media/UNSWCEEMLogoTransparent.png'
+import ceem from "../media/ceemLogo.jpeg";
+import dgfi from "../media/DGFILogo.gif";
 import dgfilogo from '../media/DGFILogo.gif'
+import ceemlogo from '../media/UNSWCEEMLogoTransparent.png'
 import unswlogo from '../media/unswlogo.jpg'
+import unsw from "../media/unswLogo.png";
 
 function LandingPage() {
   return (
-    <div className="LandingPage">
-      <header>
-      </header>
+    <div className="LandingPage"  >
+      <header></header>
       <main>
       <Container>
       <Row className="px-4 my-5">

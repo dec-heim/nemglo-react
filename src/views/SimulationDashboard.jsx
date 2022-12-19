@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Col, Container, Grid, Row } from "react-bootstrap";
+import { Col, Container, Grid, Row, Alert } from "react-bootstrap";
 import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
 
 import NemGloApi from "../api/NemgloApi";
@@ -398,6 +398,7 @@ export default class SimulationDashboard extends Component {
             paddingRight: 20,
           }}
         >
+          <Alert variant="warning">This is a <b>Beta</b> release of NEMGLO. Check back later for a production release!</Alert>
           <Container
             style={{ paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}
           >

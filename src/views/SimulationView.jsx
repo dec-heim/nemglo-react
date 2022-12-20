@@ -1,45 +1,31 @@
 import React, { Component } from "react";
-import { Card, Container, Button } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
+import { Audio } from "react-loader-spinner";
 
-const secProfiles = ["fixed", "variable"];
-const duids = ["BERYLSF1", "BERYLSF2", "BLOWERNG"];
-const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
-const technologyTypes = ["PEM", "AE"];
+export default class SimulationView extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isLoading: false
+    }
+    this.onRunSimulation = this.onRunSimulation.bind(this);
+  }
 
-// dispatchIntervalLength: 30,
-// startDate: "",
-// startTime: "",
-// endDate: "",
-// endTime: "",
-// electrolyserCapacity: 50,
-// ppa1StrikePrice: 20,
-// ppa1Capacity: 30,
-// ppa2StrikePrice: 30,
-// ppa2Capacity: 30,
-// duid1: duids[0],
-// duid2: duids[0],
-// secProfile: secProfiles[0],
-// conversionFactor: 50,
-// nominalSec: 6,
-// // overload: 0,
-// // ratedLoad: 50,
-// minStableLoad: 50,
-// h2Price: 6,
-// technologyType: technologyTypes[0],
-// region: regions[0],
-export default function SimulationView(props) {
-  let { config, ppa1Disabled, ppa2Disabled } = props.state;
+  onRunSimulation = async () => {
+    this.setState({isLoading : true});
+    await this.props.runSimulation();
+    this.setState({isLoading : false});
+  }
+
+render () {
+  const {config, ppa1Disabled, ppa2Disabled} = this.props.state;
   return (
     <Card
-    // style={{
-    //   paddingTop: 20,
-    //   paddingBottom: 10,
-    //   paddingLeft: 5,
-    //   paddingRight: 5,
-    // }}
     >
       <Card.Header>Perform Simulation</Card.Header>
-      <Card.Body>
+     <Card.Body>
+     {!this.state.isLoading ? 
+      <div>
         <Card.Title style={{ paddingBottom: 10 }}>Market Data</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">
           Dispatch Interval: {config.dispatchIntervalLength}
@@ -110,9 +96,27 @@ export default function SimulationView(props) {
           </div>
         )}
         <br></br>
-        <Button  variant={"primary"} onClick={props.runSimulation}>Run Simulation</Button>{" "}
+        <Button  variant={"primary"} onClick={this.onRunSimulation}>Run Simulation</Button>{" "}
         <Button  variant={"danger"} onClick={() => window.location.reload(false)}>Reset Model Config</Button>
+       </div>
+        : <Audio
+          height="80"
+          width="80"
+          radius="9"
+          color="green"
+          ariaLabel="loading"
+          wrapperStyle
+          wrapperClass
+          style={{
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            }} />
+     }
       </Card.Body>
     </Card>
   );
+    }
 }

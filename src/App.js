@@ -1,11 +1,12 @@
 import React from "react";
-import { Button, Card, Col, Container, Nav, Navbar, Row } from "react-bootstrap";
-import { HiAdjustments } from "react-icons/hi";
+import { Container, Nav, Navbar } from "react-bootstrap";
 import { ProSidebarProvider } from "react-pro-sidebar";
-import { Icon, Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import AmChart from "./components/AmChart";
+import Linux from "./media/linux.png";
+import NemgloLogo from "./media/nemgloLogo.png";
+import About from "./views/About";
+import LandingPage from "./views/LandingPage";
 import SimulationDashboard from "./views/SimulationDashboard";
 
 import "./App.css";
@@ -14,13 +15,39 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   return (
     <ProSidebarProvider className="pro-sidebar">
-      <Navbar className="navbar"  expand="lg">
-          <Container>
-          <Navbar.Brand href="/">NEMGLO</Navbar.Brand>
-          </Container>
+      <Navbar bg="dark" variant="dark" expand="lg">
+        <Container>
+          <Navbar.Brand >
+            {/* <img
+              src={Linux}
+              width="30"
+              height="30"
+              className="d-inline-block align-top"
+              alt="nemglo logo"
+            /> */}
+            NEMGLO
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="/">Home</Nav.Link>
+              <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+              <Nav.Link href="/about">About</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
-      <SimulationDashboard />
+      <Router>
+        <div>
+          <Routes>
+            <Route exact path="/" element={<LandingPage />} />
+            <Route exact path="dashboard" element={<SimulationDashboard />} />
+            <Route exact path="/about" element={<About />} />
+          </Routes>
+        </div>
+      </Router>
     </ProSidebarProvider>
+    //  </div>
   );
 }
 

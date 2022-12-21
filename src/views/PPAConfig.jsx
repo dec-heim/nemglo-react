@@ -188,7 +188,7 @@ export default class PPAConfig extends Component {
                 max={100}
                 disabled={isDisabled}
               ></SliderInput>
-              <SliderInputOptional // Floor price input needs to be configurable as optional field, if unchecked (disabled) api call should be None.
+              {/* <SliderInputOptional // Floor price input needs to be configurable as optional field, if unchecked (disabled) api call should be None.
               // Probably could do without the slider for floor input, just have the numerical field input?
                 id={floorPriceId}
                 label="Floor Price ($/MWh)"
@@ -196,7 +196,7 @@ export default class PPAConfig extends Component {
                 value={ppaFloorPrice}
                 max={10} // Value range for floor price should be say -100 (min) to 0 (max)
                 disabled={isDisabled}
-              ></SliderInputOptional>
+              ></SliderInputOptional> */}
               <ToggleButton
                 className="mb-2"
                 id={duidId}

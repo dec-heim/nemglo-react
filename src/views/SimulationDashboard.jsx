@@ -384,7 +384,6 @@ export default class SimulationDashboard extends Component {
               )}
             </SubMenu>
 
-            <MenuItem> About </MenuItem>
           </Menu>
         </Sidebar>
         <Container

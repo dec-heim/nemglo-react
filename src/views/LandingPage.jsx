@@ -20,10 +20,10 @@ function LandingPage() {
         </Col>
         <Col sm={6}>
           <h1 class="font-weigh-line">National Electricity Market <br></br>Green-Energy Load Optimisation</h1>
-          <p class="mt-4">NEMGLO, the NEM Green-energy Load Optimisation tool is a mixed-integer linear program (MILP) which allows users to solve counterfactual operating strategies for a hypothetical flexible load participating in the NEM energy market.
-          Case studies can be constructed using this tool which provides the ability to study techno-economic-environmental considerations of a flexible load such as a Hydrogen Electrolyser or large C&I consumer, in a historical period and NEM region.<br></br><br></br>
-          Curious and Interested? Find out more about the tool below or try it now!</p>
-          <Button variant="outline-primary" href="/dashboard">Go to Tool</Button>
+          <p class="mt-4">NEMGLO, the Australian NEM Green-energy Load Optimisation tool is a mixed-integer linear program (MILP) which allows users to solve counterfactual operating strategies for a hypothetical flexible load participating in the energy spot market.
+          Case studies can be constructed using this tool which provides the ability to study techno-economic-environmental considerations of a flexible load such as a hydrogen electrolyser or large C&I consumer, in historic NEM market conditions.<br></br>
+          Curious and Interested? Check out the lite online simulator or for extended functionality see the python package!</p>
+          <Button variant="outline-primary" href="/simulator">Go to Simulator</Button>
         </Col>
       </Row>
       <Row>
@@ -33,7 +33,7 @@ function LandingPage() {
           <Card.Img variant="top" src="https://images.unsplash.com/photo-1490775949603-0e355e8e01ba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1466&q=80"></Card.Img>
           <Card.Body>
             <Card.Title>Getting Started</Card.Title>
-            <Card.Text>A quick start guide, tutorial page and walkthrough of the NEMGLO Web Interface.</Card.Text>
+            <Card.Text>A quick start guide, tutorial page and walkthrough of the NEMGLO online Simulator.</Card.Text>
             <Button variant="secondary" disabled={true}>Coming Soon</Button>
           </Card.Body>
         </Card>

@@ -2,6 +2,7 @@ import React, { Component, Fragment, useEffect, useState } from "react";
 import { Stack } from "react-bootstrap";
 import RangeSlider from "react-bootstrap-range-slider";
 import Form from "react-bootstrap/Form";
+import HelpToolTip from "./HelpToolTip";
 
 export default function SliderInput(props) {
   const [value, setValue] = React.useState({ ...props.value });
@@ -22,6 +23,7 @@ export default function SliderInput(props) {
     <Form.Group style={{ paddingBottom: 10 }}>
       <Form.Label style={{ textAlign: "text-center text-md-right" }}>
         {props.label}
+        <HelpToolTip description={props.description}></HelpToolTip>
       </Form.Label>
       <Stack direction="horizontal" gap={5}>
         <Form.Control 

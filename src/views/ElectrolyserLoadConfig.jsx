@@ -27,6 +27,7 @@ export default function ElectrolyserLoadConfig(props) {
         <DropDownSelector
           id="technologyType"
           label="Technology Type"
+          description="Default values are configured by selecting a technology. Choose CUSTOM to enter your own values."
           options={technologyTypes}
           setConfigValue={props.setConfigValue}
           value={props.technologyType}
@@ -34,6 +35,7 @@ export default function ElectrolyserLoadConfig(props) {
         <SliderInput
           id="h2Price"
           label="H2 Price ($/kg)"
+          description="The production benefit ('sales') price for each kg of hydrogen."
           setConfigValue={props.setConfigValue}
           value={props.h2Price}
           max={20}
@@ -41,6 +43,7 @@ export default function ElectrolyserLoadConfig(props) {
         <SliderInput
           id="electrolyserCapacity"
           label="Capacity (MW)"
+          description="The desired nominal capacity and rated load value of the electrolyser."
           setConfigValue={props.setConfigValue}
           value={props.electrolyserCapacity}
           max={100}
@@ -49,6 +52,7 @@ export default function ElectrolyserLoadConfig(props) {
         <SliderInput
           id="minStableLoad"
           label="Minimum Stable Load"
+          description="The lowest possible operating point of the load in MW."
           setConfigValue={props.setConfigValue}
           value={props.minStableLoad}
           max={60}
@@ -71,6 +75,7 @@ export default function ElectrolyserLoadConfig(props) {
         <RegularInput
           id="nominalSec"
           label="Nominal SEC (kWh/kg)"
+          description="The Specific Energy Consumption of the electrolyser used to compute the produced hydrogen mass from the electrical energy consumed."
           placeholder={50}
           setConfigValue={props.setConfigValue}
           value={props.nominalSec}
@@ -79,6 +84,7 @@ export default function ElectrolyserLoadConfig(props) {
         <RegularInput
           id="conversionFactor"
           label="Conversion Factor (%)"
+          description="An efficiency factor applied to the above SEC should this prior value consider only the electrolyser stack and not balance of plant."
           placeholder={100}
           setConfigValue={props.setConfigValue}
           value={props.conversionFactor}
@@ -87,6 +93,7 @@ export default function ElectrolyserLoadConfig(props) {
         <DropDownSelector
           id="secProfile"
           label="SEC Profile"
+          description="The assumed profile of the SEC input. Refer to use guide for 'variable SEC'. If 'variable' the assumed SEC changes dependent on the load operating point."
           options={secProfiles}
           setConfigValue={props.setConfigValue}
           value={props.secProfile}

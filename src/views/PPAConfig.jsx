@@ -167,6 +167,7 @@ export default class PPAConfig extends Component {
               <DropDownSelector
                 id={duidId}
                 label="DUID (Unit)"
+                description="The desired solar or wind generator for which its historical trace is considered in a PPA contract. Units available reflect the region selected on the Planner page."
                 options={filteredOptions}
                 setConfigValue={setConfigValue}
                 value={duid}
@@ -175,6 +176,7 @@ export default class PPAConfig extends Component {
               <SliderInput
                 id={capacityId}
                 label="Capacity (MW)"
+                description="The desired scaled nominal capacity of the unit trace selected."
                 setConfigValue={setCapacity}
                 value={ppaCapacity}
                 max={100}
@@ -183,6 +185,7 @@ export default class PPAConfig extends Component {
               <SliderInput
                 id={strikePriceId}
                 label="PPA Strike ($/MWh)"
+                description="The Power Purchase Agreement strike price at which the variable volume contract for difference is settled."
                 setConfigValue={setConfigValue}
                 value={ppaStrikePrice}
                 max={100}
@@ -206,7 +209,7 @@ export default class PPAConfig extends Component {
                 value="1"
                 onChange={(e) => this.setIsDisabled(e.currentTarget.checked)}
               >
-                Enabled
+                {isDisabled ? ("Disabled") : ("Enabled")}
               </ToggleButton>
             </Form>
           </div>

@@ -6,6 +6,7 @@ import { Audio } from "react-loader-spinner";
 import NemGloApi from "../api/NemgloApi";
 import AmChart from "../components/AmChart";
 import DropDownSelector from "../components/DropDownSelector";
+import HelpToolTip from "../components/HelpToolTip";
 
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
 
@@ -53,7 +54,11 @@ export default class PlannerConfig extends Component {
       const end = new Date(endDate);
       let diff = end.getTime() - start.getTime();
       let diffDays = diff / (1000 * 3600 * 24);
-      return diffDays > 7 || diffDays <= 0;
+      if (diffDays > 7 || diffDays <= 0)  {
+        return true;
+      } else {
+        return false;
+      }
     }
     if (startDate !== "" && endDate === "") {
       return true;
@@ -66,11 +71,12 @@ export default class PlannerConfig extends Component {
 
   getMarketData = async () => {
     this.setState({ dataPoints: [] });
-    const { startDate, endDate, region } = this.props;
+    const { startDate, endDate, region, dispatchIntervalLength } = this.props;
     const config = {
       startDate: startDate,
       endDate: endDate,
       region: region,
+      dispatch_interval_length: dispatchIntervalLength
     };
     this.setState({ isMakingApiCall: true });
     const marketData = await NemGloApi.getMarketData(config);
@@ -99,7 +105,7 @@ export default class PlannerConfig extends Component {
     const seriesSettings = [
       {
         valueYField: "price",
-        tooltip: "Price: ${valueY}",
+        tooltip: "Price: ${valueY.formatNumber('#.00')}",
       },
     ];
     const { formValidated, dataPoints, isMakingApiCall } = this.state;
@@ -122,7 +128,10 @@ export default class PlannerConfig extends Component {
                   id="planner-plot"
                   data={dataPoints}
                   seriesSettings={seriesSettings}
-                  baseInterval={baseInterval}
+                  baseInterval={{
+                    timeUnit: "minute",
+                    count: this.props.dispatchIntervalLength,
+                  }}
                 ></AmChart>
               </div>
             )}
@@ -137,6 +146,7 @@ export default class PlannerConfig extends Component {
                     <DropDownSelector
                       id="dispatchIntervalLength"
                       label="Dispatch Interval Length"
+                      description="The time resolution (minutes) between simulated load dispatch intervals. NEM input data is aggregated to this length."
                       value={this.props.dispatchIntervalLength}
                       options={[5, 30, 60]}
                       setConfigValue={this.props.setConfigValue}
@@ -149,6 +159,7 @@ export default class PlannerConfig extends Component {
                         }}
                       >
                         Start Date
+                        <HelpToolTip description={"Date to commence simulation. Time commences by default from 00:00 but all intervals are reported as time-ending."}></HelpToolTip>
                       </Form.Label>
                       <Form.Control
                         required
@@ -172,6 +183,7 @@ export default class PlannerConfig extends Component {
                     <DropDownSelector
                       id="region"
                       label="Region"
+                      description="The NEM region for which input data is sourced and the simulation is run in."
                       value={this.props.region}
                       options={regions}
                       setConfigValue={this.props.setConfigValue}
@@ -184,6 +196,7 @@ export default class PlannerConfig extends Component {
                         }}
                       >
                         End Date
+                        <HelpToolTip description={"Date to end simulation. Time ends by default at 00:00"}></HelpToolTip>
                       </Form.Label>
                       <Form.Control
                         required
@@ -204,10 +217,17 @@ export default class PlannerConfig extends Component {
                   </Col>
                 </Row>
                 <Container style={{ height: 10 }}></Container>
-
-                <Button className="float-end" type="submit" variant={"primary"}>
+                {this.isDateInvalid() && 
+                  <Button className="float-end" type="submit" variant={"secondary"} disabled={this.isDateInvalid()}>
                   Get Market Data
-                </Button>
+                  </Button>
+                }
+                {!this.isDateInvalid() && 
+                  <Button className="float-end" type="submit" variant={"primary"} disabled={this.isDateInvalid()}>
+                  Get Market Data
+                  </Button>
+                }
+
               </Form>
             ) : (
               <Audio

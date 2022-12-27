@@ -30,7 +30,7 @@ const getGeneratorData = async (simConfig) => {
       },
       ppa: {
         duid: simConfig.duid,
-        capacity: simConfig.ppaCapacity,
+        capacity: simConfig.ppaCapacity
       }
     }
     const reponse = await axios.post(`${config.api}/get-generator-data`, body);
@@ -48,11 +48,11 @@ const getGeneratorData_ppa1 = async (simConfig) => {
         start_date: simConfig.startDate,
         end_date: simConfig.endDate,
         region: simConfig.region,
-        dispatch_interval_length: simConfig.dispatchIntervalLength,
+        dispatch_interval_length: simConfig.dispatchIntervalLength
       },
       ppa_1: {
         duid:simConfig.duid1,
-        capacity: simConfig.ppa1Capacity,
+        capacity: simConfig.ppa1Capacity
       }
     }
     const reponse = await axios.post(`${config.api}/get-generator-data`, body);
@@ -70,11 +70,11 @@ const getGeneratorData_ppa2 = async (simConfig) => {
         start_date: simConfig.startDate,
         end_date: simConfig.endDate,
         region: simConfig.region,
-        dispatch_interval_length: simConfig.dispatchIntervalLength,
+        dispatch_interval_length: simConfig.dispatchIntervalLength
       },
       ppa_2: {
         duid:simConfig.duid2,
-        capacity: simConfig.ppa2Capacity,
+        capacity: simConfig.ppa2Capacity
       }
     }
     const reponse = await axios.post(`${config.api}/get-generator-data`, body);

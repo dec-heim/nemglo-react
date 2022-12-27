@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Col, Container, Grid, Row } from "react-bootstrap";
+import { Alert, Container } from "react-bootstrap";
 import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
 
 import NemGloApi from "../api/NemgloApi";
@@ -384,7 +384,6 @@ export default class SimulationDashboard extends Component {
               )}
             </SubMenu>
 
-            <MenuItem> About </MenuItem>
           </Menu>
         </Sidebar>
         <Container
@@ -395,7 +394,7 @@ export default class SimulationDashboard extends Component {
             paddingRight: 20,
           }}
         >
-          <Alert variant="warning">This is a <b>Beta</b> release of NEMGLO. Check back later for a production release!</Alert>
+          <Alert variant="warning">This is a <b>Beta</b> release of NEMGLO. Some elements may not work as expected. Check back later for a production release!</Alert>
           <Container
             style={{ paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}
           >
@@ -459,6 +458,11 @@ export default class SimulationDashboard extends Component {
                 title={"Costs"}
               />
             )}
+          </Container>
+          <Container style={{
+                textAlign: "center"
+              }}>
+            <p>By using this tool, you agree to abide by and acknowledge the <a href="https://github.com/dec-heim/NEMGLO/blob/main/LICENSE" target="_blank">licence and disclaimer.</a></p>
           </Container>
         </Container>
       </div>

@@ -125,12 +125,24 @@ export default class PPAConf extends Component {
       ppaCapacity: config.ppa2Capacity,
     };
     this.setState({ isMakingApiCall: true });
-    const ppaData1 = await NemGloApi.getGeneratorData(duid1Body);
-    const ppaData2 = await NemGloApi.getGeneratorData(duid2Body);
-    console.log("making call", ppaData1);
+
+    let ppaData1 = {};  
+    let ppaData2 = {};
+
+    if (!ppa1Disabled){
+      ppaData1 = await NemGloApi.getGeneratorData(duid1Body);
+    }
+    if (!ppa2Disabled){
+      ppaData2 = await NemGloApi.getGeneratorData(duid2Body);
+    }
+
     this.storeDataPoints(ppaData1, ppaData2, config.ppa1Capacity, config.ppa2Capacity, ppa1Disabled, ppa2Disabled);
-    setPPAData(ppaData1, "duid1"); 
-    setPPAData(ppaData2, "duid2");
+    if (ppa1Disabled == false){
+      setPPAData(ppaData1, "duid1");
+    }
+    if (ppa2Disabled == false){
+      setPPAData(ppaData2, "duid2");
+    }
     this.setState({ isMakingApiCall: false });
   };
 
@@ -163,15 +175,27 @@ export default class PPAConf extends Component {
   storeDataPoints = (ppaData1, ppaData2, ppa1Capacity, ppa2Capacity, ppa1Disabled, ppa2Disabled) => {
     console.log(ppa1Disabled, ppa2Disabled);
     let dataPoints = [];
-    for (let i = 0; i < ppaData1.time.length; i++) {
-      let dataPoint = {};
-      dataPoint["timestamp"] = ppaData1.timestamps[i];
-      if (!ppa1Disabled)
-        dataPoint["ppa1"] = ppa1Capacity * ppaData1.cf_trace[i];
-      if (!ppa2Disabled)
-        dataPoint["ppa2"] = ppa2Capacity * ppaData2.cf_trace[i];
-      dataPoints.push(dataPoint);
-    }
+    if (!ppa1Disabled){
+      for (let i = 0; i < ppaData1.time.length; i++) {
+        let dataPoint = {};
+        dataPoint["timestamp"] = ppaData1.timestamps[i];
+        if (!ppa1Disabled)
+          dataPoint["ppa1"] = ppa1Capacity * ppaData1.cf_trace[i];
+        if (!ppa2Disabled)
+          dataPoint["ppa2"] = ppa2Capacity * ppaData2.cf_trace[i];
+        dataPoints.push(dataPoint);
+      }
+    } else {
+      for (let i = 0; i < ppaData2.time.length; i++) {
+        let dataPoint = {};
+        dataPoint["timestamp"] = ppaData2.timestamps[i];
+        if (!ppa1Disabled)
+          dataPoint["ppa1"] = ppa1Capacity * ppaData1.cf_trace[i];
+        if (!ppa2Disabled)
+          dataPoint["ppa2"] = ppa2Capacity * ppaData2.cf_trace[i];
+        dataPoints.push(dataPoint);
+      }
+    }      
     console.log(dataPoints)
     this.setState({ dataPoints });
   };

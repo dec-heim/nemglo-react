@@ -1,4 +1,4 @@
 {
-    "api": "http://nemglo-backend-api-dev.ap-southeast-2.elasticbeanstalk.com/api"
+    "api": "https://api.nemglo.org/api"
 }
 

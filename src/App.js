@@ -31,7 +31,7 @@ function App() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+              <Nav.Link href="/simulator">Simulator</Nav.Link>
               <Nav.Link href="/about">About</Nav.Link>
             </Nav>
           </Navbar.Collapse>
@@ -41,7 +41,7 @@ function App() {
         <div>
           <Routes>
             <Route exact path="/" element={<LandingPage />} />
-            <Route exact path="dashboard" element={<SimulationDashboard />} />
+            <Route exact path="simulator" element={<SimulationDashboard />} />
             <Route exact path="/about" element={<About />} />
           </Routes>
         </div>

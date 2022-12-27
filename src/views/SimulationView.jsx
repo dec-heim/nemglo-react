@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Card, Button } from "react-bootstrap";
 import { Audio } from "react-loader-spinner";
+import HelpToolTip from "../components/HelpToolTip";
 
 export default class SimulationView extends Component {
   constructor() {
@@ -22,7 +23,9 @@ render () {
   return (
     <Card
     >
-      <Card.Header>Perform Simulation</Card.Header>
+      <Card.Header>Perform Simulation
+      <HelpToolTip description={"A summary of the configured input parameters for the simulator."}></HelpToolTip>
+      </Card.Header>
      <Card.Body>
      {!this.state.isLoading ? 
       <div>

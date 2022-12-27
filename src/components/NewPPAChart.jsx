@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
+import * as am5plugins_exporting from "@amcharts/amcharts5/plugins/exporting";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
-class AmChart extends Component {
+
+class NewPPAChart extends Component {
   constructor() {
     super();
     this.state = {};
@@ -14,21 +16,27 @@ class AmChart extends Component {
   createAxisAndSeries = (
     chart,
     xAxis,
+    yAxis,
     data,
     valueYField,
     root,
-    opposite,
-    tooltip
+    tooltip,
+    yRenderer
   ) => {
-    let yRenderer = am5xy.AxisRendererY.new(root, {
-      opposite: opposite,
+    // let yRenderer = am5xy.AxisRendererY.new(root, {
+    //   opposite: opposite,
+    // });
+    // let yAxis = chart.yAxes.push(
+    //   am5xy.ValueAxis.new(root, {
+    //     maxDeviation: 1,
+    //     renderer: yRenderer,
+    //   })
+    // );
+
+    let exporting = am5plugins_exporting.Exporting.new(root, {
+      menu: am5plugins_exporting.ExportingMenu.new(root, {}),
+      dataSource: data
     });
-    let yAxis = chart.yAxes.push(
-      am5xy.ValueAxis.new(root, {
-        maxDeviation: 1,
-        renderer: yRenderer,
-      })
-    );
 
     if (chart.yAxes.indexOf(yAxis) > 0) {
       yAxis.set("syncWithAxis", chart.yAxes.getIndex(0));
@@ -133,19 +141,26 @@ class AmChart extends Component {
     );
     let data = this.props.data; // valueYField, tooltip
     const {seriesSettings} = this.props;
-
+    let yRenderer = am5xy.AxisRendererY.new(root, {
+      opposite: false,
+    });
+    let yAxis = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        maxDeviation: 1,
+        renderer: yRenderer,
+      })
+    );
 
     for (let i = 0; i < seriesSettings.length; i++) {
       let seriesSetting = seriesSettings[i];
-      let opposite = i % 2 === 0 ? false : true;
       this.createAxisAndSeries( chart,
         xAxis,
+        yAxis,
         data,
         seriesSetting.valueYField,
         root,
-        opposite,
         seriesSetting.tooltip,
-        seriesSetting.enableYAxis)
+        yRenderer)
     }
 
     let legend = chart.children.push(
@@ -178,4 +193,4 @@ class AmChart extends Component {
   }
 }
 
-export default AmChart;
+export default NewPPAChart;

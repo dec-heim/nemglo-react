@@ -3,7 +3,7 @@ import { Alert, Col, Container, Grid, Row } from "react-bootstrap";
 import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
 
 import NemGloApi from "../api/NemgloApi";
-import RevenueChartView from "../components/RevenueChartView";
+import RevenueChartView from "./RevenueChartView";
 import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
 import PlannerConfig from "./PlannerConfig";
 import PPAConf from "./PPAConf";

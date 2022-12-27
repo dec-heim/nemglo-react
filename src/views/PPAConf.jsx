@@ -3,6 +3,7 @@ import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import NemGloApi from "../api/NemgloApi";
 import AmChart from "../components/AmChart";
+import NewPPAChart from "../components/NewPPAChart";
 
 import DropDownSelector from "../components/DropDownSelector";
 import SliderInput from "../components/SliderInput";
@@ -212,10 +213,12 @@ export default class PPAConf extends Component {
       {
         valueYField: "ppa1",
         tooltip: "MW: {valueY}",
+        enableYAxis: true,
       },
       {
         valueYField: "ppa2",
         tooltip: "MW: {valueY}",
+        enableYAxis: true,
       },
     ];
     let {
@@ -244,12 +247,18 @@ export default class PPAConf extends Component {
           {!isMakingApiCall ? (
             <div>
               {dataPoints.length > 0 && (
-                <AmChart
+                <NewPPAChart
                   id={"ppa-plot"}
                   data={dataPoints}
                   seriesSettings={seriesSettings}
                   baseInterval={baseInterval}
-                ></AmChart>
+                ></NewPPAChart>
+              //   <newPPAChart
+              //   id={"ppa-plot"}
+              //   data={dataPoints}
+              //   seriesSettings={seriesSettings}
+              //   baseInterval={baseInterval}
+              // ></newPPAChart>
               )}
               <Container
                 style={{

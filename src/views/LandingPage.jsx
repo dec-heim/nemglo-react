@@ -23,7 +23,7 @@ function LandingPage() {
           <p class="mt-4">NEMGLO, the Australian NEM Green-energy Load Optimisation tool is a mixed-integer linear program (MILP) which allows users to solve counterfactual operating strategies for a hypothetical flexible load participating in the energy spot market.
           Case studies can be constructed using this tool which provides the ability to study techno-economic-environmental considerations of a flexible load such as a hydrogen electrolyser or large C&I consumer, in historic NEM market conditions.<br></br>
           Curious and Interested? Check out the lite online simulator or for extended functionality see the python package!</p>
-          <Button variant="outline-primary" href="/dashboard">Go to Simulator</Button>
+          <Button variant="outline-primary" href="/simulator">Go to Simulator</Button>
         </Col>
       </Row>
       <Row>

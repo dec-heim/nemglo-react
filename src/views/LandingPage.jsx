@@ -1,5 +1,6 @@
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import { Card } from "react-bootstrap";
+import Footer from "../components/Footer";
 
 import ceem from "../media/ceemLogo.jpeg";
 import dgfi from "../media/DGFILogo.gif";
@@ -23,7 +24,7 @@ function LandingPage() {
           <p class="mt-4">NEMGLO, the Australian NEM Green-energy Load Optimisation tool is a mixed-integer linear program (MILP) which allows users to solve counterfactual operating strategies for a hypothetical flexible load participating in the energy spot market.
           Case studies can be constructed using this tool which provides the ability to study techno-economic-environmental considerations of a flexible load such as a hydrogen electrolyser or large C&I consumer, in historic NEM market conditions.<br></br>
           Curious and Interested? Check out the lite online simulator or for extended functionality see the python package!</p>
-          <Button variant="outline-primary" href="/dashboard">Go to Simulator</Button>
+          <Button variant="outline-primary" href="/simulator">Go to Simulator</Button>
         </Col>
       </Row>
       <Row>
@@ -93,14 +94,15 @@ function LandingPage() {
       </Row>
     </Container>
       </main>
-      <footer class="py-5 my-5 bg-dark" justify="center">
+      <Footer></Footer>
+      {/* <footer class="py-5 my-5 bg-dark" justify="center">
         <Container className="px-4" justify="center">
           <p class="text-center text-white">Copyright &copy; Declan Heim and Jay Anand, 2022</p>
           <div class="text-center">
             <a href="/about">Licence and Disclaimer</a>
           </div>
         </Container>
-      </footer>
+      </footer> */}
     </div>
   );
 }

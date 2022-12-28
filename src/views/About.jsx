@@ -3,6 +3,7 @@ import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
 import ceem from "../media/UNSWCEEMLogoTransparent.png";
 import dgfi from "../media/DGFILogo.gif";
 import unsw from "../media/unswlogo.jpg";
+import Footer from "../components/Footer";
 
 export default function About() {
   return (
@@ -74,13 +75,7 @@ export default function About() {
           </div>
         </Container>
       </main>
-      <footer class="py-5 my-5 bg-dark">
-        <Container className="px-4">
-          <p class="text-center text-white">
-            Copyright &copy; www.nemglo.com.au 2022
-          </p>
-        </Container>
-      </footer>
+      <Footer></Footer>
     </div>
   );
 }

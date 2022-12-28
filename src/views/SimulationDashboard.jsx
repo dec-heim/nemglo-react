@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Alert, Container } from "react-bootstrap";
 import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
 
+import Footer from "../components/Footer";
 import NemGloApi from "../api/NemgloApi";
 import RevenueChartView from "./RevenueChartView";
 import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
@@ -320,9 +321,10 @@ export default class SimulationDashboard extends Component {
       revenueResults,
     } = this.state;
     return (
+      <div>
       <div
         className="full-screen-div"
-        style={{ display: "flex", background: "#eceff4", minHeight: "100vh"}}
+        style={{ display: "flex", background: "#eceff4", minHeight: "100vh", width: "100%"}}
       >
         <Sidebar style={{ borderRight: "None" }}>
           <Menu>
@@ -465,6 +467,8 @@ export default class SimulationDashboard extends Component {
             <p>By using this tool, you agree to abide by and acknowledge the <a href="https://github.com/dec-heim/NEMGLO/blob/main/LICENSE" target="_blank">licence and disclaimer.</a></p>
           </Container>
         </Container>
+      </div>
+      <Footer></Footer>
       </div>
     );
   }

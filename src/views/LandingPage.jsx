@@ -1,5 +1,6 @@
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import { Card } from "react-bootstrap";
+import Footer from "../components/Footer";
 
 import ceem from "../media/ceemLogo.jpeg";
 import dgfi from "../media/DGFILogo.gif";
@@ -93,14 +94,15 @@ function LandingPage() {
       </Row>
     </Container>
       </main>
-      <footer class="py-5 my-5 bg-dark" justify="center">
+      <Footer></Footer>
+      {/* <footer class="py-5 my-5 bg-dark" justify="center">
         <Container className="px-4" justify="center">
           <p class="text-center text-white">Copyright &copy; Declan Heim and Jay Anand, 2022</p>
           <div class="text-center">
             <a href="/about">Licence and Disclaimer</a>
           </div>
         </Container>
-      </footer>
+      </footer> */}
     </div>
   );
 }

@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { Alert, Container } from "react-bootstrap";
 import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
 
-import Footer from "../components/Footer";
 import NemGloApi from "../api/NemgloApi";
-import RevenueChartView from "./RevenueChartView";
+import Footer from "../components/Footer";
 import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
 import PlannerConfig from "./PlannerConfig";
 import PPAConf from "./PPAConf";
 import ResultsView from "./ResultsView";
+import RevenueChartView from "./RevenueChartView";
 import SimulationView from "./SimulationView";
 
 const secProfiles = ["fixed", "variable"];
@@ -27,8 +27,10 @@ export default class SimulationDashboard extends Component {
         endTime: "",
         electrolyserCapacity: 50,
         ppa1StrikePrice: 20,
+        ppa1FloorPrice:null, 
         ppa1Capacity: 30,
         ppa2StrikePrice: 30,
+        ppa2FloorPrice:null, 
         ppa2Capacity: 30,
         duid1: "",
         duid2: "",
@@ -36,7 +38,7 @@ export default class SimulationDashboard extends Component {
         ppa2Data: {},
         secProfile: secProfiles[0],
         conversionFactor: 100,
-        nominalSec: 66,
+        nominalSec: 60,
         // overload: 0,
         // ratedLoad: 50,
         minStableLoad: 10,
@@ -210,8 +212,10 @@ export default class SimulationDashboard extends Component {
         endTime: "",
         electrolyserCapacity: 50,
         ppa1StrikePrice: 20,
+        ppa1FloorPrice:null, 
         ppa1Capacity: 30,
         ppa2StrikePrice: 30,
+        ppa2FloorPrice:null, 
         ppa2Capacity: 30,
         duid1: "",
         duid2: "",
@@ -355,15 +359,6 @@ export default class SimulationDashboard extends Component {
                   Renewable PPAs{" "}
                 </MenuItem>
               )}
-              {/* {this.isMarketDataLoaded() && (
-                <MenuItem
-                  id="ppa2Config"
-                  onClick={() => this.onSelectView("ppa2Config")}
-                >
-                  {" "}
-                  Renewable PPA 2{" "}
-                </MenuItem>
-              )} */}
             </SubMenu>
             {this.isMarketDataLoaded() && (
               <MenuItem onClick={() => this.onSelectView("simulationView")}>

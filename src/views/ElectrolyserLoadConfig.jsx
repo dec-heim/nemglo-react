@@ -5,24 +5,28 @@ import DropDownSelector from "../components/DropDownSelector";
 import RegularInput from "../components/RegularInput";
 import SliderInput from "../components/SliderInput";
 
+// STATIC VARIABLES
 const PEM_TYPE = "PEM";
 const AE_TYPE = "AE";
 const CUSTOM_TYPE = "CUSTOM";
-
 const SEC_PROFILES = ["fixed", "variable"];
 const TECHNOLOGY_TYPES = [PEM_TYPE, AE_TYPE, CUSTOM_TYPE];
-
 const PEM_PROFILE = {
   nominalSec: 10,
   conversionFactor: 10,
-  secProfile: SEC_PROFILES[0],
+  minStableLoadFactor: 0.2
 };
-
 const AE_PROFILE = {
-  nominalSec: 20,
-  conversionFactor: 50,
-  secProfile: SEC_PROFILES[1],
+  nominalSec: 50,
+  conversionFactor: 100,
+  minStableLoadFactor: 0.4
 };
+const NOMINAL_SEC_PLACEHOLDER = 50;
+const CONVERSION_PLACEHOLDER = 100;
+const MAX_H2_PRICE = 20;
+const MAX_CAPACITY = 200;
+const MAX_MIN_STABLE_LOAD = 60;
+
 
 export default function ElectrolyserLoadConfig({
   setConfigValue,
@@ -34,32 +38,35 @@ export default function ElectrolyserLoadConfig({
   electrolyserCapacity,
   minStableLoad,
 }) {
-  const [isCustomType, setCustomType] = useState(false);
+  const [isCustomTechType, setCustomTechType] = useState(false);
 
   const setTechnologyType = (id, technologyType) => {
-    var validTypeSelected = true;
-    console.log(id, technologyType);
     switch (technologyType) {
       case PEM_TYPE:
-        setCustomType(false);
-        console.log("PEM selected");
+        setCustomTechType(false);
+        setConfigValue("nominalSec", PEM_PROFILE.nominalSec);
+        setConfigValue("conversionFactor", PEM_PROFILE.conversionFactor);
+        setConfigValue("minStableLoad", PEM_PROFILE.minStableLoadFactor * electrolyserCapacity);
         break;
       case AE_TYPE:
-        setCustomType(false);
-        console.log("AE selected");
+        setCustomTechType(false);
+        setConfigValue("nominalSec", AE_PROFILE.nominalSec);
+        setConfigValue("conversionFactor", AE_PROFILE.conversionFactor);
+        setConfigValue("minStableLoad", AE_PROFILE.minStableLoadFactor * electrolyserCapacity);
         break;
       case CUSTOM_TYPE:
-        setCustomType(true);
-        console.log("CUSTOM selected");
+        setCustomTechType(true);
         break;
       default:
         console.warn("INVALID TECHNOLOGY TYPE SELECTED");
-        validTypeSelected = false;
     }
-    if (validTypeSelected) {
-      setConfigValue(id, technologyType);
-    }
+    setConfigValue(id, technologyType);
   };
+
+  const getMaxMinStableLoad = () => {
+
+  }
+
 
   return (
     <Card
@@ -86,31 +93,34 @@ export default function ElectrolyserLoadConfig({
               id="nominalSec"
               label="Nominal SEC (kWh/kg)"
               description="The Specific Energy Consumption of the electrolyser used to compute the produced hydrogen mass from the electrical energy consumed."
-              placeholder={50}
+              placeholder={NOMINAL_SEC_PLACEHOLDER}
               setConfigValue={setConfigValue}
-              value={nominalSec}
+              value={nominalSec
+              }
               type="number"
-              readOnly={!isCustomType}
+              readOnly={!isCustomTechType}
             ></RegularInput>
             <RegularInput
               id="conversionFactor"
               label="Conversion Factor (%)"
               description="An efficiency factor applied to the above SEC should this prior value consider only the electrolyser stack and not balance of plant."
-              placeholder={100}
+              placeholder={CONVERSION_PLACEHOLDER}
               setConfigValue={setConfigValue}
-              value={conversionFactor}
+              value={conversionFactor
+              }
               type="number"
-              readOnly={!isCustomType}
+              readOnly={!isCustomTechType}
             ></RegularInput>
-            <DropDownSelector
-              id="secProfile"
-              label="SEC Profile"
-              description="The assumed profile of the SEC input. Refer to use guide for 'variable SEC'. If 'variable' the assumed SEC changes dependent on the load operating point."
-              options={SEC_PROFILES}
+            <SliderInput
+              id="minStableLoad"
+              label="Minimum Stable Load"
+              description="The lowest possible operating point of the load in MW."
               setConfigValue={setConfigValue}
-              value={secProfile}
-              disabled={!isCustomType}
-            ></DropDownSelector>
+              value={minStableLoad}
+              max={isCustomTechType ? 0.7 * electrolyserCapacity : minStableLoad }
+              disabled={!isCustomTechType}
+            ></SliderInput>
+           
           </Col>
           <Col>
             <SliderInput
@@ -119,7 +129,7 @@ export default function ElectrolyserLoadConfig({
               description="The production benefit ('sales') price for each kg of hydrogen."
               setConfigValue={setConfigValue}
               value={h2Price}
-              max={20}
+              max={MAX_H2_PRICE}
             ></SliderInput>
             <SliderInput
               id="electrolyserCapacity"
@@ -127,16 +137,18 @@ export default function ElectrolyserLoadConfig({
               description="The desired nominal capacity and rated load value of the electrolyser."
               setConfigValue={setConfigValue}
               value={electrolyserCapacity}
-              max={100}
+              max={MAX_CAPACITY}
             ></SliderInput>
-            <SliderInput
-              id="minStableLoad"
-              label="Minimum Stable Load"
-              description="The lowest possible operating point of the load in MW."
+             <DropDownSelector
+              id="secProfile"
+              label="SEC Profile"
+              description="The assumed profile of the SEC input. Refer to use guide for 'variable SEC'. If 'variable' the assumed SEC changes dependent on the load operating point."
+              options={SEC_PROFILES}
               setConfigValue={setConfigValue}
-              value={minStableLoad}
-              max={60}
-            ></SliderInput>
+              value={secProfile
+              }
+              disabled={false}
+            ></DropDownSelector>
           </Col>
         </Row>
       </Card.Body>

@@ -1,17 +1,17 @@
 import React, { Component, useState } from "react";
-import { Card, Container, Button } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import NemGloApi from "../api/NemgloApi";
-import AmChart from "../components/AmChart";
-
-import DropDownSelector from "../components/DropDownSelector";
-import SliderInput from "../components/SliderInput";
-import SliderInputOptional from "../components/SliderInputOptional";
+import { Card, InputGroup } from "react-bootstrap";
+import Switch from "react-bootstrap-switch";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Form from "react-bootstrap/Form";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import { Audio } from "react-loader-spinner";
+
+import NemGloApi from "../api/NemgloApi";
+import AmChart from "../components/AmChart";
+import DropDownSelector from "../components/DropDownSelector";
 import PPA1Chart from "../components/PPA1Chart";
-import Switch from "react-bootstrap-switch";
+import SliderInput from "../components/SliderInput";
+import SliderInputOptional from "../components/SliderInputOptional";
 
 export default class PPAConfig extends Component {
   constructor() {
@@ -150,10 +150,9 @@ export default class PPAConfig extends Component {
     } = this.props;
     let filteredOptions = availableGens.filter((item) => item !== otherPPADuid);
     const { formValidated } = this.state;
-    const {setCapacity} = this.props;
+    const { setCapacity } = this.props;
     return (
       <Card>
-
         <Card.Title style={{ paddingLeft: 15, paddingTop: 15 }}>
           {title}
         </Card.Title>
@@ -162,7 +161,7 @@ export default class PPAConfig extends Component {
             <Form
               noValidate
               validated={formValidated}
-              onSubmit={this.handleSubmit}
+              // onSubmit={this.handleSubmit}
             >
               <DropDownSelector
                 id={duidId}
@@ -191,15 +190,18 @@ export default class PPAConfig extends Component {
                 max={100}
                 disabled={isDisabled}
               ></SliderInput>
-              {/* <SliderInputOptional // Floor price input needs to be configurable as optional field, if unchecked (disabled) api call should be None.
+            
+
+              <SliderInputOptional // Floor price input needs to be configurable as optional field, if unchecked (disabled) api call should be None.
               // Probably could do without the slider for floor input, just have the numerical field input?
                 id={floorPriceId}
                 label="Floor Price ($/MWh)"
                 setConfigValue={setConfigValue}
                 value={ppaFloorPrice}
                 max={10} // Value range for floor price should be say -100 (min) to 0 (max)
+                min={-100}
                 disabled={isDisabled}
-              ></SliderInputOptional> */}
+              ></SliderInputOptional>
               <ToggleButton
                 className="mb-2"
                 id={duidId}
@@ -209,12 +211,13 @@ export default class PPAConfig extends Component {
                 value="1"
                 onChange={(e) => this.setIsDisabled(e.currentTarget.checked)}
               >
-                {isDisabled ? ("Disabled") : ("Enabled")}
+                {isDisabled ? "Disabled" : "Enabled"}
               </ToggleButton>
             </Form>
           </div>
         </Card.Body>
       </Card>
+      
     );
   }
 }

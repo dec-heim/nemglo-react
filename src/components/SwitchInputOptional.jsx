@@ -1,11 +1,13 @@
-import React, { Component, Fragment, useEffect, useState } from "react";
-import { Stack } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { InputGroup, Stack } from "react-bootstrap";
 import RangeSlider from "react-bootstrap-range-slider";
 import Form from "react-bootstrap/Form";
+
 import HelpToolTip from "./HelpToolTip";
 
-export default function SliderInput(props) {
-  const [value, setValue] = React.useState({ ...props.value });
+export default function SwitchInputOptional(props) {
+  const [value, setValue] = useState({ ...props.value });
+  const [isSelected, setSelected] = useState(false);
 
   useEffect(() => {
     setValue(props.value);
@@ -26,22 +28,16 @@ export default function SliderInput(props) {
         <HelpToolTip description={props.description}></HelpToolTip>
       </Form.Label>
       <Stack direction="horizontal" gap={5}>
-        <Form.Control 
-          disabled={props.disabled}
-          required = {!props.disabled}
+        <InputGroup>
+          <InputGroup.Checkbox onChange={() => setSelected(!isSelected)} disabled={props.disabled}/>
+          <Form.Control disabled={!isSelected || props.disabled}  
+          required = {!props.disabled && isSelected}
           value={value}
-          step={props.step ? props.step : 1}
-          type="number"
-          onChange={(e) => updateValue(e)}
-        />
-        <RangeSlider
-          disabled={props.disabled}
-          max={props.max}
-          step={props.step ? props.step : 1}
-          value={value}
-          tooltip="off"
-          onChange={(e) => updateValue(e)}
-        />
+          type="text"
+          readOnly
+          placeholder={props.showText}
+          onChange={(e) => updateValue(e)} />
+        </InputGroup>
       </Stack>
     </Form.Group>
   );

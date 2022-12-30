@@ -156,6 +156,17 @@ export default class PPAConfig extends Component {
 
         <Card.Title style={{ paddingLeft: 15, paddingTop: 15 }}>
           {title}
+          <ToggleButton style={{'marginRight': '1rem'}}
+            className="mb-2 float-end"
+            id={duidId}
+            type="checkbox"
+            variant={!isDisabled ? "outline-primary" : "secondary"}
+            checked={!isDisabled}
+            value="1"
+            onChange={(e) => this.setIsDisabled(e.currentTarget.checked)}
+          >
+            {isDisabled ? "Disabled" : "Enabled"}
+          </ToggleButton>
         </Card.Title>
         <Card.Body>
           <div>
@@ -200,17 +211,6 @@ export default class PPAConfig extends Component {
                 max={10} // Value range for floor price should be say -100 (min) to 0 (max)
                 disabled={isDisabled}
               ></SliderInputOptional>
-              <ToggleButton
-                className="mb-2"
-                id={duidId}
-                type="checkbox"
-                variant={!isDisabled ? "outline-primary" : "secondary"}
-                checked={!isDisabled}
-                value="1"
-                onChange={(e) => this.setIsDisabled(e.currentTarget.checked)}
-              >
-                {isDisabled ? ("Disabled") : ("Enabled")}
-              </ToggleButton>
             </Form>
           </div>
         </Card.Body>

@@ -10,6 +10,7 @@ import PlannerConfig from "./PlannerConfig";
 import PPAConf from "./PPAConf";
 import ResultsView from "./ResultsView";
 import SimulationView from "./SimulationView";
+import StrategyConfig from "./StrategyConfig";
 
 const secProfiles = ["fixed", "variable"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
@@ -355,15 +356,15 @@ export default class SimulationDashboard extends Component {
                   Renewable PPAs{" "}
                 </MenuItem>
               )}
-              {/* {this.isMarketDataLoaded() && (
+              {this.isMarketDataLoaded() && (
                 <MenuItem
-                  id="ppa2Config"
-                  onClick={() => this.onSelectView("ppa2Config")}
+                  id="strategyConfig"
+                  onClick={() => this.onSelectView("strategyConfig")}
                 >
                   {" "}
-                  Renewable PPA 2{" "}
+                  Strategy{" "}
                 </MenuItem>
-              )} */}
+              )}
             </SubMenu>
             {this.isMarketDataLoaded() && (
               <MenuItem onClick={() => this.onSelectView("simulationView")}>
@@ -438,6 +439,12 @@ export default class SimulationDashboard extends Component {
                 endDate={config.endDate}
                 region={config.region}
                 dispatchIntervalLength={config.dispatchIntervalLength}
+              />
+            )}
+            {currentConfig === "strategyConfig" && (
+              <StrategyConfig
+                setConfigValue={this.setConfigValue}
+                recMode={config.recMode}
               />
             )}
             {currentConfig === "simulationView" && (

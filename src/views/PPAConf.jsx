@@ -207,7 +207,7 @@ export default class PPAConf extends Component {
   render() {
     const baseInterval = {
       timeUnit: "minute",
-      count: 30,
+      count: 5,
     };
     const seriesSettings = [
       {
@@ -251,7 +251,10 @@ export default class PPAConf extends Component {
                   id={"ppa-plot"}
                   data={dataPoints}
                   seriesSettings={seriesSettings}
-                  baseInterval={baseInterval}
+                  baseInterval={{
+                    timeUnit: "minute",
+                    count: config.dispatchIntervalLength,
+                  }}
                 ></NewPPAChart>
               //   <newPPAChart
               //   id={"ppa-plot"}

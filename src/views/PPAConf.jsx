@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import { Card, Container, Row, Col, Button } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import { Audio } from "react-loader-spinner";
+
 import NemGloApi from "../api/NemgloApi";
 import AmChart from "../components/AmChart";
-import NewPPAChart from "../components/NewPPAChart";
-
 import DropDownSelector from "../components/DropDownSelector";
+import NewPPAChart from "../components/NewPPAChart";
 import SliderInput from "../components/SliderInput";
-import ToggleButton from "react-bootstrap/ToggleButton";
-import { Audio } from "react-loader-spinner";
 import PPAConfig from "./PPAConfig";
 
 export default class PPAConf extends Component {
@@ -23,6 +22,8 @@ export default class PPAConf extends Component {
       dispatchIntervalLength: 0,
       dataPoints: [],
       isMakingApiCall: false,
+      duid1ApiCall: "",
+      duid2ApiCall: "",
     };
     this.isDisabled = this.isDisabled.bind(this);
     this.setCapacity = this.setCapacity.bind(this);
@@ -36,33 +37,33 @@ export default class PPAConf extends Component {
     let ppa2Capacity = config.ppa2Capacity;
     let ppa1Disabled = this.props.ppa1Disabled;
     let ppa2Disabled = this.props.ppa2Disabled;
-    
+
     if (isDisabled) {
-        if (PPANum === "duid1") {
-            ppa1Disabled = true;
-        } else if (PPANum === "duid2") {
-            ppa2Disabled = true;
-        }
+      if (PPANum === "duid1") {
+        ppa1Disabled = true;
+      } else if (PPANum === "duid2") {
+        ppa2Disabled = true;
+      }
     } else {
-        if (PPANum === "duid1") {
-            ppa1Disabled = false;
-        } else if (PPANum === "duid2") {
-            ppa2Disabled = false;
-        }
+      if (PPANum === "duid1") {
+        ppa1Disabled = false;
+      } else if (PPANum === "duid2") {
+        ppa2Disabled = false;
+      }
     }
 
     this.storeDataPoints(
       config.ppa1Data,
       config.ppa2Data,
       ppa1Capacity,
-      ppa2Capacity, 
+      ppa2Capacity,
       ppa1Disabled,
       ppa2Disabled
     );
   }
 
   setCapacity(id, capacity) {
-    const { setConfigValue, config, ppa1Disabled, ppa2Disabled} = this.props;
+    const { setConfigValue, config, ppa1Disabled, ppa2Disabled } = this.props;
     setConfigValue(id, capacity);
     console.log(id, capacity);
     if (
@@ -76,7 +77,7 @@ export default class PPAConf extends Component {
           config.ppa1Data,
           config.ppa2Data,
           ppa1Capacity,
-          ppa2Capacity, 
+          ppa2Capacity,
           ppa1Disabled,
           ppa2Disabled
         );
@@ -106,7 +107,7 @@ export default class PPAConf extends Component {
       config,
       marketData,
       ppa1Disabled,
-      ppa2Disabled
+      ppa2Disabled,
     } = this.props;
     const duid1Body = {
       startDate: startDate,
@@ -124,31 +125,56 @@ export default class PPAConf extends Component {
       duid: config.duid2 === "" ? marketData.availgens[1] : config.duid2,
       ppaCapacity: config.ppa2Capacity,
     };
-    this.setState({ isMakingApiCall: true });
 
-    let ppaData1 = {};  
+    this.setState({
+      isMakingApiCall: true,
+      duid1ApiCall: duid1Body.duid,
+      duid2ApiCall: duid2Body.duid,
+    });
+
+    let ppaData1 = {};
     let ppaData2 = {};
 
-    if (!ppa1Disabled){
+    if (!ppa1Disabled) {
       ppaData1 = await NemGloApi.getGeneratorData(duid1Body);
+      if (ppaData1 === null) {
+        this.setState({ isMakingApiCall: false });
+      }
     }
-    if (!ppa2Disabled){
+    if (!ppa2Disabled) {
       ppaData2 = await NemGloApi.getGeneratorData(duid2Body);
+      if (ppaData2 === null) {
+        this.setState({ isMakingApiCall: false });
+      }
     }
 
-    this.storeDataPoints(ppaData1, ppaData2, config.ppa1Capacity, config.ppa2Capacity, ppa1Disabled, ppa2Disabled);
-    if (ppa1Disabled == false){
+    this.storeDataPoints(
+      ppaData1,
+      ppaData2,
+      config.ppa1Capacity,
+      config.ppa2Capacity,
+      ppa1Disabled,
+      ppa2Disabled
+    );
+    if (ppa1Disabled) {
       setPPAData(ppaData1, "duid1");
     }
-    if (ppa2Disabled == false){
+    if (ppa2Disabled) {
       setPPAData(ppaData2, "duid2");
     }
     this.setState({ isMakingApiCall: false });
   };
 
   componentDidMount() {
-    const { startDate, endDate, region, dispatchIntervalLength, config, ppa1Disabled, ppa2Disabled } =
-      this.props;
+    const {
+      startDate,
+      endDate,
+      region,
+      dispatchIntervalLength,
+      config,
+      ppa1Disabled,
+      ppa2Disabled,
+    } = this.props;
     this.setState({
       startDate,
       endDate,
@@ -172,10 +198,17 @@ export default class PPAConf extends Component {
     }
   }
 
-  storeDataPoints = (ppaData1, ppaData2, ppa1Capacity, ppa2Capacity, ppa1Disabled, ppa2Disabled) => {
+  storeDataPoints = (
+    ppaData1,
+    ppaData2,
+    ppa1Capacity,
+    ppa2Capacity,
+    ppa1Disabled,
+    ppa2Disabled
+  ) => {
     console.log(ppa1Disabled, ppa2Disabled);
     let dataPoints = [];
-    if (!ppa1Disabled){
+    if (!ppa1Disabled) {
       for (let i = 0; i < ppaData1.time.length; i++) {
         let dataPoint = {};
         dataPoint["timestamp"] = ppaData1.timestamps[i];
@@ -195,8 +228,8 @@ export default class PPAConf extends Component {
           dataPoint["ppa2"] = ppa2Capacity * ppaData2.cf_trace[i];
         dataPoints.push(dataPoint);
       }
-    }      
-    console.log(dataPoints)
+    }
+    console.log(dataPoints);
     this.setState({ dataPoints });
   };
 
@@ -230,144 +263,173 @@ export default class PPAConf extends Component {
       setPPADisabled,
       setPPAData,
     } = this.props;
-    let { formValidated, dataPoints, isMakingApiCall } = this.state;
+    let {
+      formValidated,
+      dataPoints,
+      isMakingApiCall,
+      duid1ApiCall,
+      duid2ApiCall,
+    } = this.state;
+
+    let showAlert =
+      (duid1ApiCall !== "" &&
+      duid1ApiCall !== config.duid1) ||
+      (duid2ApiCall !== "" &&
+      duid2ApiCall !== config.duid2);
+
     return (
-      <Card
-        style={{
-          paddingTop: 20,
-          paddingLeft: 5,
-          paddingRight: 5,
-          paddingBottom: 5,
-        }}
-      >
-        <Card.Title style={{ paddingLeft: 15 }}>
-          Power Purchase Agreements
-        </Card.Title>
-        <Card.Body>
-          {!isMakingApiCall ? (
-            <div>
-              {dataPoints.length > 0 && (
-                <NewPPAChart
-                  id={"ppa-plot"}
-                  data={dataPoints}
-                  seriesSettings={seriesSettings}
-                  baseInterval={{
-                    timeUnit: "minute",
-                    count: config.dispatchIntervalLength,
+      <div>
+        {showAlert && (
+          <Alert key="info" variant="info">
+            You updated the PPA Configuration, select Get Renewables Data to get new
+            results.
+          </Alert>
+        )}
+
+        <Card
+          style={{
+            paddingTop: 20,
+            paddingLeft: 5,
+            paddingRight: 5,
+            paddingBottom: 5,
+          }}
+        >
+          <Card.Title style={{ paddingLeft: 15 }}>
+            Power Purchase Agreements
+          </Card.Title>
+          <Card.Body>
+            {!isMakingApiCall ? (
+              <div>
+                {dataPoints.length > 0 && (
+                  <NewPPAChart
+                    id={"ppa-plot"}
+                    data={dataPoints}
+                    seriesSettings={seriesSettings}
+                    baseInterval={{
+                      timeUnit: "minute",
+                      count: config.dispatchIntervalLength,
+                    }}
+                    // baseInterval={baseInterval}
+                  ></NewPPAChart>
+                  //   <newPPAChart
+                  //   id={"ppa-plot"}
+                  //   data={dataPoints}
+                  //   seriesSettings={seriesSettings}
+                  //   baseInterval={baseInterval}
+                  // ></newPPAChart>
+                )}
+                <Container
+                  style={{
+                    paddingTop: 20,
                   }}
-                ></NewPPAChart>
-              //   <newPPAChart
-              //   id={"ppa-plot"}
-              //   data={dataPoints}
-              //   seriesSettings={seriesSettings}
-              //   baseInterval={baseInterval}
-              // ></newPPAChart>
-              )}
-              <Container
-                style={{
-                  paddingTop: 20,
-                }}
-              >
-                <Form
-                  noValidate
-                  validated={formValidated}
-                  onSubmit={this.handleSubmit}
                 >
-                  <Row className="show-grid">
-                    <Col>
-                      <PPAConfig
-                        title="PPA 1"
-                        duidId="duid1"
-                        capacityId="ppa1Capacity"
-                        strikePriceId="ppa1StrikePrice"
-                        setConfigValue={setConfigValue}
-                        setCapacity={this.setCapacity}
-                        duid={
-                          config.duid1 === ""
-                            ? marketData.availgens[0]
-                            : config.duid1
-                        }
-                        ppaCapacity={config.ppa1Capacity}
-                        ppaStrikePrice={config.ppa1StrikePrice}
-                        marketData={marketData}
-                        otherPPADuid={config.duid2}
-                        isDisabled={ppa1Disabled}
-                        setPPADisabled={this.setPPADisabled}
-                        availableGens={marketData.availgens}
-                        startDate={config.startDate}
-                        endDate={config.endDate}
-                        region={config.region}
-                        dispatchIntervalLength={config.dispatchIntervalLength}
-                        ppaData={config.ppa1Data}
-                        setPPAData={setPPAData}
-                      />
-                    </Col>
-                    <Col>
-                      <PPAConfig
-                        title="PPA 2"
-                        duidId="duid2"
-                        capacityId="ppa2Capacity"
-                        strikePriceId="ppa2StrikePrice"
-                        setConfigValue={setConfigValue}
-                        setCapacity={this.setCapacity}
-                        duid={
-                          config.duid2 === ""
-                            ? marketData.availgens[1]
-                            : config.duid2
-                        }
-                        ppaCapacity={config.ppa2Capacity}
-                        ppaStrikePrice={config.ppa2StrikePrice}
-                        marketData={marketData}
-                        otherPPADuid={config.duid1}
-                        isDisabled={ppa2Disabled}
-                        setPPADisabled={this.setPPADisabled}
-                        availableGens={marketData.availgens}
-                        startDate={config.startDate}
-                        endDate={config.endDate}
-                        region={config.region}
-                        dispatchIntervalLength={config.dispatchIntervalLength}
-                        ppaData={config.ppa2Data}
-                        setPPAData={setPPAData}
-                      />
-                    </Col>
-                  </Row>
-                  <Container style={{ height: 10 }}></Container>
-                  {ppa1Disabled && ppa2Disabled ? (
-                    <Button className="float-end" variant={"secondary"}>
-                      Get Renewables Data
-                    </Button>
-                  ) : (
-                    <Button
-                      className="float-end"
-                      type="submit"
-                      variant={"primary"}
-                    >
-                      Get Renewables Data
-                    </Button>
-                  )}
-                </Form>
-              </Container>
-            </div>
-          ) : (
-            <Audio
-              height="80"
-              width="80"
-              radius="9"
-              color="green"
-              ariaLabel="loading"
-              wrapperStyle
-              wrapperClass
-              style={{
-                height: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            />
-          )}
-        </Card.Body>
-      </Card>
+                  <Form
+                    noValidate
+                    validated={formValidated}
+                    onSubmit={this.handleSubmit}
+                  >
+                    <Row className="show-grid">
+                      <Col>
+                        <PPAConfig
+                          title="PPA 1"
+                          duidId="duid1"
+                          prevDuid={this.state.duid1ApiCall}
+                          capacityId="ppa1Capacity"
+                          strikePriceId="ppa1StrikePrice"
+                          floorPriceId="ppa1FloorPrice"
+                          setConfigValue={setConfigValue}
+                          setCapacity={this.setCapacity}
+                          duid={
+                            config.duid1 === ""
+                              ? marketData.availgens[0]
+                              : config.duid1
+                          }
+                          ppaCapacity={config.ppa1Capacity}
+                          ppaStrikePrice={config.ppa1StrikePrice}
+                          ppaFloorPrice={config.ppa1FloorPrice}
+                          marketData={marketData}
+                          otherPPADuid={config.duid2}
+                          isDisabled={ppa1Disabled}
+                          setPPADisabled={this.setPPADisabled}
+                          availableGens={marketData.availgens}
+                          startDate={config.startDate}
+                          endDate={config.endDate}
+                          region={config.region}
+                          dispatchIntervalLength={config.dispatchIntervalLength}
+                          ppaData={config.ppa1Data}
+                          setPPAData={setPPAData}
+                        />
+                      </Col>
+                      <Col>
+                        <PPAConfig
+                          title="PPA 2"
+                          duidId="duid2"
+                          prevDuid={this.state.duid2ApiCall}
+                          capacityId="ppa2Capacity"
+                          strikePriceId="ppa2StrikePrice"
+                          floorPriceId="ppa2FloorPrice"
+                          setConfigValue={setConfigValue}
+                          setCapacity={this.setCapacity}
+                          duid={
+                            config.duid2 === ""
+                              ? marketData.availgens[1]
+                              : config.duid2
+                          }
+                          ppaCapacity={config.ppa2Capacity}
+                          ppaStrikePrice={config.ppa2StrikePrice}
+                          ppaFloorPrice={config.ppa2FloorPrice}
+                          marketData={marketData}
+                          otherPPADuid={config.duid1}
+                          isDisabled={ppa2Disabled}
+                          setPPADisabled={this.setPPADisabled}
+                          availableGens={marketData.availgens}
+                          startDate={config.startDate}
+                          endDate={config.endDate}
+                          region={config.region}
+                          dispatchIntervalLength={config.dispatchIntervalLength}
+                          ppaData={config.ppa2Data}
+                          setPPAData={setPPAData}
+                        />
+                      </Col>
+                    </Row>
+                    <Container style={{ height: 10 }}></Container>
+                    {ppa1Disabled && ppa2Disabled ? (
+                      <Button className="float-end" variant={"secondary"}>
+                        Get Renewables Data
+                      </Button>
+                    ) : (
+                      <Button
+                        className="float-end"
+                        type="submit"
+                        variant={"primary"}
+                      >
+                        Get Renewables Data
+                      </Button>
+                    )}
+                  </Form>
+                </Container>
+              </div>
+            ) : (
+              <Audio
+                height="80"
+                width="80"
+                radius="9"
+                color="green"
+                ariaLabel="loading"
+                wrapperStyle
+                wrapperClass
+                style={{
+                  height: "100vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              />
+            )}
+          </Card.Body>
+        </Card>
+      </div>
     );
   }
 }

@@ -28,7 +28,7 @@ export default function SliderInputOptional(props) {
         <HelpToolTip description={props.description}></HelpToolTip>
       </Form.Label>
       <Stack direction="horizontal" gap={5}>
-      <InputGroup>
+        <InputGroup>
           <InputGroup.Checkbox onChange={() => setSelected(!isSelected)} disabled={props.disabled}/>
           <Form.Control disabled={!isSelected || props.disabled}  
           required = {!props.disabled && isSelected}

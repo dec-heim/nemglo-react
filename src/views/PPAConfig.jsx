@@ -155,6 +155,17 @@ export default class PPAConfig extends Component {
       <Card>
         <Card.Title style={{ paddingLeft: 15, paddingTop: 15 }}>
           {title}
+          <ToggleButton style={{'marginRight': '1rem'}}
+                className="mb-2 float-end"
+                id={duidId}
+                type="checkbox"
+                variant={!isDisabled ? "outline-primary" : "secondary"}
+                checked={!isDisabled}
+                value="1"
+                onChange={(e) => this.setIsDisabled(e.currentTarget.checked)}
+              >
+                {isDisabled ? "Disabled" : "Enabled"}
+              </ToggleButton>
         </Card.Title>
         <Card.Body>
           <div>
@@ -190,8 +201,6 @@ export default class PPAConfig extends Component {
                 max={100}
                 disabled={isDisabled}
               ></SliderInput>
-            
-
               <SliderInputOptional // Floor price input needs to be configurable as optional field, if unchecked (disabled) api call should be None.
               // Probably could do without the slider for floor input, just have the numerical field input?
                 id={floorPriceId}
@@ -202,17 +211,6 @@ export default class PPAConfig extends Component {
                 min={-100}
                 disabled={isDisabled}
               ></SliderInputOptional>
-              <ToggleButton
-                className="mb-2"
-                id={duidId}
-                type="checkbox"
-                variant={!isDisabled ? "outline-primary" : "secondary"}
-                checked={!isDisabled}
-                value="1"
-                onChange={(e) => this.setIsDisabled(e.currentTarget.checked)}
-              >
-                {isDisabled ? "Disabled" : "Enabled"}
-              </ToggleButton>
             </Form>
           </div>
         </Card.Body>

@@ -391,6 +391,7 @@ export default class SimulationDashboard extends Component {
             paddingRight: 20,
           }}
         >
+          <Alert variant="danger">NEMGLO Simulator is temporarily suspended. This tool may not be available until 31 Jan</Alert>
           <Alert variant="warning">This is a <b>Beta</b> release of NEMGLO. Some elements may not work as expected. Check back later for a production release!</Alert>
           <Container
             style={{ paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}

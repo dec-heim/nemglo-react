@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 
 import HelpToolTip from "./HelpToolTip";
 
-export default function SliderInputOptional(props) {
+export default function SwitchInputOptional(props) {
   const [value, setValue] = useState({ ...props.value });
   const [isSelected, setSelected] = useState(false);
 
@@ -33,17 +33,11 @@ export default function SliderInputOptional(props) {
           <Form.Control disabled={!isSelected || props.disabled}  
           required = {!props.disabled && isSelected}
           value={value}
-          type="number"
+          type="text"
+          readOnly
+          placeholder={props.showText}
           onChange={(e) => updateValue(e)} />
         </InputGroup>
-        <RangeSlider
-          disabled={!isSelected || props.disabled}
-          max={props.max}
-          min={props.min}
-          value={value}
-          tooltip="off"
-          onChange={(e) => updateValue(e)}
-        />
       </Stack>
     </Form.Group>
   );

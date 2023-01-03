@@ -52,9 +52,21 @@ export default class PlannerConfig extends Component {
     if (startDate !== "" && endDate !== "") {
       const start = new Date(startDate);
       const end = new Date(endDate);
+      const earliest = new Date("2018-01-01T00:00:00.000+10:00")
+      const curr = new Date()//.toISOString().slice(0, 10);
+
+      // Date not earlier than defined param
+      if (start < earliest) {
+        return true;
+      }
+      // Date not later than two months prior curr
+      if (end.getTime() > curr.getTime() - (1000 * 3600 * 24 * 30 * 2)) {
+        return true;
+      }
       let diff = end.getTime() - start.getTime();
       let diffDays = diff / (1000 * 3600 * 24);
-      if (diffDays > 7 || diffDays <= 0) {
+      // Date range longer than 7 days or invalid
+      if (diffDays > 7 || diffDays <= 0 || isNaN(diffDays))  {
         return true;
       } else {
         return false;
@@ -197,7 +209,7 @@ export default class PlannerConfig extends Component {
                         isInvalid={this.isDateInvalid()}
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please select a valid date. Maximum date range is 7
+                        Please select a valid date. Earliest date supported is 01/01/2018. Maximum date range is 7
                         days.
                       </Form.Control.Feedback>
                     </Form.Group>
@@ -263,7 +275,7 @@ export default class PlannerConfig extends Component {
                         isInvalid={this.isDateInvalid()}
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please select a valid date. Maximum date range is 7
+                        Please select a valid date. Latest date supported is 2 months prior today. Maximum date range is 7
                         days.
                       </Form.Control.Feedback>
                     </Form.Group>

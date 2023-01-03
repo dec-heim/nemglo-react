@@ -30,12 +30,14 @@ export default function SliderInput(props) {
           disabled={props.disabled}
           required = {!props.disabled}
           value={value}
+          step={props.step ? props.step : 1}
           type="number"
           onChange={(e) => updateValue(e)}
         />
         <RangeSlider
           disabled={props.disabled}
           max={props.max}
+          step={props.step ? props.step : 1}
           value={value}
           tooltip="off"
           onChange={(e) => updateValue(e)}

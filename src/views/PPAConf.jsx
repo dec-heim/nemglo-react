@@ -4,9 +4,10 @@ import Form from "react-bootstrap/Form";
 import { Audio } from "react-loader-spinner";
 
 import NemGloApi from "../api/NemgloApi";
-import AmChart from "../components/charts/MarketDataChart";
+
+import AmChart from "../components/AmChart";
 import DropDownSelector from "../components/DropDownSelector";
-import NewPPAChart from "../components/charts/NewPPAChart";
+import NewPPAChart from "../components/NewPPAChart";
 import SliderInput from "../components/SliderInput";
 import PPAConfig from "./PPAConfig";
 

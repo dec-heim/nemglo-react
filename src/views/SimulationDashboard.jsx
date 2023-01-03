@@ -10,6 +10,7 @@ import PPAConf from "./PPAConf";
 import ResultsView from "./ResultsView";
 import RevenueChartView from "./RevenueChartView";
 import SimulationView from "./SimulationView";
+import StrategyConfig from "./StrategyConfig";
 
 const secProfiles = ["fixed", "variable"];
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
@@ -27,11 +28,12 @@ export default class SimulationDashboard extends Component {
         endTime: "00:00",
         electrolyserCapacity: 50,
         ppa1StrikePrice: 20,
-        ppa1FloorPrice:null, 
+        ppa1FloorPrice:null,
         ppa1Capacity: 30,
         ppa2StrikePrice: 30,
         ppa2FloorPrice:null, 
         ppa2Capacity: 30,
+        ppa2FloorPrice:null,
         duid1: "",
         duid2: "",
         ppa1Data: {},
@@ -213,10 +215,10 @@ export default class SimulationDashboard extends Component {
         endTime: "00:00",
         electrolyserCapacity: 50,
         ppa1StrikePrice: 20,
-        ppa1FloorPrice:null, 
+        ppa1FloorPrice:null,
         ppa1Capacity: 30,
         ppa2StrikePrice: 30,
-        ppa2FloorPrice:null, 
+        ppa2FloorPrice:null,
         ppa2Capacity: 30,
         duid1: "",
         duid2: "",
@@ -360,6 +362,15 @@ export default class SimulationDashboard extends Component {
                   Renewable PPAs{" "}
                 </MenuItem>
               )}
+              {this.isMarketDataLoaded() && (
+                <MenuItem
+                  id="strategyConfig"
+                  onClick={() => this.onSelectView("strategyConfig")}
+                >
+                  {" "}
+                  Strategy{" "}
+                </MenuItem>
+              )}
             </SubMenu>
             {this.isMarketDataLoaded() && (
               <MenuItem onClick={() => this.onSelectView("simulationView")}>
@@ -440,6 +451,12 @@ export default class SimulationDashboard extends Component {
                 region={config.region}
                 dispatchIntervalLength={config.dispatchIntervalLength}
                 electrolyserCapacity={config.electrolyserCapacity}
+              />
+            )}
+            {currentConfig === "strategyConfig" && (
+              <StrategyConfig
+                setConfigValue={this.setConfigValue}
+                recMode={config.recMode}
               />
             )}
             {currentConfig === "simulationView" && (

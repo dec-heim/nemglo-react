@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import { Audio } from "react-loader-spinner";
 
 import NemGloApi from "../api/NemgloApi";
+
 import AmChart from "../components/AmChart";
 import DropDownSelector from "../components/DropDownSelector";
 import NewPPAChart from "../components/NewPPAChart";
@@ -116,6 +117,8 @@ export default class PPAConf extends Component {
       dispatchIntervalLength: dispatchIntervalLength,
       duid: config.duid1 === "" ? marketData.availgens[0] : config.duid1,
       ppaCapacity: config.ppa1Capacity,
+      ppaStrikePrice: config.ppa1StrikePrice,
+      ppaFloorPrice: config.ppa1FloorPrice
     };
     const duid2Body = {
       startDate: startDate,
@@ -124,6 +127,8 @@ export default class PPAConf extends Component {
       dispatchIntervalLength: dispatchIntervalLength,
       duid: config.duid2 === "" ? marketData.availgens[1] : config.duid2,
       ppaCapacity: config.ppa2Capacity,
+      ppaStrikePrice: config.ppa1StrikePrice,
+      ppaFloorPrice: config.ppa1FloorPrice
     };
 
     this.setState({
@@ -309,14 +314,7 @@ export default class PPAConf extends Component {
                       timeUnit: "minute",
                       count: config.dispatchIntervalLength,
                     }}
-                    // baseInterval={baseInterval}
                   ></NewPPAChart>
-                  //   <newPPAChart
-                  //   id={"ppa-plot"}
-                  //   data={dataPoints}
-                  //   seriesSettings={seriesSettings}
-                  //   baseInterval={baseInterval}
-                  // ></newPPAChart>
                 )}
                 <Container
                   style={{
@@ -358,6 +356,7 @@ export default class PPAConf extends Component {
                           dispatchIntervalLength={config.dispatchIntervalLength}
                           ppaData={config.ppa1Data}
                           setPPAData={setPPAData}
+                          electrolyserCapacity={config.electrolyserCapacity}
                         />
                       </Col>
                       <Col>
@@ -389,6 +388,7 @@ export default class PPAConf extends Component {
                           dispatchIntervalLength={config.dispatchIntervalLength}
                           ppaData={config.ppa2Data}
                           setPPAData={setPPAData}
+                          electrolyserCapacity={config.electrolyserCapacity}
                         />
                       </Col>
                     </Row>

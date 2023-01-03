@@ -7,6 +7,8 @@ const getMarketData = async (marketConfig) => {
       market_data: {
         start_date: marketConfig.startDate,
         end_date: marketConfig.endDate,
+        start_time: marketConfig.startTime,
+        end_time: marketConfig.endTime,
         region: marketConfig.region,
         dispatch_interval_length: marketConfig.dispatch_interval_length
       }
@@ -30,7 +32,9 @@ const getGeneratorData = async (simConfig) => {
       },
       ppa: {
         duid: simConfig.duid,
-        capacity: simConfig.ppaCapacity
+        capacity: simConfig.ppaCapacity,
+        strike_price: simConfig.ppaStrikePrice,
+        floor_price: simConfig.ppaFloorPrice
       }
     }
     const reponse = await axios.post(`${config.api}/get-generator-data`, body);

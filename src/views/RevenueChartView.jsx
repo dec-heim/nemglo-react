@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 
-import AmChart from "../components/AmChart";
-import RevenueChart from "../components/RevenueChart";
+import AmChart from "../components/charts/MarketDataChart";
+import RevenueChart from "../components/charts/RevenueChart";
 
 export default class RevenueChartView extends Component {
   constructor() {

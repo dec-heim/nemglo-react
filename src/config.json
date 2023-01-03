@@ -1,4 +1,4 @@
 {
-    "api": "https://api.nemglo.org/api"
+    "api": "http://localhost:5000/api"
 }
 

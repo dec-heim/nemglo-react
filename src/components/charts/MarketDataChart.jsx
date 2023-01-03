@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Container, Card } from "react-bootstrap";
-
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import * as am5plugins_exporting from "@amcharts/amcharts5/plugins/exporting";
+import timestamp2str from "./Utils";
 
-class RevenueChart extends Component {
+
+class MarketDataChart extends Component {
   constructor() {
     super();
     this.state = {};
@@ -16,20 +17,35 @@ class RevenueChart extends Component {
   createAxisAndSeries = (
     chart,
     xAxis,
-    yAxis,
     data,
     valueYField,
     root,
-    tooltip,
-    yRenderer
+    opposite,
+    tooltip
   ) => {
 
-    // Add series
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+    let exporting = am5plugins_exporting.Exporting.new(root, {
+      menu: am5plugins_exporting.ExportingMenu.new(root, {}),
+      dataSource: data
+    });
+
+
+    let yRenderer = am5xy.AxisRendererY.new(root, {
+      opposite: opposite,
+    });
+    let yAxis = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        maxDeviation: 1,
+        renderer: yRenderer,
+      })
+    );
 
     if (chart.yAxes.indexOf(yAxis) > 0) {
       yAxis.set("syncWithAxis", chart.yAxes.getIndex(0));
     }
+
+    // Add series
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 
     let series = chart.series.push(
       am5xy.LineSeries.new(root, {
@@ -67,17 +83,15 @@ class RevenueChart extends Component {
 
   updateChart = () => {
     am5.array.each(am5.registry.rootElements, function (root) {
-      if (root  !== undefined) {
-        if (root.dom.id === "revenue") {
+      if (root !== undefined) {
+        if ( root.dom.id === "chartdiv") {
           root.dispose();
         }
       }
-    
+      
     });
 
-    let root = am5.Root.new("revenue");
-
-    this.setState({root});
+    let root = am5.Root.new("chartdiv");
 
     root.setThemes([am5themes_Animated.new(root)]);
 
@@ -89,23 +103,19 @@ class RevenueChart extends Component {
         wheelX: "panX",
         wheelY: "zoomX",
         pinchZoomX: true,
-        // maxTooltipDistance:0,
-        // pinchZoomX:true,
         layout: root.verticalLayout,
       })
     );
 
     let easing = am5.ease.linear;
     chart.get("colors").set("step", 3);
+    const {baseInterval} = this.props;
     // Create axis
     let xAxis = chart.xAxes.push(
       am5xy.DateAxis.new(root, {
         maxDeviation: 0.1,
         groupData: false,
-        baseInterval: {
-          timeUnit: "minute",
-          count: 30,
-        },
+        baseInterval: baseInterval,
         renderer: am5xy.AxisRendererX.new(root, {}),
         tooltip: am5.Tooltip.new(root, {}),
       })
@@ -133,27 +143,20 @@ class RevenueChart extends Component {
     );
     let data = this.props.data; // valueYField, tooltip
     const {seriesSettings} = this.props;
-    let yRenderer = am5xy.AxisRendererY.new(root, {
-      opposite: true,
-    });
-    let yAxis = chart.yAxes.push(
-      am5xy.ValueAxis.new(root, {
-        maxDeviation: 1,
-        renderer: yRenderer,
-      })
-    );
+
 
     for (let i = 0; i < seriesSettings.length; i++) {
       let seriesSetting = seriesSettings[i];
+      let opposite = i % 2 === 0 ? false : true;
       this.createAxisAndSeries( chart,
         xAxis,
-        yAxis,
         data,
         seriesSetting.valueYField,
         root,
-        seriesSetting.tooltip, yRenderer)
+        opposite,
+        seriesSetting.tooltip,
+        seriesSetting.enableYAxis)
     }
-
 
     let legend = chart.children.push(
       am5.Legend.new(root, {
@@ -164,6 +167,10 @@ class RevenueChart extends Component {
     );
     legend.data.setAll(chart.series.values);
   };
+
+  componentDidUpdate() {
+    this.updateChart();
+  }
 
   componentDidMount() {
     this.updateChart();
@@ -176,8 +183,8 @@ class RevenueChart extends Component {
   }
 
   render() {
-    return <div id="revenue" style={{ width: "100%", height: "500px" }}></div>;
+    return <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>;
   }
 }
 
-export default RevenueChart;
+export default MarketDataChart;

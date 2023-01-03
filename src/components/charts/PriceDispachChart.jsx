@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import * as am5plugins_exporting from "@amcharts/amcharts5/plugins/exporting";
 
 class PriceDispatchChart extends Component {
   constructor() {
@@ -24,7 +25,11 @@ class PriceDispatchChart extends Component {
     if (chart.yAxes.indexOf(yAxis) > 0) {
       yAxis.set("syncWithAxis", chart.yAxes.getIndex(0));
     }
-
+    
+    let exporting = am5plugins_exporting.Exporting.new(root, {
+      menu: am5plugins_exporting.ExportingMenu.new(root, {}),
+      dataSource: data
+    });
     // Add series
     // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 
@@ -70,6 +75,9 @@ class PriceDispatchChart extends Component {
         }
       }
     });
+
+ 
+
 
     let root = am5.Root.new("priceDispatch");
 

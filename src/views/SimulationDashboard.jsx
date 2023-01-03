@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { Alert, Container } from "react-bootstrap";
 import { Menu, MenuItem, Sidebar, SubMenu } from "react-pro-sidebar";
 
-import Footer from "../components/Footer";
 import NemGloApi from "../api/NemgloApi";
-import RevenueChartView from "./RevenueChartView";
+import Footer from "../components/Footer";
 import ElectrolyserLoadConfig from "./ElectrolyserLoadConfig";
 import PlannerConfig from "./PlannerConfig";
 import PPAConf from "./PPAConf";
 import ResultsView from "./ResultsView";
+import RevenueChartView from "./RevenueChartView";
 import SimulationView from "./SimulationView";
 import StrategyConfig from "./StrategyConfig";
 
@@ -23,14 +23,15 @@ export default class SimulationDashboard extends Component {
       config: {
         dispatchIntervalLength: 30,
         startDate: "2021-01-01",
-        startTime: "",
+        startTime: "00:00",
         endDate: "2021-01-07",
-        endTime: "",
+        endTime: "00:00",
         electrolyserCapacity: 50,
         ppa1StrikePrice: 20,
         ppa1FloorPrice:null,
         ppa1Capacity: 30,
         ppa2StrikePrice: 30,
+        ppa2FloorPrice:null, 
         ppa2Capacity: 30,
         ppa2FloorPrice:null,
         duid1: "",
@@ -39,7 +40,7 @@ export default class SimulationDashboard extends Component {
         ppa2Data: {},
         secProfile: secProfiles[0],
         conversionFactor: 100,
-        nominalSec: 66,
+        nominalSec: 60,
         // overload: 0,
         // ratedLoad: 50,
         minStableLoad: 10,
@@ -80,6 +81,7 @@ export default class SimulationDashboard extends Component {
   };
 
   setConfigValue = (id, val) => {
+    console.log(id, val);
     const { config } = this.state;
     config[id] = val;
     this.setState({
@@ -207,10 +209,10 @@ export default class SimulationDashboard extends Component {
     this.setState({
       config: {
         dispatchIntervalLength: 30,
-        startDate: "",
-        startTime: "",
-        endDate: "",
-        endTime: "",
+        startDate: "2021-01-01",
+        startTime: "00:00",
+        endDate: "2021-01-07",
+        endTime: "00:00",
         electrolyserCapacity: 50,
         ppa1StrikePrice: 20,
         ppa1FloorPrice:null,
@@ -401,6 +403,7 @@ export default class SimulationDashboard extends Component {
             paddingRight: 20,
           }}
         >
+          <Alert variant="danger">NEMGLO Simulator is temporarily suspended. This tool may not be available until 31 Jan</Alert>
           <Alert variant="warning">This is a <b>Beta</b> release of NEMGLO. Some elements may not work as expected. Check back later for a production release!</Alert>
           <Container
             style={{ paddingLeft: 5, paddingRight: 5, paddingBottom: 20 }}
@@ -410,7 +413,9 @@ export default class SimulationDashboard extends Component {
                 setConfigValue={this.setConfigValue}
                 dispatchIntervalLength={config.dispatchIntervalLength}
                 startDate={config.startDate}
+                startTime={config.startTime}
                 endDate={config.endDate}
+                endTime={config.endTime}
                 region={config.region}
                 marketData={marketData}
                 setMarketData={this.setMarketData}
@@ -440,9 +445,12 @@ export default class SimulationDashboard extends Component {
                 setPPAData={this.setPPAData}
                 setPPADisabled={this.setPPADisabled}
                 startDate={config.startDate}
+                startTime={config.startTime}
                 endDate={config.endDate}
+                endTime={config.endTime}
                 region={config.region}
                 dispatchIntervalLength={config.dispatchIntervalLength}
+                electrolyserCapacity={config.electrolyserCapacity}
               />
             )}
             {currentConfig === "strategyConfig" && (

@@ -4,9 +4,9 @@ import Form from "react-bootstrap/Form";
 import { Audio } from "react-loader-spinner";
 
 import NemGloApi from "../api/NemgloApi";
-import AmChart from "../components/AmChart";
+import AmChart from "../components/charts/MarketDataChart";
 import DropDownSelector from "../components/DropDownSelector";
-import NewPPAChart from "../components/NewPPAChart";
+import NewPPAChart from "../components/charts/NewPPAChart";
 import SliderInput from "../components/SliderInput";
 import PPAConfig from "./PPAConfig";
 
@@ -309,14 +309,7 @@ export default class PPAConf extends Component {
                       timeUnit: "minute",
                       count: config.dispatchIntervalLength,
                     }}
-                    // baseInterval={baseInterval}
                   ></NewPPAChart>
-                  //   <newPPAChart
-                  //   id={"ppa-plot"}
-                  //   data={dataPoints}
-                  //   seriesSettings={seriesSettings}
-                  //   baseInterval={baseInterval}
-                  // ></newPPAChart>
                 )}
                 <Container
                   style={{
@@ -358,6 +351,7 @@ export default class PPAConf extends Component {
                           dispatchIntervalLength={config.dispatchIntervalLength}
                           ppaData={config.ppa1Data}
                           setPPAData={setPPAData}
+                          electrolyserCapacity={config.electrolyserCapacity}
                         />
                       </Col>
                       <Col>
@@ -389,6 +383,7 @@ export default class PPAConf extends Component {
                           dispatchIntervalLength={config.dispatchIntervalLength}
                           ppaData={config.ppa2Data}
                           setPPAData={setPPAData}
+                          electrolyserCapacity={config.electrolyserCapacity}
                         />
                       </Col>
                     </Row>

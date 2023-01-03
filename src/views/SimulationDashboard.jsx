@@ -22,9 +22,9 @@ export default class SimulationDashboard extends Component {
       config: {
         dispatchIntervalLength: 30,
         startDate: "2021-01-01",
-        startTime: "",
+        startTime: "00:00",
         endDate: "2021-01-07",
-        endTime: "",
+        endTime: "00:00",
         electrolyserCapacity: 50,
         ppa1StrikePrice: 20,
         ppa1FloorPrice:null, 
@@ -79,6 +79,7 @@ export default class SimulationDashboard extends Component {
   };
 
   setConfigValue = (id, val) => {
+    console.log(id, val);
     const { config } = this.state;
     config[id] = val;
     this.setState({
@@ -206,10 +207,10 @@ export default class SimulationDashboard extends Component {
     this.setState({
       config: {
         dispatchIntervalLength: 30,
-        startDate: "",
-        startTime: "",
-        endDate: "",
-        endTime: "",
+        startDate: "2021-01-01",
+        startTime: "00:00",
+        endDate: "2021-01-07",
+        endTime: "00:00",
         electrolyserCapacity: 50,
         ppa1StrikePrice: 20,
         ppa1FloorPrice:null, 
@@ -401,7 +402,9 @@ export default class SimulationDashboard extends Component {
                 setConfigValue={this.setConfigValue}
                 dispatchIntervalLength={config.dispatchIntervalLength}
                 startDate={config.startDate}
+                startTime={config.startTime}
                 endDate={config.endDate}
+                endTime={config.endTime}
                 region={config.region}
                 marketData={marketData}
                 setMarketData={this.setMarketData}
@@ -431,9 +434,12 @@ export default class SimulationDashboard extends Component {
                 setPPAData={this.setPPAData}
                 setPPADisabled={this.setPPADisabled}
                 startDate={config.startDate}
+                startTime={config.startTime}
                 endDate={config.endDate}
+                endTime={config.endTime}
                 region={config.region}
                 dispatchIntervalLength={config.dispatchIntervalLength}
+                electrolyserCapacity={config.electrolyserCapacity}
               />
             )}
             {currentConfig === "simulationView" && (

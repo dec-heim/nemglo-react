@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import { Audio } from "react-loader-spinner";
 
 import NemGloApi from "../api/NemgloApi";
-import AmChart from "../components/AmChart";
+import MarketDataChart from "../components/charts/MarketDataChart";
 import DropDownSelector from "../components/DropDownSelector";
 import HelpToolTip from "../components/HelpToolTip";
 
@@ -54,7 +54,7 @@ export default class PlannerConfig extends Component {
       const end = new Date(endDate);
       let diff = end.getTime() - start.getTime();
       let diffDays = diff / (1000 * 3600 * 24);
-      if (diffDays > 7 || diffDays <= 0)  {
+      if (diffDays > 7 || diffDays <= 0) {
         return true;
       } else {
         return false;
@@ -71,12 +71,14 @@ export default class PlannerConfig extends Component {
 
   getMarketData = async () => {
     this.setState({ dataPoints: [] });
-    const { startDate, endDate, region, dispatchIntervalLength } = this.props;
+    const { startDate, endDate, region, dispatchIntervalLength, startTime, endTime } = this.props;
     const config = {
       startDate: startDate,
       endDate: endDate,
+      startTime: startTime,
+      endTime: endTime,
       region: region,
-      dispatch_interval_length: dispatchIntervalLength
+      dispatch_interval_length: dispatchIntervalLength,
     };
     this.setState({ isMakingApiCall: true });
     const marketData = await NemGloApi.getMarketData(config);
@@ -98,10 +100,6 @@ export default class PlannerConfig extends Component {
   };
 
   render() {
-    const baseInterval = {
-      timeUnit: "minute",
-      count: 5,
-    };
     const seriesSettings = [
       {
         valueYField: "price",
@@ -124,7 +122,7 @@ export default class PlannerConfig extends Component {
           <Card.Body>
             {dataPoints.length > 0 && (
               <div>
-                <AmChart
+                <MarketDataChart
                   id="planner-plot"
                   data={dataPoints}
                   seriesSettings={seriesSettings}
@@ -132,7 +130,7 @@ export default class PlannerConfig extends Component {
                     timeUnit: "minute",
                     count: this.props.dispatchIntervalLength,
                   }}
-                ></AmChart>
+                ></MarketDataChart>
               </div>
             )}
             {!isMakingApiCall ? (
@@ -158,10 +156,36 @@ export default class PlannerConfig extends Component {
                           textAlign: "text-center text-md-right",
                         }}
                       >
-                        Start Date
-                        <HelpToolTip description={"Date to commence simulation. Time commences by default from 00:00 but all intervals are reported as time-ending."}></HelpToolTip>
+                        Start Time
+                        <HelpToolTip
+                          description={"Time to commence simulation."}
+                        ></HelpToolTip>
                       </Form.Label>
                       <Form.Control
+                        required
+                        id="startTime"
+                        type="time"
+                        onChange={(e) =>
+                          this.props.setConfigValue("startTime", e.target.value)
+                        }
+                        value={this.props.startTime}
+                        isInvalid={this.isDateInvalid()}
+                      />
+                      <Container style={{ paddingBottom: 10 }}></Container>
+                      <Form.Label
+                        style={{
+                          textAlign: "text-center text-md-right",
+                        }}
+                      >
+                        Start Date
+                        <HelpToolTip
+                          description={
+                            "Date to commence simulation. Time commences by default from 00:00 but all intervals are reported as time-ending."
+                          }
+                        ></HelpToolTip>
+                      </Form.Label>
+                      <Form.Control
+                        style={{ paddingBottom: 10 }}
                         required
                         id="startDate"
                         type="date"
@@ -195,8 +219,37 @@ export default class PlannerConfig extends Component {
                           textAlign: "text-center text-md-right",
                         }}
                       >
+                        End Time
+                        <HelpToolTip
+                          description={
+                            "Date to commence simulation. Time commences by default from 00:00 but all intervals are reported as time-ending."
+                          }
+                        ></HelpToolTip>
+                      </Form.Label>
+
+                      <Form.Control
+                        required
+                        id="endTime"
+                        type="time"
+                        onChange={(e) =>
+                          this.props.setConfigValue("endTime", e.target.value)
+                        }
+                        value={this.props.endTime}
+                        isInvalid={this.isDateInvalid()}
+                      />
+                      <Container style={{ paddingBottom: 10 }}></Container>
+
+                      <Form.Label
+                        style={{
+                          textAlign: "text-center text-md-right",
+                        }}
+                      >
                         End Date
-                        <HelpToolTip description={"Date to end simulation. Time ends by default at 00:00"}></HelpToolTip>
+                        <HelpToolTip
+                          description={
+                            "Date to end simulation. Time ends by default at 00:00"
+                          }
+                        ></HelpToolTip>
                       </Form.Label>
                       <Form.Control
                         required
@@ -217,17 +270,26 @@ export default class PlannerConfig extends Component {
                   </Col>
                 </Row>
                 <Container style={{ height: 10 }}></Container>
-                {this.isDateInvalid() && 
-                  <Button className="float-end" type="submit" variant={"secondary"} disabled={this.isDateInvalid()}>
-                  Get Market Data
+                {this.isDateInvalid() && (
+                  <Button
+                    className="float-end"
+                    type="submit"
+                    variant={"secondary"}
+                    disabled={this.isDateInvalid()}
+                  >
+                    Get Market Data
                   </Button>
-                }
-                {!this.isDateInvalid() && 
-                  <Button className="float-end" type="submit" variant={"primary"} disabled={this.isDateInvalid()}>
-                  Get Market Data
+                )}
+                {!this.isDateInvalid() && (
+                  <Button
+                    className="float-end"
+                    type="submit"
+                    variant={"primary"}
+                    disabled={this.isDateInvalid()}
+                  >
+                    Get Market Data
                   </Button>
-                }
-
+                )}
               </Form>
             ) : (
               <Audio

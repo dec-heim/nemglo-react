@@ -7,7 +7,7 @@ import ToggleButton from "react-bootstrap/ToggleButton";
 import { Audio } from "react-loader-spinner";
 
 import NemGloApi from "../api/NemgloApi";
-import AmChart from "../components/AmChart";
+import AmChart from "../components/charts/MarketDataChart";
 import DropDownSelector from "../components/DropDownSelector";
 import PPA1Chart from "../components/PPA1Chart";
 import SliderInput from "../components/SliderInput";
@@ -147,6 +147,7 @@ export default class PPAConfig extends Component {
       ppaCapacity,
       availableGens,
       otherPPADuid,
+      electrolyserCapacity,
     } = this.props;
     let filteredOptions = availableGens.filter((item) => item !== otherPPADuid);
     const { formValidated } = this.state;
@@ -178,8 +179,8 @@ export default class PPAConfig extends Component {
                 description="The desired scaled nominal capacity of the unit trace selected."
                 setConfigValue={setCapacity}
                 value={ppaCapacity}
-                max={100}
                 disabled={isDisabled}
+                max={3 * electrolyserCapacity}
               ></SliderInput>
               <SliderInput
                 id={strikePriceId}
@@ -187,13 +188,12 @@ export default class PPAConfig extends Component {
                 description="The Power Purchase Agreement strike price at which the variable volume contract for difference is settled."
                 setConfigValue={setConfigValue}
                 value={ppaStrikePrice}
-                max={100}
                 disabled={isDisabled}
+                max={3 * electrolyserCapacity}
               ></SliderInput>
-            
 
               <SliderInputOptional // Floor price input needs to be configurable as optional field, if unchecked (disabled) api call should be None.
-              // Probably could do without the slider for floor input, just have the numerical field input?
+                // Probably could do without the slider for floor input, just have the numerical field input?
                 id={floorPriceId}
                 label="Floor Price ($/MWh)"
                 setConfigValue={setConfigValue}
@@ -217,7 +217,6 @@ export default class PPAConfig extends Component {
           </div>
         </Card.Body>
       </Card>
-      
     );
   }
 }

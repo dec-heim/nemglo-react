@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import * as am5plugins_exporting from "@amcharts/amcharts5/plugins/exporting";
 
-class AmChart extends Component {
+class RevenueChart extends Component {
   constructor() {
     super();
     this.state = {};
@@ -14,28 +15,25 @@ class AmChart extends Component {
   createAxisAndSeries = (
     chart,
     xAxis,
+    yAxis,
     data,
     valueYField,
     root,
-    opposite,
-    tooltip
+    tooltip,
+    yRenderer
   ) => {
-    let yRenderer = am5xy.AxisRendererY.new(root, {
-      opposite: opposite,
+
+    // Add series
+    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+
+    let exporting = am5plugins_exporting.Exporting.new(root, {
+      menu: am5plugins_exporting.ExportingMenu.new(root, {}),
+      dataSource: data
     });
-    let yAxis = chart.yAxes.push(
-      am5xy.ValueAxis.new(root, {
-        maxDeviation: 1,
-        renderer: yRenderer,
-      })
-    );
 
     if (chart.yAxes.indexOf(yAxis) > 0) {
       yAxis.set("syncWithAxis", chart.yAxes.getIndex(0));
     }
-
-    // Add series
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 
     let series = chart.series.push(
       am5xy.LineSeries.new(root, {
@@ -73,15 +71,17 @@ class AmChart extends Component {
 
   updateChart = () => {
     am5.array.each(am5.registry.rootElements, function (root) {
-      if (root !== undefined) {
-        if ( root.dom.id === "chartdiv") {
+      if (root  !== undefined) {
+        if (root.dom.id === "revenue") {
           root.dispose();
         }
       }
-      
+    
     });
 
-    let root = am5.Root.new("chartdiv");
+    let root = am5.Root.new("revenue");
+
+    this.setState({root});
 
     root.setThemes([am5themes_Animated.new(root)]);
 
@@ -93,19 +93,23 @@ class AmChart extends Component {
         wheelX: "panX",
         wheelY: "zoomX",
         pinchZoomX: true,
+        // maxTooltipDistance:0,
+        // pinchZoomX:true,
         layout: root.verticalLayout,
       })
     );
 
     let easing = am5.ease.linear;
     chart.get("colors").set("step", 3);
-    const {baseInterval} = this.props;
     // Create axis
     let xAxis = chart.xAxes.push(
       am5xy.DateAxis.new(root, {
         maxDeviation: 0.1,
         groupData: false,
-        baseInterval: baseInterval,
+        baseInterval: {
+          timeUnit: "minute",
+          count: 30,
+        },
         renderer: am5xy.AxisRendererX.new(root, {}),
         tooltip: am5.Tooltip.new(root, {}),
       })
@@ -133,20 +137,27 @@ class AmChart extends Component {
     );
     let data = this.props.data; // valueYField, tooltip
     const {seriesSettings} = this.props;
-
+    let yRenderer = am5xy.AxisRendererY.new(root, {
+      opposite: true,
+    });
+    let yAxis = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        maxDeviation: 1,
+        renderer: yRenderer,
+      })
+    );
 
     for (let i = 0; i < seriesSettings.length; i++) {
       let seriesSetting = seriesSettings[i];
-      let opposite = i % 2 === 0 ? false : true;
       this.createAxisAndSeries( chart,
         xAxis,
+        yAxis,
         data,
         seriesSetting.valueYField,
         root,
-        opposite,
-        seriesSetting.tooltip,
-        seriesSetting.enableYAxis)
+        seriesSetting.tooltip, yRenderer)
     }
+
 
     let legend = chart.children.push(
       am5.Legend.new(root, {
@@ -157,11 +168,6 @@ class AmChart extends Component {
     );
     legend.data.setAll(chart.series.values);
   };
-
-  componentDidUpdate() {
-    // console.log(this.props.data);
-    this.updateChart();
-  }
 
   componentDidMount() {
     this.updateChart();
@@ -174,8 +180,8 @@ class AmChart extends Component {
   }
 
   render() {
-    return <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>;
+    return <div id="revenue" style={{ width: "100%", height: "500px" }}></div>;
   }
 }
 
-export default AmChart;
+export default RevenueChart;

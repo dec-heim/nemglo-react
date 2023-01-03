@@ -7,8 +7,8 @@ const getMarketData = async (marketConfig) => {
       market_data: {
         start_date: marketConfig.startDate,
         end_date: marketConfig.endDate,
-        // start_time: marketConfig.startTime,
-        // end_time: marketConfig.endTime,
+        start_time: marketConfig.startTime,
+        end_time: marketConfig.endTime,
         region: marketConfig.region,
         dispatch_interval_length: marketConfig.dispatch_interval_length
       }

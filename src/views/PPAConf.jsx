@@ -5,9 +5,9 @@ import { Audio } from "react-loader-spinner";
 
 import NemGloApi from "../api/NemgloApi";
 
-import AmChart from "../components/AmChart";
+import MarketDataChart from "../components/charts/MarketDataChart";
 import DropDownSelector from "../components/DropDownSelector";
-import NewPPAChart from "../components/NewPPAChart";
+import NewPPAChart from "../components/charts/NewPPAChart";
 import SliderInput from "../components/SliderInput";
 import PPAConfig from "./PPAConfig";
 

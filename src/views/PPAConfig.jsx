@@ -68,6 +68,8 @@ export default class PPAConfig extends Component {
       dispatchIntervalLength,
       duid,
       ppaCapacity,
+      ppaStrikePrice,
+      ppaFloorPrice,
       duidId,
       setPPAData,
     } = this.props;
@@ -78,7 +80,11 @@ export default class PPAConfig extends Component {
       dispatchIntervalLength: dispatchIntervalLength,
       duid: duid,
       ppaCapacity: ppaCapacity,
+      ppaStrikePrice: ppaStrikePrice,
+      ppaFloorPrice: ppaFloorPrice
     };
+    console.log("ppaconfig.jsx")
+    console.log(config)
     this.setState({ isMakingApiCall: true });
     const ppaData = await NemGloApi.getGeneratorData(config);
     this.setState({ isMakingApiCall: false });
@@ -87,7 +93,7 @@ export default class PPAConfig extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props);
+    // console.log(this.props);
     const { startDate, endDate, region, dispatchIntervalLength, isDisabled } =
       this.props;
     let radioValue = isDisabled ? "2" : "1";

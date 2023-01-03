@@ -116,6 +116,8 @@ export default class PPAConf extends Component {
       dispatchIntervalLength: dispatchIntervalLength,
       duid: config.duid1 === "" ? marketData.availgens[0] : config.duid1,
       ppaCapacity: config.ppa1Capacity,
+      ppaStrikePrice: config.ppa1StrikePrice,
+      ppaFloorPrice: config.ppa1FloorPrice
     };
     const duid2Body = {
       startDate: startDate,
@@ -124,6 +126,8 @@ export default class PPAConf extends Component {
       dispatchIntervalLength: dispatchIntervalLength,
       duid: config.duid2 === "" ? marketData.availgens[1] : config.duid2,
       ppaCapacity: config.ppa2Capacity,
+      ppaStrikePrice: config.ppa1StrikePrice,
+      ppaFloorPrice: config.ppa1FloorPrice
     };
 
     this.setState({

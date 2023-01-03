@@ -32,7 +32,9 @@ const getGeneratorData = async (simConfig) => {
       },
       ppa: {
         duid: simConfig.duid,
-        capacity: simConfig.ppaCapacity
+        capacity: simConfig.ppaCapacity,
+        strike_price: simConfig.ppaStrikePrice,
+        floor_price: simConfig.ppaFloorPrice
       }
     }
     const reponse = await axios.post(`${config.api}/get-generator-data`, body);

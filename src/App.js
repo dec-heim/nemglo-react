@@ -4,7 +4,7 @@ import { ProSidebarProvider } from "react-pro-sidebar";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import Linux from "./media/linux.png";
-import NemgloLogo from "./media/nemgloLogo.png";
+import NemgloLogo from "./media/nemgloLogo_long.png";
 import About from "./views/About";
 import LandingPage from "./views/LandingPage";
 import SimulationDashboard from "./views/SimulationDashboard";
@@ -15,17 +15,18 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   return (
     <ProSidebarProvider className="pro-sidebar">
-      <Navbar bg="dark" variant="dark" expand="lg">
+      <Navbar bg="dark" variant="dark" expand="lg" className="navheader">
         <Container>
-          <Navbar.Brand >
-            {/* <img
-              src={Linux}
-              width="30"
-              height="30"
+          <Navbar.Brand>
+            <img
+              src={NemgloLogo}
+              width="100"
+              height="25"
+              style={{ paddingTop: "2px"}}
               className="d-inline-block align-top"
               alt="nemglo logo"
-            /> */}
-            NEMGLO
+            />
+            {/* NEMGLO */}
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">

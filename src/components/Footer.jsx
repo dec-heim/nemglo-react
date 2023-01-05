@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col, Container } from "react-bootstrap";
 
 const Footer = () => (
-  <div className="footer px-4" justify="center">
+  <div className="footer px-1" justify="center">
     <Container fluid>
     <Row>
         <Col>

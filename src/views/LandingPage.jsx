@@ -12,8 +12,7 @@ import unsw from "../media/unswLogo.png";
 function LandingPage() {
   return (
     <div className="LandingPage"  >
-      <header></header>
-      <main>
+      <main style={{ flex: 1}}>
       <Container>
       <Row className="px-1 my-5">
         <Col sm={6}>

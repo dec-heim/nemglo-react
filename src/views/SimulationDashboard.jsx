@@ -330,8 +330,8 @@ export default class SimulationDashboard extends Component {
     return (
       <div>
       <div
-        className="full-screen-div"
-        style={{ display: "flex", background: "#eceff4", minHeight: "100vh", width: "100%"}}
+        //className="full-screen-div"
+       style={{ display: "flex", background: "#eceff4", minHeight: "100vh", width: "100%"}} //, 
       >
         <Sidebar style={{ borderRight: "None" }}>
           <Menu>

@@ -1,5 +1,6 @@
 import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
 
+import NemgloLogo from "../media/nemgloLogo_long_bgwhite.png";
 import ceem from "../media/UNSWCEEMLogoTransparent.png";
 import dgfi from "../media/DGFILogo.gif";
 import unsw from "../media/unswlogo.jpg";
@@ -11,6 +12,17 @@ export default function About() {
       <header></header>
       <main>
         <Container style={{marginTop: 30, }}>
+          <Row sm={1} style={{marginBottom: 30}}><Col style={{height: "80px"}}>
+            <img
+                src={NemgloLogo}
+                width="30%"
+                height="100%"
+                className="alignCenter"
+                fluid
+                rounded
+                alt="nemglo logo"
+              />
+          </Col></Row>
           <Row>
             <h1 class="font-weigh-line">About</h1>
             <p class="mt-1">Nemglo, the NEM Green-energy Load Optimisation tool is an open-source mixed-integer linear program (MILP) which allows users to solve counterfactual operating strategies for a hypothetical flexible load participating in the NEM energy market.

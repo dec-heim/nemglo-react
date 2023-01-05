@@ -4,7 +4,7 @@ import { ProSidebarProvider } from "react-pro-sidebar";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import Linux from "./media/linux.png";
-import NemgloLogo from "./media/nemgloLogo_long.png";
+import NemgloLogo from "./media/nemgloLogo_long_bgdark.png";
 import About from "./views/About";
 import LandingPage from "./views/LandingPage";
 import SimulationDashboard from "./views/SimulationDashboard";

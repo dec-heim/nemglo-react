@@ -1,8 +1,8 @@
-import React, { Component } from "react";
 import * as am5 from "@amcharts/amcharts5";
-import * as am5xy from "@amcharts/amcharts5/xy";
-import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import * as am5plugins_exporting from "@amcharts/amcharts5/plugins/exporting";
+import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import * as am5xy from "@amcharts/amcharts5/xy";
+import React, { Component } from "react";
 
 class RevenueChart extends Component {
   constructor() {
@@ -26,10 +26,10 @@ class RevenueChart extends Component {
     // Add series
     // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 
-    let exporting = am5plugins_exporting.Exporting.new(root, {
-      menu: am5plugins_exporting.ExportingMenu.new(root, {}),
-      dataSource: data
-    });
+    // let exporting = am5plugins_exporting.Exporting.new(root, {
+    //   menu: am5plugins_exporting.ExportingMenu.new(root, {}),
+    //   dataSource: data
+    // });
 
     if (chart.yAxes.indexOf(yAxis) > 0) {
       yAxis.set("syncWithAxis", chart.yAxes.getIndex(0));

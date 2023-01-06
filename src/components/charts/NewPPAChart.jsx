@@ -1,9 +1,8 @@
-import React, { Component } from "react";
 import * as am5 from "@amcharts/amcharts5";
-import * as am5xy from "@amcharts/amcharts5/xy";
 import * as am5plugins_exporting from "@amcharts/amcharts5/plugins/exporting";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-
+import * as am5xy from "@amcharts/amcharts5/xy";
+import React, { Component } from "react";
 
 class NewPPAChart extends Component {
   constructor() {
@@ -33,10 +32,6 @@ class NewPPAChart extends Component {
     //   })
     // );
 
-    let exporting = am5plugins_exporting.Exporting.new(root, {
-      menu: am5plugins_exporting.ExportingMenu.new(root, {}),
-      dataSource: data
-    });
 
     if (chart.yAxes.indexOf(yAxis) > 0) {
       yAxis.set("syncWithAxis", chart.yAxes.getIndex(0));

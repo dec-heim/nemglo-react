@@ -5,6 +5,7 @@ import { Audio } from "react-loader-spinner";
 
 import NemGloApi from "../api/NemgloApi";
 import MarketDataChart from "../components/charts/MarketDataChart";
+import DownloadCSV from "../components/DownloadCSV";
 import DropDownSelector from "../components/DropDownSelector";
 import HelpToolTip from "../components/HelpToolTip";
 
@@ -18,12 +19,13 @@ export default class PlannerConfig extends Component {
       formValidated: false,
       dataPoints: [],
       isMakingApiCall: false,
-      prevDispatchLength: -1, 
+      prevDispatchLength: -1,
     };
     this.isDateInvalid = this.isDateInvalid.bind(this);
     this.getMarketData = this.getMarketData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.storeDataPoints = this.storeDataPoints.bind(this);
+    this.getCSVData = this.getCSVData.bind(this);
   }
 
   componentDidMount() {
@@ -53,21 +55,21 @@ export default class PlannerConfig extends Component {
     if (startDate !== "" && endDate !== "") {
       const start = new Date(startDate);
       const end = new Date(endDate);
-      const earliest = new Date("2018-01-01T00:00:00.000+10:00")
-      const curr = new Date()//.toISOString().slice(0, 10);
+      const earliest = new Date("2018-01-01T00:00:00.000+10:00");
+      const curr = new Date(); //.toISOString().slice(0, 10);
 
       // Date not earlier than defined param
       if (start < earliest) {
         return true;
       }
       // Date not later than two months prior curr
-      if (end.getTime() > curr.getTime() - (1000 * 3600 * 24 * 30 * 2)) {
+      if (end.getTime() > curr.getTime() - 1000 * 3600 * 24 * 30 * 2) {
         return true;
       }
       let diff = end.getTime() - start.getTime();
       let diffDays = diff / (1000 * 3600 * 24);
       // Date range longer than 7 days or invalid
-      if (diffDays > 7 || diffDays <= 0 || isNaN(diffDays))  {
+      if (diffDays > 7 || diffDays <= 0 || isNaN(diffDays)) {
         return true;
       } else {
         return false;
@@ -82,10 +84,27 @@ export default class PlannerConfig extends Component {
     return false;
   };
 
+  getCSVData = () => {
+    const { marketData } = this.state;
+    let csvData = [["time", "price"]];
+    if (marketData !== null) {
+      for (let i = 0; i < marketData.time.length; i++) {
+        csvData.push([marketData.time[i], marketData.prices[i]]);
+      }
+    }
+    return csvData;
+  };
 
   getMarketData = async () => {
     this.setState({ dataPoints: [] });
-    const { startDate, endDate, region, dispatchIntervalLength, startTime, endTime } = this.props;
+    const {
+      startDate,
+      endDate,
+      region,
+      dispatchIntervalLength,
+      startTime,
+      endTime,
+    } = this.props;
     const config = {
       startDate: startDate,
       endDate: endDate,
@@ -94,7 +113,7 @@ export default class PlannerConfig extends Component {
       region: region,
       dispatch_interval_length: dispatchIntervalLength,
     };
-    this.setState({prevDispatchLength: dispatchIntervalLength});
+    this.setState({ prevDispatchLength: dispatchIntervalLength });
     this.setState({ isMakingApiCall: true });
     const marketData = await NemGloApi.getMarketData(config);
     this.setState({ isMakingApiCall: false });
@@ -108,7 +127,7 @@ export default class PlannerConfig extends Component {
     for (let i = 0; i < marketData.time.length; i++) {
       let dataPoint = {};
       dataPoint["timestamp"] = marketData.timestamps[i];
-      dataPoint["price"] = marketData.prices[i];
+      dataPoint["Price"] = marketData.prices[i];
       dataPoints.push(dataPoint);
     }
     this.setState({ dataPoints });
@@ -117,22 +136,37 @@ export default class PlannerConfig extends Component {
   render() {
     const seriesSettings = [
       {
-        valueYField: "price",
+        valueYField: "Price",
         tooltip: "Price: ${valueY.formatNumber('#.00')}",
       },
     ];
-    const { formValidated, dataPoints, isMakingApiCall, prevDispatchLength } = this.state;
-    const { startDate, endDate, region, dispatchIntervalLength, startTime, endTime, setConfigValue } = this.props;
+    const {
+      formValidated,
+      dataPoints,
+      isMakingApiCall,
+      prevDispatchLength,
+      marketData,
+    } = this.state;
+    const {
+      startDate,
+      endDate,
+      region,
+      dispatchIntervalLength,
+      startTime,
+      endTime,
+      setConfigValue,
+    } = this.props;
     let showAlert =
-    (prevDispatchLength !== -1 &&
-      prevDispatchLength !== dispatchIntervalLength);
-    
+      prevDispatchLength !== -1 &&
+      prevDispatchLength !== dispatchIntervalLength;
+    let showDownloadCsv = marketData !== null;
+
     return (
       <div>
-         {showAlert && (
+        {showAlert && (
           <Alert key="info" variant="info">
-            You updated the Dispatch Interval Length, select Get Market Data to get new
-            results.
+            You updated the Dispatch Interval Length, select Get Market Data to
+            get new results.
           </Alert>
         )}
         <Card
@@ -223,8 +257,8 @@ export default class PlannerConfig extends Component {
                         isInvalid={this.isDateInvalid()}
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please select a valid date. Earliest date supported is 01/01/2018. Maximum date range is 7
-                        days.
+                        Please select a valid date. Earliest date supported is
+                        01/01/2018. Maximum date range is 7 days.
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -289,13 +323,16 @@ export default class PlannerConfig extends Component {
                         isInvalid={this.isDateInvalid()}
                       />
                       <Form.Control.Feedback type="invalid">
-                        Please select a valid date. Latest date supported is 2 months prior today. Maximum date range is 7
-                        days.
+                        Please select a valid date. Latest date supported is 2
+                        months prior today. Maximum date range is 7 days.
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
                 <Container style={{ height: 10 }}></Container>
+                {showDownloadCsv && (
+                  <DownloadCSV data={this.getCSVData()} filename="market-data"></DownloadCSV>
+                )}
                 {this.isDateInvalid() && (
                   <Button
                     className="float-end"

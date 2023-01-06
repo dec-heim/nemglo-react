@@ -1,10 +1,10 @@
-import React, { Component } from "react";
 import * as am5 from "@amcharts/amcharts5";
-import * as am5xy from "@amcharts/amcharts5/xy";
-import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import * as am5plugins_exporting from "@amcharts/amcharts5/plugins/exporting";
-import timestamp2str from "./Utils";
+import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import * as am5xy from "@amcharts/amcharts5/xy";
+import React, { Component } from "react";
 
+import timestamp2str from "./Utils";
 
 class MarketDataChart extends Component {
   constructor() {
@@ -24,10 +24,10 @@ class MarketDataChart extends Component {
     tooltip
   ) => {
 
-    let exporting = am5plugins_exporting.Exporting.new(root, {
-      menu: am5plugins_exporting.ExportingMenu.new(root, {}),
-      dataSource: data
-    });
+    // let exporting = am5plugins_exporting.Exporting.new(root, {
+    //   menu: am5plugins_exporting.ExportingMenu.new(root, {}),
+    //   dataSource: data
+    // });
 
 
     let yRenderer = am5xy.AxisRendererY.new(root, {

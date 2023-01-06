@@ -204,11 +204,16 @@ export default class PPAConf extends Component {
     ppa1Disabled,
     ppa2Disabled
   ) => {
+
+    if (ppa1Disabled && ppa2Disabled) {
+      return;
+    }
+
     const { config } = this.props;
     let dataPoints = [];
     let csvData = [];
 
-    if (!ppa1Disabled) {
+    if (!ppa1Disabled && "time" in ppaData1) {
       for (let i = 0; i < ppaData1.time.length; i++) {
         let dataPoint = {};
         let csvRow = {};
@@ -231,7 +236,7 @@ export default class PPAConf extends Component {
         dataPoints.push(dataPoint);
         csvData.push(csvRow);
       }
-    } else  {
+    } else if ("time" in ppaData2) {
       for (let i = 0; i < ppaData2.time.length; i++) {
         let dataPoint = {};
         let csvRow = {};

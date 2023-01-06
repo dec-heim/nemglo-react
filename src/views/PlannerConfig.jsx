@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Alert, Button, Card, Col, Container, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { Audio } from "react-loader-spinner";
 
@@ -18,6 +18,7 @@ export default class PlannerConfig extends Component {
       formValidated: false,
       dataPoints: [],
       isMakingApiCall: false,
+      prevDispatchLength: -1, 
     };
     this.isDateInvalid = this.isDateInvalid.bind(this);
     this.getMarketData = this.getMarketData.bind(this);
@@ -81,6 +82,7 @@ export default class PlannerConfig extends Component {
     return false;
   };
 
+
   getMarketData = async () => {
     this.setState({ dataPoints: [] });
     const { startDate, endDate, region, dispatchIntervalLength, startTime, endTime } = this.props;
@@ -92,6 +94,7 @@ export default class PlannerConfig extends Component {
       region: region,
       dispatch_interval_length: dispatchIntervalLength,
     };
+    this.setState({prevDispatchLength: dispatchIntervalLength});
     this.setState({ isMakingApiCall: true });
     const marketData = await NemGloApi.getMarketData(config);
     this.setState({ isMakingApiCall: false });
@@ -118,9 +121,20 @@ export default class PlannerConfig extends Component {
         tooltip: "Price: ${valueY.formatNumber('#.00')}",
       },
     ];
-    const { formValidated, dataPoints, isMakingApiCall } = this.state;
+    const { formValidated, dataPoints, isMakingApiCall, prevDispatchLength } = this.state;
+    const { startDate, endDate, region, dispatchIntervalLength, startTime, endTime, setConfigValue } = this.props;
+    let showAlert =
+    (prevDispatchLength !== -1 &&
+      prevDispatchLength !== dispatchIntervalLength);
+    
     return (
-      <Col>
+      <div>
+         {showAlert && (
+          <Alert key="info" variant="info">
+            You updated the Dispatch Interval Length, select Get Market Data to get new
+            results.
+          </Alert>
+        )}
         <Card
           style={{
             paddingTop: 20,
@@ -140,7 +154,7 @@ export default class PlannerConfig extends Component {
                   seriesSettings={seriesSettings}
                   baseInterval={{
                     timeUnit: "minute",
-                    count: this.props.dispatchIntervalLength,
+                    count: dispatchIntervalLength,
                   }}
                 ></MarketDataChart>
               </div>
@@ -157,9 +171,9 @@ export default class PlannerConfig extends Component {
                       id="dispatchIntervalLength"
                       label="Dispatch Interval Length"
                       description="The time resolution (minutes) between simulated load dispatch intervals. NEM input data is aggregated to this length."
-                      value={this.props.dispatchIntervalLength}
+                      value={dispatchIntervalLength}
                       options={[5, 30, 60]}
-                      setConfigValue={this.props.setConfigValue}
+                      setConfigValue={setConfigValue}
                     ></DropDownSelector>
 
                     <Form.Group style={{ paddingBottom: 10 }}>
@@ -178,9 +192,9 @@ export default class PlannerConfig extends Component {
                         id="startTime"
                         type="time"
                         onChange={(e) =>
-                          this.props.setConfigValue("startTime", e.target.value)
+                          setConfigValue("startTime", e.target.value)
                         }
-                        value={this.props.startTime}
+                        value={startTime}
                         isInvalid={this.isDateInvalid()}
                       />
                       <Container style={{ paddingBottom: 10 }}></Container>
@@ -203,9 +217,9 @@ export default class PlannerConfig extends Component {
                         type="date"
                         format="dd/MM/yyyy"
                         onChange={(e) =>
-                          this.props.setConfigValue("startDate", e.target.value)
+                          setConfigValue("startDate", e.target.value)
                         }
-                        value={this.props.startDate}
+                        value={startDate}
                         isInvalid={this.isDateInvalid()}
                       />
                       <Form.Control.Feedback type="invalid">
@@ -220,9 +234,9 @@ export default class PlannerConfig extends Component {
                       id="region"
                       label="Region"
                       description="The NEM region for which input data is sourced and the simulation is run in."
-                      value={this.props.region}
+                      value={region}
                       options={regions}
-                      setConfigValue={this.props.setConfigValue}
+                      setConfigValue={setConfigValue}
                     ></DropDownSelector>
 
                     <Form.Group style={{ paddingBottom: 10 }}>
@@ -244,9 +258,9 @@ export default class PlannerConfig extends Component {
                         id="endTime"
                         type="time"
                         onChange={(e) =>
-                          this.props.setConfigValue("endTime", e.target.value)
+                          setConfigValue("endTime", e.target.value)
                         }
-                        value={this.props.endTime}
+                        value={endTime}
                         isInvalid={this.isDateInvalid()}
                       />
                       <Container style={{ paddingBottom: 10 }}></Container>
@@ -269,9 +283,9 @@ export default class PlannerConfig extends Component {
                         type="date"
                         format="dd/MM/yyyy"
                         onChange={(e) =>
-                          this.props.setConfigValue("endDate", e.target.value)
+                          setConfigValue("endDate", e.target.value)
                         }
-                        value={this.props.endDate}
+                        value={endDate}
                         isInvalid={this.isDateInvalid()}
                       />
                       <Form.Control.Feedback type="invalid">
@@ -323,7 +337,7 @@ export default class PlannerConfig extends Component {
             )}
           </Card.Body>
         </Card>
-      </Col>
+      </div>
     );
   }
 }

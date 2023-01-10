@@ -7,6 +7,7 @@ import NemGloApi from "../api/NemgloApi";
 import MarketDataChart from "../components/charts/MarketDataChart";
 import DownloadCSV from "../components/DownloadCSV";
 import DropDownSelector from "../components/DropDownSelector";
+import DropDownSelectorOptional from "../components/DropDownSelectorOptional";
 import HelpToolTip from "../components/HelpToolTip";
 
 const regions = ["NSW1", "QLD1", "VIC1", "SA1", "TAS1"];
@@ -104,6 +105,7 @@ export default class PlannerConfig extends Component {
       dispatchIntervalLength,
       startTime,
       endTime,
+      emissionsType,
     } = this.props;
     const config = {
       startDate: startDate,
@@ -112,7 +114,9 @@ export default class PlannerConfig extends Component {
       endTime: endTime,
       region: region,
       dispatch_interval_length: dispatchIntervalLength,
+      emissions_type: emissionsType,
     };
+    console.log("Emissions Type... "+ emissionsType)
     this.setState({ prevDispatchLength: dispatchIntervalLength });
     this.setState({ isMakingApiCall: true });
     const marketData = await NemGloApi.getMarketData(config);
@@ -154,8 +158,10 @@ export default class PlannerConfig extends Component {
       dispatchIntervalLength,
       startTime,
       endTime,
+      emissionsType,
       setConfigValue,
     } = this.props;
+    console.log("render co2..."+emissionsType)
     let showAlert =
       prevDispatchLength !== -1 &&
       prevDispatchLength !== dispatchIntervalLength;
@@ -261,6 +267,14 @@ export default class PlannerConfig extends Component {
                         01/01/2018. Maximum date range is 7 days.
                       </Form.Control.Feedback>
                     </Form.Group>
+                    <DropDownSelectorOptional
+                      id="emissionsType"
+                      label="Emissions Type"
+                      description="Enable checkbox to load emissions data. Emissions Type can either be Total (Average Emissions Intensity of the specified region) or Marginal Emissions Intensity."
+                      value={emissionsType}
+                      options={["Total", "Marginal"]}
+                      setConfigValue={setConfigValue}
+                    ></DropDownSelectorOptional>
                   </Col>
 
                   <Col>

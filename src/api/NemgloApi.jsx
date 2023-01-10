@@ -11,7 +11,10 @@ const getMarketData = async (marketConfig) => {
         end_time: marketConfig.endTime,
         region: marketConfig.region,
         dispatch_interval_length: marketConfig.dispatch_interval_length
-      }
+      }//,
+      // emissions_data: {
+      //   emissions_type: marketConfig.emissions_type
+      // }
     }
     const reponse = await axios.post(`${config.api}/get-market-data`, body);
     return reponse.data;

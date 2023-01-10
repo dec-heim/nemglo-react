@@ -24,7 +24,6 @@
     "react-bootstrap-range-slider": "^3.0.8",
     "react-bootstrap-sidebar-menu": "^2.0.3",
     "react-bootstrap-switch": "^15.5.3",
-    "react-csv": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "react-loader-spinner": "^5.3.4",
@@ -60,5 +59,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-csv": "^2.2.2"
   }
 }
